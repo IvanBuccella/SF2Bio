@@ -1,0 +1,507 @@
+\documentclass[conference]{IEEEtran}
+%\usepackage{spconf,amsmath,amssymb,graphicx}
+\usepackage{amsmath,amssymb,graphicx,caption,listings,hyperref,graphicx}
+
+% Example definitions.
+% --------------------
+% nice symbols for real and complex numbers
+\newcommand{\R}[0]{\mathbb{R}}
+\newcommand{\C}[0]{\mathbb{C}}
+% bold paragraph titles
+\newcommand{\mypar}[1]{{\bf #1.}}
+\newcommand{\mysubpar}[2]{{\bf #1.}}
+\graphicspath{ {./images/} }
+
+\lstset{frame=tb,
+  language=C,
+  aboveskip=5mm,
+  belowskip=5mm,
+  showstringspaces=true,
+  columns=flexible,
+  numbers=none,	
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=2
+}
+
+\begin{document}
+
+\title{A Stencil computation algorithm optimization}
+
+
+\author{\IEEEauthorblockN{Ivan Buccella}
+\IEEEauthorblockA{Department of Computer Science\\
+ University of Salerno\\
+ Italy}
+}
+
+\maketitle
+
+\begin{abstract}
+ReLeaSE (Reinforcement Learning for Structural Evolution) is a new computational strategy for de novo design of molecules with desired properties. This strategy integrates two deep neural networks, one generative and one predictive, which are trained separately but used jointly to generate new targeted chemical libraries.
+ReLeaSE uses a simple representation of molecules only through SMILES (simplified molecular-input line-entry system) strings.
+"Generative models are trained with a stack-increment memory network to produce chemically feasible SMILES strings, and predictive models are derived to predict the desired properties of the generated de novo compounds. In the first stage of the method, the generative and predictive models are trained separately with a supervised learning algorithm. In the second stage, both models are jointly trained with the RL approach to guide the generation of new chemical structures toward those with the desired physical and/or biological properties."
+the ReLeaSE method was used to design chemical libraries with a bias toward structural complexity or toward compounds with maximal, minimal or specific physical properties, such as melting point or hydrophobicity, or toward compounds with inhibitory activity toward Janus protein kinase 2.
+Based on these explanations, the main work focuses, with the use of OS. Linux, on the demonstration examples "RecurrentQSAR," i.e., training of a recurrent neural network to predict logP from SMILES using the [OpenChem] toolkit(https://github.com/Mariewelt/OpenChem), and "LogP_optimization," i.e., optimization of logP in a drug-like region from 0 to 5 according to [Lipinski's rule of five] (https://en.wikipedia.org/wiki/Lipinski%27s_rule_of_five).
+The future goal is to use Docker software to simplify software application deployment processes.
+
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+The World Economic Forum has called the combination of big data and artificial intelligence (AI) the fourth industrial revolution, capable of radically transforming science. AI is revolutionizing several fields of medicine, such as radiology, pathology and other specialties, and has begun to be used in drug discovery through deep learning (DL) technologies. These technologies are being applied in different areas, such as molecular docking, transcriptomics, understanding reaction mechanisms, and molecular energy prediction.
+In drug discovery, a crucial step is to formulate a well-reasoned hypothesis on how to synthesize new compounds or select them from available chemical libraries based on structure-activity relationship (SAR) data. Automated design approaches to create compounds with specific properties have been the subject of research for the past 15 years. Although there are many synthetically feasible chemicals that could be considered as possible drug-like molecules, their huge number makes it impossible to systematically examine all of them and verify them through the construction and evaluation of each individual compound. Local optimization approaches have been proposed, but these do not guarantee the optimal solution, as the design process may converge on a local or "practical" optimum through stochastic sampling or limit the search to a specific section of the chemical space that can be exhaustively examined.
+In this paper we present a novel method to generate de novo chemical compounds with desired physical, chemical and/or bioactive properties based on deep reinforcement learning (RL). RL, a subfield of artificial intelligence, is used to solve dynamic decision problems and involves analyzing possible actions, estimating the statistical relationship between actions and their possible outcomes, and determining a treatment regime that seeks to achieve the most desirable outcome. The integration of RL and neural networks was developed in the 1990s, but with the recent advancement of deep learning, which benefits from big data, new and powerful algorithmic approaches are emerging. RL, especially when combined with deep neural networks, is currently experiencing a renaissance and has recently enabled superior human performance. 
+Our method, called ReLeaSE (Reinforcement Learning for Structural Evolution), applies to the problem of designing chemical libraries with desired properties and proves to be a viable solution to this problem. ReLeaSE is distinguished from other similar approaches by its simple representation of molecules through the molecular string input system (SMILES) only during the generation and prediction phases of the method and the integration of these phases into a single workflow that also includes an RL module. ReLeaSE demonstrates that it can design chemical libraries with desired physicochemical and biological properties, and we discuss its algorithm and test applications for designing targeted chemical libraries.
+The project makes use of QSPR (Quantitative Structure-Property Relationship) a technique that uses mathematical models to predict the properties of a chemical compound based on its chemical structure. QSPR models are often used in medicinal chemistry to predict properties such as melting point, solvent potency, thermal stability, toxicity and biological activity of a compound.
+QSPR models are based on the assumption that there is a quantitative relationship between the structure of a chemical compound and its properties. For example, a QSPR model might use the structure of a chemical compound as input and predict its melting point as output. To build a QSPR model, data on the structure and properties of a large number of known chemical compounds (training set) are used, which are then used to train the model. Once the model has been trained, it can be used to predict the properties of unknown chemical compounds (test set).
+QSPR models are very useful because they make it possible to predict the properties of a chemical compound without having to synthesize or test it experimentally. However, they also have some limitations, such as dependence on the quality and accuracy of the training set and difficulty in predicting the properties of compounds with very complex chemical structures.
+QSAR predicts the following properties LogP, Tm and pIC50.
+In the field of machine learning, the partition coefficient (logP) can be used as a property of a chemical compound to predict its toxicity or biological activity. For example, in some reinforcement learning applications, logP can be used as a feature to help the model predict the response of the biological system to a given chemical compound.
+In this way, the model can learn to select the most promising molecules for further study or new drug development. For example, the model could be trained to select molecules with a high logP because they have a higher probability of being biologically active. Conversely, the model could be trained to exclude molecules with too high a logP because they might be too toxic.
+In addition, logP can be used to predict the distribution of the chemical compound in the body and thus to determine its bioavailability. For example, a compound with a high logP might have higher bioavailability because it has a greater tendency to accumulate in lipid membranes and thus be absorbed by the body. Conversely, a compound with a low logP might have lower bioavailability because it has a lower tendency to accumulate in fats.
+Tm (melting point) is the temperature at which a solid changes to a liquid state. In chemistry and medicinal chemistry, the melting point of a substance is often used as an identifying property because each substance has a specific melting point.
+In some cases, QSPR (Quantitative Structure-Property Relationship) models can be used to predict the melting point of a substance from its chemical structure. QSPR models for melting point can be useful in identifying new molecules that may have desirable properties, such as a specific melting point. However, it is important to note that QSPR models generally have limited accuracy and can be affected by several factors, such as measurement conditions.
+Inhibitory concentration (IC) is a measure of the efficacy of a chemical compound in inhibiting the activity of a particular biological target, such as an enzyme or protein. pIC50 is a specific type of IC that represents the concentration of a compound that is required to inhibit the activity of the target by 50%. It is often used in QSAR studies as a measure of the potency of a compound.
+In QSAR, the pIC50 value can be used as a prediction of the activity of a chemical compound on a particular target. For example, if a QSAR model is developed to predict the activity of a series of chemical compounds on a particular enzyme, the pIC50 values of the compounds can be used as a metric to assess how accurately the model can predict the activity of each compound. The lower the pIC50 value, the more potent the compound is predicted to be.
+In the following sections we will look in detail at the use of ReLeaSe.
+
+\mypar{Related work} 
+\textit{The generative
+model in references (23, 37) is a “vanilla” RNN without augmented
+memory stack, which does not have the capacity to count and infer
+algorithmic patterns (34).
+}' \cite{}
+
+\section{Cosa fa ReLeaSE}\label{sec:Cosa fa ReLeaSE}
+
+We have created and implemented a deep RL approach termed ReLeaSE for de novo design of novel chemical compounds with desired properties. To achieve this outcome, we combined two deep neural networks (generative and predictive) in a general workflow that also included the RL step. 
+The training process consists of two stages. The generative model has two modes of processing sequences—training and generating. At each time step, in the training mode, the
+generative network takes a current prefix of the training object and predicts the probability distribution of the next character. Then, the next character is sampled from this predicted probability distribution and is compared to the ground truth. Afterward, on the basis of this comparison, the cross-entropy loss function is calculated, and parameters of the model are updated. At each time step, in generating mode, the generative network takes a prefix of already generated sequences and then, like in the training mode, predicts the probability distribution of the next character and samples it from this predicted distribution. In the generative model, we do not update the model parameters. At the second stage, we combined both generative and predictive models into one RL system. In this system, the generative model plays the role of an agent, whose action space is represented by the SMILES notation alphabet, and state space is represented by all possible strings in this alphabet.The predictive model plays the role of a critic estimating the agent’s behavior by assigning a numerical reward to every generated molecule (that is, SMILES string). The reward is a function of the numerical property calculated by the predictive model. At this stage, the generative model is trained to maximize the expected reward.
+
+The absolute majority of compounds generated de novo by the ReLeaSE method are novel structures as compared to the data sets used to train generative models, and any QSAR model could be used to evaluate their properties.
+However, one of our chief objectives was to develop a method that can tune not only structural diversity (cf. case study 1) but,most importantly, also bias the property (physical or biological) toward the desired range of values.
+As a proof of principle, we tested our approach on three diverse types of end points: physical properties, biological activity, and chemical substructure bias. The use of flexible reward function enables different library optimization strategies where one can minimize,maximize, or impose a desired range to a property of interest in the generated compound libraries. 
+
+We have built QSPR models for three different properties—Tm, logP, and pIC50 for JAK2. Curated data sets for all three end points were divided into training and training sets in 5CV fashion. Specifically, it has been shown that multiple random splitting of data sets into training and test sets affords models of the highest stability and predictive power. Each model consisted of an embedding layer transforming the sequence of discrete tokens (that is, SMILES symbols) into a vector of 100 continuous numbers, an LSTM layer with 100 units and tanh nonlinearity, one dense layer with 100 units and rectify nonlinearity function, and one dense layer with one unit and identity activation function. All three models were trained with the learning-rate decay technique until convergence.
+
+As for the software needed for the project, in addition to an Nvidia GPU that meets the CUDA requirement, you will need to install Anaconda to manage packages and dependencies. Once Anaconda is installed, you will be able to create a new conda environment with Python and install the dependencies specified in the conda_requirements file, such as numpy, seaborn v0.9.0, scikit-learn v0.20.2, scipy, pytest, pytest-cov, ipython and ipykernel. In addition, you need to install RDKit, pytorch v1.10.2, torchvision v0.11.3 and cudatoolkit v11.3. You also need to install the pip dependencies listed in the pip_requirements file, such as mordred v1.1.2, tensorboard v2.5.0, tensorflow v2.5.0, tqdm v4.64.1 and xgboost v0.81. Finally, you need to add a new kernel to the jupyter notebook kernel list using ipykernel to make the newly created conda environment available within Jupyter.
+
+\section{Esempio di utilizzo di ReLeaSe}\label{sec:Esempio di utilizzo di ReLeaSe}
+
+In this experiment we will optimize parameters of pretrained generative RNN to produce molecules with values of logP within drug-like region according to Lipinsky rule. We use policy gradient algorithm with custom reward function to bias the properties of generated molecules aka Reinforcement Learning for Structural Evolution (ReLeaSE) as was proposed in Popova, M., Isayev, O., & Tropsha, A. (2018). Deep reinforcement learning for de novo drug design. Science advances, 4(7), eaap7885.
+
+The following example uses real SMILES strings, contained in a given input file (we used the ChEMBL database of drug-like compounds).
+
+We will used stack augmented generative GRU as a generator. The model was trained to predict the next symbol from SMILES alphabet using the already generated prefix. Model was trained to minimize the cross-entropy loss between predicted symbol and ground truth symbol.
+
+\mypar{The multi-core architecture}
+Multicore refers to an architecture in which a single physical processor incorporates the core logic of more than one processor. A single integrated circuit is used to package or hold these processors. These single integrated circuits are known as a die. Multicore architecture places multiple processor cores and bundles them as a single physical processor. The objective is to create a system that can complete more tasks at the same time, thereby gaining better overall system performance \cite{techopedia}.
+
+\mypar{OpenMP}
+The OpenMP API supports multi-platform shared-memory parallel programming in C/C++ and Fortran. The OpenMP API defines a portable, scalable model with a simple and flexible interface for developing parallel applications on platforms from the desktop to the supercomputer \cite{openmp}.
+
+\mypar{Loop interchange}
+In compiler theory, loop interchange is the process of exchanging the order of two iteration variables used by a nested loop. The variable used in the inner loop switches to the outer loop, and vice versa. It is often done to ensure that the elements of a multi-dimensional array are accessed in the order in which they are present in memory, improving the locality of reference \cite{loop-interchange}.
+
+\mypar{Optimization flags}
+Without any optimization option, the compiler's goal is to reduce the cost of compilation and to make debugging produce the expected results. Statements are independent: if you stop the program with a breakpoint between statements, you can then assign a new value to any variable or change the program counter to any other statement in the function and get exactly the results you expect from the source code. 
+Turning on optimization flags makes the compiler attempt to improve the performance and/or code size at the expense of compilation time and possibly the ability to debug the program. 
+The compiler performs optimization based on the knowledge it has of the program. 
+Depending on the target and how the compiler was configured, a slightly different set of optimizations may be enabled at each -O level (\textit{-O0},\textit{-O1},\textit{-O2},\textit{-O3}) \cite{optimization-flags}.
+
+\mypar{Parallel loops}
+A parallel for loop is a for loop in which the statements in the loop can be run in parallel: on separate cores, processors, or threads. 
+In OpenMP the \textit{parallel loop} construct is a shortcut for specifying a parallel construct containing a loop construct with one or more associated loops and no other statements \cite{omp-parallel}. 
+
+\mypar{Loop tiling}
+Loop tiling transformation (or simply tiling) consists of partitioning an iteration domain into many regular and uniform tiles \cite{barigou}. A tile is thus a subset of iteration points. Executing a tile corresponds to the execution of all the iteration points it contains. A tile's execution is independent, which means if a tile execution starts, it cannot be interrupted until it reaches its last iteration point. This condition implies that no data can be exchanged between two concurrent tiles. This transformation allows data to be accessed in blocks (tiles), with the block size defined as a parameter of this transformation. Each loop is transformed into two loops: one iterating inside each block (intratile) and the other one iterating over the blocks (intertile) \cite{loop-tiling}. 
+
+\section{The applied method}\label{sec:yourmethod}
+
+The main goal of this experiment is to minimize the computation time of the chosen algorithm for Stencil Computation as soon as possible. This operation is done by using the above explained techniques: \textit{loop interchange}, \textit{optimization flags}, \textit{parallel loops} and \textit{loop tiling}.
+
+\mypar{Starting Alogrithm}
+First of all, it's important to show what the used algorithm that the experiment tries to improve is.
+\begin{lstlisting}
+for (x = 1; x < N - 1; x++)
+{
+		for (y = 1; y < N - 1; y++)
+		{
+				B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
+		}
+}
+\end{lstlisting}
+
+\mypar{Loop interchange}
+The first step is editing the starting algorithm by exchanging the order of the iteration variables \textbf{x} and \textbf{y} used by nested loops. The result is two different algorithms:
+
+\setcounter{lstlisting}{0}
+\renewcommand{\lstlistingname}{Algorithm}
+
+\begin{lstlisting}[caption={The starting algorithm},label={lst:loop-interchange-x-y}]
+for (x = 1; x < N - 1; x++)
+{
+		for (y = 1; y < N - 1; y++)
+		{
+				B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
+		}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={A new algorithm with x and y swapped},label={lst:loop-interchange-y-x}]
+for (y = 1; y < N - 1; y++)
+{
+		for (x = 1; x < N - 1; x++)
+		{
+				B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
+		}
+}
+\end{lstlisting}
+
+\mypar{Optimization flags}
+The next step is editing the optimization flag used for compiling the source code; the clang compiler offers four different flag specifications: O0, O1, O2, and O3. The result is four different commands:
+
+\setcounter{lstlisting}{0}
+\renewcommand{\lstlistingname}{Command}
+
+\begin{lstlisting}[caption={Flag -O0},label={lst:optimization-flags-0}]
+clang code.c -o code.out -fopenmp -O0
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Flag -O1},label={lst:optimization-flags-1}]
+clang code.c -o code.out -fopenmp -O1
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Flag -O2},label={lst:optimization-flags-2}]
+clang code.c -o code.out -fopenmp -O2
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Flag -O3},label={lst:optimization-flags-3}]
+clang code.c -o code.out -fopenmp -O3
+\end{lstlisting}
+
+\mypar{Parallel Loops}
+The next step is editing the code by applying the parallel loops optimization. In order to distribute the execution of a loop into multiple threads, it has been used the ``#pragma omp parallel for'' \cite{omp-parallel}\cite{omp-for} directive; this directive opens a parallel region and schedules the loop into multiple threads. The directive could be applied to each loop, also on both. To apply the directive on both loops, it has been used the ``#pragma omp parallel for collapse(2)'' \cite{omp-collapse} directive which is able to distribute two nested loops on multiple threads. The result of this step is three different algorithms:
+
+\setcounter{lstlisting}{2}
+\renewcommand{\lstlistingname}{Algorithm}
+
+\begin{lstlisting}[caption={Parallel loop on X},label={lst:parallel-loop-x}]
+#pragma omp parallel for
+for (x = 1; x < N - 1; x++)
+{
+		for (y = 1; y < N - 1; y++)
+		{
+				B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
+		}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Parallel loop on Y},label={lst:parallel-loop-y}]
+for (x = 1; x < N - 1; x++)
+{
+		#pragma omp parallel for
+		for (y = 1; y < N - 1; y++)
+		{
+				B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
+		}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Parallel loop on X and Y},label={lst:parallel-loop-x-y}]
+#pragma omp parallel for collapse(2)
+for (x = 1; x < N - 1; x++)
+{
+		for (y = 1; y < N - 1; y++)
+		{
+				B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
+		}
+}
+\end{lstlisting}
+
+\mypar{Loop tiling}
+The next step is editing the code by applying tiling optimization. In order to apply this type of optimization it has been necessary to cut the \textbf{A} matrix into multiple smaller \textit{tiles}; For this a new variable has been introduced into the code ``tile\textunderscore size'' which expresses the tile size, and two nested loops that have the goal of executing the code on the different tiles. On the tiling loops (with \textit{xx} and \textit{yy} variables) it has been applied the ``#pragma omp parallel for collapse(2)'' directive in order to distribute the matrices tiles on multiple threads. Different tile sizes have been chosen depending on several points of view like L2 Cache size, etc. The result of this step is four different algorithms, identical but with different tile sizes:
+
+\renewcommand{\lstlistingname}{Algorithm}
+
+\begin{lstlisting}[caption={Loop tiling with size of 16384},label={lst:tiling-1}]
+const int tile_size = 16384;
+#pragma omp parallel for collapse(2)
+for (int xx = 0; xx < N; xx += tile_size)
+{
+		for (int yy = 0; yy < N; yy += tile_size)
+		{
+				for (x = xx + 1; x < MIN(xx + tile_size, N - 1); x++)
+				{
+						for (y = yy + 1; y < MIN(yy + tile_size, N - 1); y++)
+						{
+								B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
+						}
+				}
+		}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Loop tiling with size of 10922},label={lst:tiling-2}]
+const int tile_size = 10922;
+...same as before
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Loop tiling with size of 8192},label={lst:tiling-3}]
+const int tile_size = 8192;
+...same as before
+\end{lstlisting} 
+
+\begin{lstlisting}[caption={Loop tiling with size of 5461},label={lst:tiling-4}]
+const int tile_size = 5461;
+...same as before
+\end{lstlisting}
+
+\mypar{Dimension augmentation}
+The next step is editing the \textit{tiled} code by applying two more dimensions to the original Stencil code. In order to apply this step, it has been necessary to edit the internal loops (with \textit{x} and \textit{y} variables) condition from ``MIN(xx + tile\textunderscore size, N - 1)'' to ``MIN(xx + tile\textunderscore size, N - 3)''. Because of the tiling optimization, the code has been executed on different tile sizes depending on several points of view like L2 Cache size, etc. The result of this step is four different algorithms, identical but with different tile sizes:
+
+\renewcommand{\lstlistingname}{Algorithm}
+
+\begin{lstlisting}[caption={Dimension augmentation + loop tiling with size of 16384},label={lst:augmentation-1}]
+const int tile_size = 16384;
+#pragma omp parallel for collapse(2)
+for (int xx = 0; xx < N; xx += tile_size)
+{
+		for (int yy = 0; yy < N; yy += tile_size)
+		{
+				for (x = xx + 3; x < MIN(xx + tile_size, N - 3); x = x + 3)
+				{
+						for (y = yy + 3; y < MIN(yy + tile_size, N - 3); y = y + 3)
+						{
+								B[x][y] = a * A[x][y] + b * (A[x - 3][y] + A[x - 2][y] + A[x - 1][y] + A[x + 1][y] + A[x + 2][y] + A[x + 3][y] + A[x][y - 3] + A[x][y - 2] + A[x][y - 1] + A[x][y + 1] + A[x][y + 2] + A[x][y + 3]);
+						}
+				}
+		}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Dimension augmentation + loop tiling with size of 10922},label={lst:augmentation-2}]
+const int tile_size = 10922;
+...same as before
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Dimension augmentation + loop tiling with size of 8192},label={lst:augmentation-3}]
+const int tile_size = 8192;
+...same as before
+\end{lstlisting} 
+
+\begin{lstlisting}[caption={Dimension augmentation + loop tiling with size of 5461},label={lst:augmentation-4}]
+const int tile_size = 5461;
+...same as before
+\end{lstlisting}
+
+\section{Experimental Results}\label{sec:exp}
+
+\mypar{Experimental setup} The execution timing is obtained by using the OpenMP primitives \cite{omp-get-wtime}, an example is shown in Algorithm \ref{lst:omp-get-time-alg}. The OpenMP settings are shown in Algorithm \ref{lst:omp-configs-alg}. The experiment is executed on two matrices, A and B (initialized with the Algorithm \ref{lst:initialization-alg}), with a size of constant \textbf{N = 32768} and on a PC with current specifications: 
+\begin{itemize}
+	\item \textbf{CPU}
+	\begin{itemize}
+		\item \textbf{Model name}: Intel(R) Core(TM) i5-9600K CPU @ 3.70GHz
+		\item \textbf{CPU(s)}: 6
+		\item \textbf{Socket(s)}: 1
+		\item \textbf{Core(s) per socket}: 6
+		\item \textbf{Thread(s) per core}: 1
+		\item \textbf{Cache L1d}: 192 KiB (6 instances)
+		\item \textbf{Cache L1i}: 192 KiB (6 instances)
+		\item \textbf{Cache L2}: 1.5 MiB (6 instances)
+		\item \textbf{Cache L3}: 9 MiB (1 instance)
+		\item \textbf{Intel Hyper-Threading Technology}: No
+	\end{itemize}
+	\item \textbf{Memory} 
+	\begin{itemize}
+		\item \textbf{Size}: 26164116 kB
+	\end{itemize}
+	\item \textbf{Compiler}: clang 14.0.5 with OpenMP 5.0
+	\end{itemize}
+\end{itemize}
+
+\renewcommand{\lstlistingname}{Algorithm}
+
+\begin{lstlisting}[caption={An example of code for obtaining the execution timing},label={lst:omp-get-time-alg}]
+double t_init = omp_get_wtime()
+//Your code's here
+printf("\%0.15f", omp_get_wtime() - t_init);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={OpenMP Configs},label={lst:omp-configs-alg}]
+int n_threads = omp_get_max_threads();
+omp_set_max_active_levels(1);
+omp_set_num_threads(n_threads);
+omp_set_dynamic(0);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={A and B matrices initialization},label={lst:initialization-alg}]
+float **A = (float **)malloc(N * sizeof(float *));
+float **B = (float **)malloc(N * sizeof(float *));
+for (x = 0; x < N; x++)
+{
+		A[x] = (float *)malloc(N * sizeof(float));
+		B[x] = (float *)malloc(N * sizeof(float));
+		for (y = 0; y < N; y++)
+		{
+				A[x][y] = 1.0f;
+				B[x][y] = 0.0f;
+		}
+}
+\end{lstlisting}
+
+\mypar{Results}
+Here the following execution timings are represented for every experiment that has been done.
+
+\begin{itemize}
+	\item \textbf{Loop interchange} computation time of: 
+	\begin{itemize}
+		\item the Algorithm \ref{lst:loop-interchange-x-y} is: 5.0533 (s) 
+		\item the Algorithm \ref{lst:loop-interchange-y-x} is: 55.8343 (s)
+	\end{itemize}
+	\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.50\textwidth]{loop-interchange.png}
+		\caption{Loop interchange computation timings}
+		\label{fig:loop-interchange}
+	\end{figure}
+	\item \textbf{Optimization flags}:
+	\begin{itemize}
+		\item the Algorithm \ref{lst:loop-interchange-x-y} by compiling with the command \ref{lst:optimization-flags-0} is: 5.0493 (s)
+		\item the Algorithm \ref{lst:loop-interchange-x-y} by compiling with the command \ref{lst:optimization-flags-1} is: 1.3734 (s)
+		\item the Algorithm \ref{lst:loop-interchange-x-y} by compiling with the command \ref{lst:optimization-flags-2} is: 0.5931 (s)
+		\item the Algorithm \ref{lst:loop-interchange-x-y} by compiling with the command \ref{lst:optimization-flags-3} is: 0.5904 (s)
+	\end{itemize}
+	\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.50\textwidth]{optimization-flags.png}
+		\caption{Optimization flags computation timings}
+		\label{fig:optimization-flags}
+	\end{figure}	
+	\item \textbf{Parallel loops}: 
+	\begin{itemize}
+		\item the Algorithm \ref{lst:parallel-loop-x} is: 0.4585 (s)
+		\item the Algorithm \ref{lst:parallel-loop-y} is: 0.4760 (s)
+		\item the Algorithm \ref{lst:parallel-loop-x-y} is: 0.7419 (s)
+	\end{itemize}
+	\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.50\textwidth]{parallel-loops.png}
+		\caption{Parallel loops computation timings}
+		\label{fig:parallel-loops}
+	\end{figure}		
+	\item \textbf{Loop tiling}: 
+	\begin{itemize}
+		\item the Algorithm \ref{lst:tiling-1} is: 0.4451 (s)
+		\item the Algorithm \ref{lst:tiling-2} is: 0.4599 (s)
+		\item the Algorithm \ref{lst:tiling-3} is: 0.4422 (s)
+		\item the Algorithm \ref{lst:tiling-4} is: 0.4537 (s)
+	\end{itemize}	
+	\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.50\textwidth]{loop-tiling.png}
+		\caption{Loop tiling computation timings}
+		\label{fig:loop-tiling}
+	\end{figure}		
+	\item \textbf{Dimension augmentation}: 
+	\begin{itemize}
+		\item the Algorithm \ref{lst:augmentation-1} is: 0.2649 (s)
+		\item the Algorithm \ref{lst:augmentation-2} is: 0.2911 (s)
+		\item the Algorithm \ref{lst:augmentation-3} is: 0.2645 (s)
+		\item the Algorithm \ref{lst:augmentation-4} is: 0.2676 (s)
+	\end{itemize}	
+	\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.50\textwidth]{dimension-augmentation.png}
+		\caption{Dimension augmentation computation timings}
+		\label{fig:dimension-augmentation}
+	\end{figure}
+\end{itemize}
+
+\section{Conclusions}
+This article presents a number of different approaches to optimize the above-detailed Stencil computation's algorithm on multi-core architectures, based on a range of micro benchmarks.
+For the \textbf{loop interchange} optimization, it indicates that the standard loop \textit{x-y} is faster than the \textit{y-x} loop, this is favored by the C programming language memory layout.
+For the \textbf{optimization flags} optimization, it indicates that the best flag to use to compile the code is the -O3.
+For the \textbf{parallel loop} optimization, it indicates that having only one parallel loop on the external loop is faster.
+For the \textbf{loop tiling} optimization, it indicates that having a \textit{tile\textunderscore size} of \textit{8192} is faster.
+About the \textbf{dimension} of the Stencil computation algorithm, it shows that by augmenting the number of dimensions of two, the computation is faster with \textbf{loop tiling} optimization than having a lower number of dimensions. In the table \ref{table:optimization-summary} is shown a summary with the best running time, relative and absolute speedups for every code optimization.
+
+\renewcommand{\tablename}{Table}
+
+\begin{table}[h!]
+\begin{tabular}{||l r r r||} 
+\hline
+ Implementation & Running time & Rel. speedup & Abs. speedup \\ [0.5ex] 
+ \hline\hline
+ Starting algorithm & 5.0533 & 1.00 & 1.00 \\
+ + Loop interchange & 5.0533 & 1.00 & 1.00 \\
+ + Optimization flags & 0.5904 & 8.55 & 8.55 \\
+ + Parallel loops & 0.4585 & 1.28 & 11.02 \\
+ + Loop tiling & 0.4422 & 1.03 & 11.42 \\
+ Dimension Augmentation & 0.2645 & 1.67 & 19.10 \\ [1ex] 
+\hline
+\end{tabular}
+\caption{Summary}
+\label{table:optimization-summary}
+\end{table}
+
+In future work, it would be interesting to try to implement what is the maximum number of dimension augmentation that offers a lower computation timing.
+
+
+\begin{thebibliography}{1}
+
+\bibitem{taflove}
+A. Taflove. Computational electrodynamics: The finite-difference time-domain method. 1995.
+
+\bibitem{smith}
+G. Smith. Numerical Solution of Partial Differential Equations: Finite Difference Methods. Oxford University Press, 2004.
+
+\bibitem{cong-huang-zou}
+J. Cong, M. Huang, and Y. Zou. Accelerating fluid registration algorithm on multi-FPGA platforms. FPL, 2011.
+
+\bibitem{cong-zou}
+On the Transformation Optimization for Stencil Computation
+
+\bibitem{su-zhang-mei}
+Huayou Su *, Kaifang Zhang and Songzhu Mei. On the Transformation Optimization for Stencil Computation
+
+\bibitem{cruz}
+Cruz, R.D.L.; Araya-Polo, M. Algorithm 942: Semi-Stencil. ACM Trans. Math. Softw. 2014, 40, 1–39.
+
+\bibitem{barigou}
+Youcef Barigou. Acceleration of real-life stencil codes on GPUs. Hardware Architecture [cs.AR]. 2011.
+
+\bibitem{holewinski-pouchet-sadayappan}
+Justin Holewinski, Louis-Noël Pouchet, P. Sadayappan. High-Performance Code Generation for Stencil Computations on GPU Architectures.
+
+\bibitem{techopedia}
+\href{https://www.techopedia.com/definition/5305/multicore}{Multi-core}
+
+\bibitem{openmp}
+\href{https://www.openmp.org/}{OpenMP}
+
+\bibitem{loop-interchange}
+\href{https://en.wikipedia.org/wiki/Loop_interchange}{Loop interchange}
+
+\bibitem{optimization-flags}
+\href{https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html}{Options That Control Optimization}
+ 
+\bibitem{loop-tiling}
+João M.P.Cardoso, José Gabriel F. Coutinho, Pedro C. Diniz. Chapter 5 - Source code transformations and optimizations. Embedded Computing for High Performance
+
+\bibitem{omp-get-wtime}
+\href{https://www.openmp.org/spec-html/5.0/openmpsu160.html}{omp\textunderscore get\textunderscore wtime() function}
+
+\bibitem{omp-parallel} 
+\href{https://www.openmp.org/specifications/}{OpenMP API 5 Specification. OMP Parallel.}
+
+\bibitem{omp-for}
+\href{https://www.openmp.org/specifications/}{OpenMP API 5 Specification. OMP For.}
+
+\bibitem{omp-collapse}
+\href{https://www.openmp.org/specifications/}{OpenMP API 5 Specification. Collapse.}
+
+\end{thebibliography}
+
+\end{document}
