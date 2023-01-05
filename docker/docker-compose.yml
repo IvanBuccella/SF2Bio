@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  miniconda:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile.miniconda
+    ports:
+      - 8888:8888
