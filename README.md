@@ -37,7 +37,7 @@ $ git clone https://github.com/IvanBuccella/SF2Bio
 
 ### Environment Variables
 
-Set your own environment variables (the http port) by using the `.env-sample` file. You can just duplicate and rename it in `.env`.
+Set your own environment variables (the jupyter notebook port) by using the `.env-sample` file. You can just duplicate and rename it in `.env`.
 
 ### Build
 
