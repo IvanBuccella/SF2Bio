@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.3.0-runtime-ubuntu20.04
+FROM nvidia/cuda:11.3.0-cudnn8-runtime-ubuntu20.04
 
 RUN apt-get update
 RUN apt-get install -y git
@@ -16,7 +16,7 @@ SHELL ["conda","run","-n","release","/bin/bash", "-c"]
 COPY environment environment
 RUN conda install --yes --file environment/conda.txt
 RUN conda install -c rdkit rdkit nox cairo
-RUN conda install pytorch=1.10.2 torchvision=0.11.3 -c pytorch -c conda-forge
+RUN conda install pytorch=1.10.1 torchvision=0.11.2 -c pytorch -c conda-forge
 RUN pip install -r environment/pip.txt
 
 WORKDIR /home
