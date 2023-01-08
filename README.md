@@ -1,0 +1,58 @@
+# The Reinforcement Learning for Structural Evolution method on a Docker Environment
+
+## Citation
+
+This work runs the developer [ReLeaSE](https://github.com/isayev/ReLeaSE/) method on a Docker Environment. Further details about the method can be found in this paper: Mariya Popova, Olexandr Isayev, Alexander Tropsha. _Deep Reinforcement Learning for de-novo Drug Design_. Science Advances, 2018, Vol. 4, no. 7, eaap7885. DOI: [10.1126/sciadv.aap7885](http://dx.doi.org/10.1126/sciadv.aap7885)
+
+## Tutorial Structure
+
+- **[Installation](#installation)**
+  - **[Prerequisites](#prerequisites)**
+  - **[Repository](#repository)**
+  - **[Environment Variables](#environment-variables)**
+  - **[Build](#build)**
+  - **[Run Docker Services](#run-docker-services)**
+
+## Installation
+
+### Prerequisites
+
+- Linux OS or WSL2 on a Windows 10 (or higher) machine.
+- Modern NVIDIA GPU, [compute capability 3.5](https://developer.nvidia.com/cuda-gpus) or newer.
+- Docker and Docker Compose (Application containers engine). Install it from [here](https://www.docker.com).
+- The Docker GPU Support enabled on the machine; check it out [here](https://docs.docker.com/compose/gpu-support/).
+- The Nvidia Container Toolkit. Install it from [here](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#install-guide).
+
+Note that you do not need to install the CUDA Toolkit on the host system.
+
+Note that you have to install the NVIDIA drivers on your system.
+
+### Repository
+
+Clone the repository:
+
+```sh
+$ git clone https://github.com/IvanBuccella/SF2Bio
+```
+
+### Environment Variables
+
+Set your own environment variables (the http port) by using the `.env-sample` file. You can just duplicate and rename it in `.env`.
+
+### Build
+
+Build the local environment with Docker:
+
+```sh
+$ docker-compose build
+```
+
+### Run Docker Services
+
+```sh
+$ docker-compose up
+```
+
+### Enjoy :-)
+
+You can execute an example that uses method by visiting the `http://localhost:${HTTP_PORT}/LogP_optimization_demo.ipynb ` URL.
