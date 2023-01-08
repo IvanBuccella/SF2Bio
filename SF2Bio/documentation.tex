@@ -38,32 +38,28 @@
 \maketitle
 
 \begin{abstract}
-ReLeaSE (Reinforcement Learning for Structural Evolution) is a new computational strategy for de novo design of molecules with desired properties. This strategy integrates two deep neural networks, one generative and one predictive, which are trained separately but used jointly to generate new targeted chemical libraries.
+The ReLeaSE (Reinforcement Learning for Structural Evolution) method is a new computational strategy for de novo design of molecules with desired properties. This strategy integrates two deep neural networks, one generative and one predictive, which are trained separately but used jointly to generate new targeted chemical libraries.
 ReLeaSE uses a simple representation of molecules only through SMILES (simplified molecular-input line-entry system) strings.
-"Generative models are trained with a stack-increment memory network to produce chemically feasible SMILES strings, and predictive models are derived to predict the desired properties of the generated de novo compounds. In the first stage of the method, the generative and predictive models are trained separately with a supervised learning algorithm. In the second stage, both models are jointly trained with the RL approach to guide the generation of new chemical structures toward those with the desired physical and/or biological properties."
-the ReLeaSE method was used to design chemical libraries with a bias toward structural complexity or toward compounds with maximal, minimal or specific physical properties, such as melting point or hydrophobicity, or toward compounds with inhibitory activity toward Janus protein kinase 2.
-Based on these explanations, the main work focuses, with the use of OS. Linux, on the demonstration examples "RecurrentQSAR," i.e., training of a recurrent neural network to predict logP from SMILES using the [OpenChem] toolkit(https://github.com/Mariewelt/OpenChem), and "LogP\_optimization," i.e., optimization of logP in a drug-like region from 0 to 5 according to Lipinski's rule of five \cite{lipinski-rule}.
-The future goal is to use Docker software to simplify software application deployment processes.
+The generative models are trained with a stack-augmented memory network to produce chemically feasible SMILES strings, and predictive models are derived to predict the desired properties of the generated de novo compounds. In the first stage of the method, the generative and predictive models are trained separately with a supervised learning algorithm. In the second stage, both models are jointly trained with the RL approach to guide the generation of new chemical structures toward those with the desired physical and/or biological properties.
+The ReLeaSE method was used to design chemical libraries with a bias toward structural complexity or toward compounds with maximal, minimal or specific physical properties, such as melting point or hydrophobicity, or toward compounds with inhibitory activity toward Janus protein kinase 2.
+Based on these explanations, the main work focuses on the execution of the method by training a recurrent neural network to predict logP from SMILES; in addition, several optimizations to the code are applied in order to create a platform-independent execution using modern technologies like Docker and Docker Compose.
 
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
 
-The World Economic Forum has called the combination of big data and artificial intelligence (AI) the fourth industrial revolution, capable of radically transforming science. AI is revolutionizing several fields of medicine, such as radiology, pathology and other specialties, and has begun to be used in drug discovery through deep learning (DL) technologies. These technologies are being applied in different areas, such as molecular docking, transcriptomics, understanding reaction mechanisms, and molecular energy prediction.
-In drug discovery, a crucial step is to formulate a well-reasoned hypothesis on how to synthesize new compounds or select them from available chemical libraries based on structure-activity relationship (SAR) data. Automated design approaches to create compounds with specific properties have been the subject of research for the past 15 years. Although there are many synthetically feasible chemicals that could be considered as possible drug-like molecules, their huge number makes it impossible to systematically examine all of them and verify them through the construction and evaluation of each individual compound. Local optimization approaches have been proposed, but these do not guarantee the optimal solution, as the design process may converge on a local or "practical" optimum through stochastic sampling or limit the search to a specific section of the chemical space that can be exhaustively examined.
-In this paper we present a novel method to generate de novo chemical compounds with desired physical, chemical and/or bioactive properties based on deep reinforcement learning (RL). RL, a subfield of artificial intelligence, is used to solve dynamic decision problems and involves analyzing possible actions, estimating the statistical relationship between actions and their possible outcomes, and determining a treatment regime that seeks to achieve the most desirable outcome. The integration of RL and neural networks was developed in the 1990s, but with the recent advancement of deep learning, which benefits from big data, new and powerful algorithmic approaches are emerging. RL, especially when combined with deep neural networks, is currently experiencing a renaissance and has recently enabled superior human performance. 
-Our method, called ReLeaSE (Reinforcement Learning for Structural Evolution), applies to the problem of designing chemical libraries with desired properties and proves to be a viable solution to this problem. ReLeaSE is distinguished from other similar approaches by its simple representation of molecules through the molecular string input system (SMILES) only during the generation and prediction phases of the method and the integration of these phases into a single workflow that also includes an RL module. ReLeaSE demonstrates that it can design chemical libraries with desired physicochemical and biological properties, and we discuss its algorithm and test applications for designing targeted chemical libraries.
-The project makes use of QSPR (Quantitative Structure-Property Relationship) a technique that uses mathematical models to predict the properties of a chemical compound based on its chemical structure. QSPR models are often used in medicinal chemistry to predict properties such as melting point, solvent potency, thermal stability, toxicity and biological activity of a compound.
-QSPR models are based on the assumption that there is a quantitative relationship between the structure of a chemical compound and its properties. For example, a QSPR model might use the structure of a chemical compound as input and predict its melting point as output. To build a QSPR model, data on the structure and properties of a large number of known chemical compounds (training set) are used, which are then used to train the model. Once the model has been trained, it can be used to predict the properties of unknown chemical compounds (test set).
-QSPR models are very useful because they make it possible to predict the properties of a chemical compound without having to synthesize or test it experimentally. However, they also have some limitations, such as dependence on the quality and accuracy of the training set and difficulty in predicting the properties of compounds with very complex chemical structures.
-QSAR predicts the following properties LogP, Tm and pIC50.
+The World Economic Forum has called the combination of big data and artificial intelligence (AI) the fourth industrial revolution, capable of radically transforming science. AI is revolutionizing several fields of medicine, such as radiology, pathology and other specialties, and has begun to be used in drug discovery through deep learning (DL) technologies. 
+These technologies are being applied in different areas, such as molecular docking, transcriptomics, understanding reaction mechanisms, and molecular energy prediction.
+In drug discovery, a crucial step is to formulate a well-reasoned hypothesis on how to synthesize new compounds or select them from available chemical libraries based on structure-activity relationship (SAR) data. Automated design approaches to create compounds with specific properties have been the subject of research for the past 15 years. Although there are many synthetically feasible chemicals that could be considered as possible drug-like molecules, their huge number makes it impossible to systematically examine all of them and verify them through the construction and evaluation of each individual compound. 
+In this document we present an execution of a novel method to generate de novo chemical compounds with desired physical, chemical and/or bioactive properties based on deep reinforcement learning (RL). 
+RL, a subfield of artificial intelligence, is used to solve dynamic decision problems and involves analyzing possible actions, estimating the statistical relationship between actions and their possible outcomes, and determining a treatment regime that seeks to achieve the most desirable outcome. 
+The integration of RL and neural networks was developed in the 1990s, but with the recent advancement of deep learning, which benefits from big data, new and powerful algorithmic approaches are emerging. RL, especially when combined with deep neural networks, is currently experiencing a renaissance and has recently enabled superior human performance. 
+The execution of the method, called ReLeaSE (Reinforcement Learning for Structural Evolution), applies to the problem of designing chemical libraries with desired properties and proves to be a viable solution to this problem. This method is able to predict different properties like logP, Tm, and pIC50.
 In the field of machine learning, the partition coefficient (logP) can be used as a property of a chemical compound to predict its toxicity or biological activity. For example, in some reinforcement learning applications, logP can be used as a feature to help the model predict the response of the biological system to a given chemical compound.
-In this way, the model can learn to select the most promising molecules for further study or new drug development. For example, the model could be trained to select molecules with a high logP because they have a higher probability of being biologically active. Conversely, the model could be trained to exclude molecules with too high a logP because they might be too toxic.
-In addition, logP can be used to predict the distribution of the chemical compound in the body and thus to determine its bioavailability. For example, a compound with a high logP might have higher bioavailability because it has a greater tendency to accumulate in lipid membranes and thus be absorbed by the body. Conversely, a compound with a low logP might have lower bioavailability because it has a lower tendency to accumulate in fats.
-Tm (melting point) is the temperature at which a solid changes to a liquid state. In chemistry and medicinal chemistry, the melting point of a substance is often used as an identifying property because each substance has a specific melting point.
-In some cases, QSPR (Quantitative Structure-Property Relationship) models can be used to predict the melting point of a substance from its chemical structure. QSPR models for melting point can be useful in identifying new molecules that may have desirable properties, such as a specific melting point. However, it is important to note that QSPR models generally have limited accuracy and can be affected by several factors, such as measurement conditions.
-Inhibitory concentration (IC) is a measure of the efficacy of a chemical compound in inhibiting the activity of a particular biological target, such as an enzyme or protein. pIC50 is a specific type of IC that represents the concentration of a compound that is required to inhibit the activity of the target by 50%. It is often used in QSAR studies as a measure of the potency of a compound.
-In QSAR, the pIC50 value can be used as a prediction of the activity of a chemical compound on a particular target. For example, if a QSAR model is developed to predict the activity of a series of chemical compounds on a particular enzyme, the pIC50 values of the compounds can be used as a metric to assess how accurately the model can predict the activity of each compound. The lower the pIC50 value, the more potent the compound is predicted to be.
+In this way, the ReLeaSE model can learn to select the most promising molecules for further study or new drug development. 
+For example, the model could be trained to select molecules with a high logP because they have a higher probability of being biologically active. Conversely, the model could be trained to exclude molecules with too high a logP because they might be too toxic. In addition, logP can be used to predict the distribution of the chemical compound in the body and thus to determine its bioavailability. For example, a compound with a high logP might have higher bioavailability because it has a greater tendency to accumulate in lipid membranes and thus be absorbed by the body. Conversely, a compound with a low logP might have lower bioavailability because it has a lower tendency to accumulate in fats.
+In some cases, the model can be used to predict the melting point (Tm) of a substance from its chemical structure; it can be useful in identifying new molecules that may have desirable properties. Tm (melting point) is the temperature at which a solid changes to a liquid state. In chemistry and medicinal chemistry, the melting point of a substance is often used as an identifying property because each substance has a specific melting point. 
+In other cases, the model can be used to predict the activity of a series of chemical compounds on a particular enzyme, like the pIC50 values of the compounds which can be used as a metric to assess how accurately the model can predict the activity of each compound. The Inhibitory concentration (IC) is a measure of the efficacy of a chemical compound in inhibiting the activity of a particular biological target, such as an enzyme or protein. The pIC50 is a specific type of IC that represents the concentration of a compound that is required to inhibit the activity of the target by 50%. 
 In the following sections we will look in detail at the use of ReLeaSe.
 
 \mypar{Related work} 
@@ -71,21 +67,60 @@ In the following sections we will look in detail at the use of ReLeaSe.
 model in references (23, 37) is a “vanilla” RNN without augmented
 memory stack, which does not have the capacity to count and infer
 algorithmic patterns (34).
-}' \cite{}
+}
 
-\section{Cosa fa ReLeaSE}\label{sec:Cosa fa ReLeaSE}
+\section{The Method}\label{sec:The Method}
 
-We have created and implemented a deep RL approach termed ReLeaSE for de novo design of novel chemical compounds with desired properties. To achieve this outcome, we combined two deep neural networks (generative and predictive) in a general workflow that also included the RL step. 
-The training process consists of two stages. The generative model has two modes of processing sequences—training and generating. At each time step, in the training mode, the
-generative network takes a current prefix of the training object and predicts the probability distribution of the next character. Then, the next character is sampled from this predicted probability distribution and is compared to the ground truth. Afterward, on the basis of this comparison, the cross-entropy loss function is calculated, and parameters of the model are updated. At each time step, in generating mode, the generative network takes a prefix of already generated sequences and then, like in the training mode, predicts the probability distribution of the next character and samples it from this predicted distribution. In the generative model, we do not update the model parameters. At the second stage, we combined both generative and predictive models into one RL system. In this system, the generative model plays the role of an agent, whose action space is represented by the SMILES notation alphabet, and state space is represented by all possible strings in this alphabet.The predictive model plays the role of a critic estimating the agent’s behavior by assigning a numerical reward to every generated molecule (that is, SMILES string). The reward is a function of the numerical property calculated by the predictive model. At this stage, the generative model is trained to maximize the expected reward.
+The ReLeaSE method implements a deep RL approach for de novo design of novel chemical compounds with desired properties. ReLeaSE is distinguished from other similar approaches by its simple representation of molecules through the molecular string input system (SMILES) only during the generation and prediction phases of the method and the integration of these phases into a single workflow that also includes an RL module. 
+The simplified molecular-input line-entry system (SMILES) is a specification in the form of a line notation for describing the structure of chemical species using short ASCII strings \cite{simplified-molecular-input-line-entry-system}. 
+The project makes use of QSPR (Quantitative Structure-Property Relationship) a technique that uses mathematical models to predict the properties of a chemical compound based on its chemical structure. QSPR models are based on the assumption that there is a quantitative relationship between the structure of a chemical compound and its properties. To build a QSPR model, data on the structure and properties of a large number of known chemical compounds (training set) are used, which are then used to train the model. Once the model has been trained, it can be used to predict the properties of unknown chemical compounds (test set). QSPR models are very useful because they make it possible to predict the properties of a chemical compound without having to synthesize or test it experimentally.
+The training process consists of two stages: in the first stage the generative model is built.
+Since Regular RNNs such as long short-term memory (LSTM) (31) and gated recurrent unit (GRU) (32) are unable to solve the sequence prediction problems because of their
+inability to count, for the generative model, a special type of stack-augmented RNN (Stack-RNN) (30) has been used; that has found success in inferring algorithmic patterns. This Stack-RNN defines a new neuron or cell structure on top of the standard gated recurrent unit \cite{arxiv} cell (see Fig. \ref{fig:softmax-loss} - A). It has two additional multiplicative gates referred to as the memory stack, which allow the Stack-RNN to learn meaningful long-range interdependencies. Stack memory is a differentiable structure onto and from which continuous vectors are inserted and removed. The objective of the Stack-RNN then is to learn hidden rules of forming sequences of letters that correspond to legitimate SMILES strings (SMILES strings as sentences
+composed of characters used in SMILES notation).
+The generative model has two modes of processing sequences—training and generating.  
+At each time step, during the training mode, the generative network takes a current prefix of the training object and predicts the probability distribution of the next character (Fig. \ref{fig:softmax-loss} - A). 
 
-The absolute majority of compounds generated de novo by the ReLeaSE method are novel structures as compared to the data sets used to train generative models, and any QSAR model could be used to evaluate their properties.
-However, one of our chief objectives was to develop a method that can tune not only structural diversity (cf. case study 1) but,most importantly, also bias the property (physical or biological) toward the desired range of values.
-As a proof of principle, we tested our approach on three diverse types of end points: physical properties, biological activity, and chemical substructure bias. The use of flexible reward function enables different library optimization strategies where one can minimize,maximize, or impose a desired range to a property of interest in the generated compound libraries. 
+\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.50\textwidth]{softmax-loss.png}
+		\caption{A}
+		\label{fig:softmax-loss}
+	\end{figure}
+	
+Then, the next character is sampled from this predicted probability distribution and is compared to the ground truth. Afterward, on the basis of this comparison, the cross-entropy loss function is calculated, and parameters of the model are updated. 
+At each time step, in generating mode, the generative network takes a prefix of already generated sequences and then, like in the training mode, predicts the probability distribution of the next character and samples it from this predicted distribution (Fig. \ref{fig:predicted-distribution} - B). 
 
-We have built QSPR models for three different properties—Tm, logP, and pIC50 for JAK2. Curated data sets for all three end points were divided into training and training sets in 5CV fashion. Specifically, it has been shown that multiple random splitting of data sets into training and test sets affords models of the highest stability and predictive power. Each model consisted of an embedding layer transforming the sequence of discrete tokens (that is, SMILES symbols) into a vector of 100 continuous numbers, an LSTM layer with 100 units and tanh nonlinearity, one dense layer with 100 units and rectify nonlinearity function, and one dense layer with one unit and identity activation function. All three models were trained with the learning-rate decay technique until convergence.
+\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.50\textwidth]{predicted-distribution.png}
+		\caption{B}
+		\label{fig:predicted-distribution}
+	\end{figure}
+	
+In the generative model, the model parameters are not updated. 
+At the second stage, both generative and predictive models are combined into one RL system, as shown in figure \ref{fig:parameter-optimization}. 
 
-As for the software needed for the project, in addition to an Nvidia GPU that meets the CUDA requirement, you will need to install Anaconda to manage packages and dependencies. Once Anaconda is installed, you will be able to create a new conda environment with Python and install the dependencies specified in the conda_requirements file, such as numpy, seaborn v0.9.0, scikit-learn v0.20.2, scipy, pytest, pytest-cov, ipython and ipykernel. In addition, you need to install RDKit, pytorch v1.10.2, torchvision v0.11.3 and cudatoolkit v11.3. You also need to install the pip dependencies listed in the pip_requirements file, such as mordred v1.1.2, tensorboard v2.5.0, tensorflow v2.5.0, tqdm v4.64.1 and xgboost v0.81. Finally, you need to add a new kernel to the jupyter notebook kernel list using ipykernel to make the newly created conda environment available within Jupyter.
+\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.50\textwidth]{parameter-optimization.png}
+		\caption{generative and predictive models}
+		\label{fig:parameter-optimization}
+	\end{figure}
+
+In this system, the generative model G (Fig. \ref{fig:parameter-optimization}) plays the role of an agent, whose action space is represented by the SMILES notation alphabet, and state space is represented by all possible strings in this alphabet.The predictive model plays the role of a critic estimating the agent’s behavior by assigning a numerical reward to every generated molecule (that is, SMILES string). 
+The predictive model P (Fig. \ref{fig:parameter-optimization}) is a model for estimating physical, chemical, or biological properties of molecules. This property prediction model is a deep neural network, which consists of an embedding layer, an LSTM layer, and two dense layers. This network is designed to calculate user-specified property (activity) of the molecule taking a SMILES string as an input data vector. This model takes a SMILES string as an input and provides one real number, which is an estimated property value, as an output (Fig. \ref{fig:smiles-to-predicted-property}). In a practical sense, this learning step is analogous to traditional  quantitative structure–activity relationships (QSAR) models. However, unlike conventional QSAR, no numerical descriptors are needed, as the model distinctly learns directly from the SMILES notation as to how to relate the comparison between SMILES strings to that between target properties. The predictor uses, as shown in the figure \ref{fig:smiles-to-predicted-property}, two unidirectional LSTM layers with hidden size of 128 each, with an embedding size of 128. The dense layer is a Multi-layer Perceptron with hidden size of 128 and ReLU activation function.
+
+\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.50\textwidth]{smiles-to-predicted-property.png}
+		\caption{SMILES strings to predicted property}
+		\label{fig:smiles-to-predicted-property}
+	\end{figure}
+	
+The reward (Fig. \ref{fig:parameter-optimization}) is a function of the numerical property calculated by the predictive model. At this stage, the generative model is trained to maximize the expected reward.
+The absolute majority of compounds generated de novo by the ReLeaSE method are novel structures as compared to the data sets used to train generative models, and any traditional quantitative structure–activity relationships model could be used to evaluate their properties.
+As a proof of principle, the method has been tested on three diverse types of endpoints: physical properties, biological activity, and chemical substructure bias. The use of a flexible reward function enables different library optimization strategies where one can minimize,maximize, or impose a desired range to a property of interest in the generated compound libraries.
 
 \section{Esempio di utilizzo di ReLeaSe}\label{sec:Esempio di utilizzo di ReLeaSe}
 
@@ -472,6 +507,9 @@ Cruz, R.D.L.; Araya-Polo, M. Algorithm 942: Semi-Stencil. ACM Trans. Math. Softw
 \bibitem{barigou}
 Youcef Barigou. Acceleration of real-life stencil codes on GPUs. Hardware Architecture [cs.AR]. 2011.
 
+\bibitem{lipinski-rule}
+\href{https://en.wikipedia.org/wiki/Lipinski\%27s_rule_of_five}{Lipinski's rule of five}
+
 \bibitem{holewinski-pouchet-sadayappan}
 Justin Holewinski, Louis-Noël Pouchet, P. Sadayappan. High-Performance Code Generation for Stencil Computations on GPU Architectures.
 
@@ -502,8 +540,11 @@ João M.P.Cardoso, José Gabriel F. Coutinho, Pedro C. Diniz. Chapter 5 - Source
 \bibitem{omp-collapse}
 \href{https://www.openmp.org/specifications/}{OpenMP API 5 Specification. Collapse.}
 
-\bibitem{lipinski-rule}
-\href{https://en.wikipedia.org/wiki/Lipinski\%27s_rule_of_five}{Lipinski's rule of five}
+\bibitem{simplified-molecular-input-line-entry-system}
+\href{https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system/}{Simplified molecular-input line-entry system}
+
+\bibitem{arxiv}
+\href{http://arxiv.org/abs/1412.3555/}{J. Chung, C. Gulcehre, K. Cho, Y. Bengio, Empirical evaluation of gated recurrent neural networks on sequence modeling, (2014).}
 
 \end{thebibliography}
 

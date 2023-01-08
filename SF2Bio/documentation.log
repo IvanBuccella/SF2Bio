@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.12) (preloaded format=pdflatex 2023.1.5)  7 JAN 2023 12:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.12) (preloaded format=pdflatex 2023.1.5)  8 JAN 2023 17:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -486,101 +486,56 @@ Package hyperref Info: Link coloring OFF on input line 27.
 \@outlinefile=\write3
 \openout3 = `documentation.out'.
 
-
-Underfull \hbox (badness 7012) in paragraph at lines 40--47
-\OT1/ptm/b/n/9 [OpenChem] toolkit(https://github.com/Mariewelt/OpenChem),
- []
-
-[1{C:/Users/maiom/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
+ [1{C:/Users/maiom/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
 
 
 ]
+<./images//softmax-loss.png, id=43, 452.69125pt x 258.9675pt>
+File: ./images//softmax-loss.png Graphic file (type png)
+<use ./images//softmax-loss.png>
+Package pdftex.def Info: ./images//softmax-loss.png  used on input line 86.
+(pdftex.def)             Requested size: 258.0pt x 147.58928pt.
 
-LaTeX Warning: Citation `' on page 2 undefined on input line 74.
-
-[2]
-! Missing $ inserted.
-<inserted text> 
-                $
-l.88 ...l the dependencies specified in the conda_
-                                                  requirements file, such as...
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-LaTeX Font Info:    Trying to load font information for U+msa on input line 88.
-
-(C:\Users\maiom\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 88.
-
-
-(C:\Users\maiom\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-! Missing $ inserted.
-<inserted text> 
-                $
-l.89 
-     
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-
-Underfull \hbox (badness 1603) in paragraph at lines 88--89
-\OT1/ptm/m/n/10 to an Nvidia GPU that meets the CUDA re-quire-ment,
+Overfull \hbox (6.0pt too wide) in paragraph at lines 86--87
+ [][] 
  []
 
+<./images//predicted-distribution.png, id=46, 452.69125pt x 247.42438pt>
+File: ./images//predicted-distribution.png Graphic file (type png)
+<use ./images//predicted-distribution.png>
+Package pdftex.def Info: ./images//predicted-distribution.png  used on input li
+ne 96.
+(pdftex.def)             Requested size: 258.0pt x 141.0107pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 88--89
-\OT1/ptm/m/n/10 and de-pen-den-cies. Once Ana-conda is in-stalled, you
+Overfull \hbox (6.0pt too wide) in paragraph at lines 96--97
+ [][] 
  []
 
+<./images//parameter-optimization.png, id=48, 452.69125pt x 331.2375pt>
+File: ./images//parameter-optimization.png Graphic file (type png)
+<use ./images//parameter-optimization.png>
+Package pdftex.def Info: ./images//parameter-optimization.png  used on input li
+ne 106.
+(pdftex.def)             Requested size: 258.0pt x 188.777pt.
 
-Underfull \hbox (badness 1668) in paragraph at lines 88--89
-\OT1/ptm/m/n/10 will be able to cre-ate a new conda en-vi-ron-ment with
+Overfull \hbox (6.0pt too wide) in paragraph at lines 106--107
+ [][] 
  []
 
+[2 <./images//softmax-loss.png> <./images//predicted-distribution.png>]
+<./images//smiles-to-predicted-property.png, id=65, 453.19313pt x 197.98969pt>
+File: ./images//smiles-to-predicted-property.png Graphic file (type png)
+<use ./images//smiles-to-predicted-property.png>
+Package pdftex.def Info: ./images//smiles-to-predicted-property.png  used on in
+put line 116.
+(pdftex.def)             Requested size: 258.0pt x 112.71329pt.
 
-Underfull \hbox (badness 4967) in paragraph at lines 88--89
-\OT1/ptm/m/n/10 Python and in-stall the de-pen-den-cies spec-i-fied in the
- []
-
-
-Overfull \hbox (17.13896pt too wide) in paragraph at lines 88--89
-\OT1/ptm/m/n/10 conda$[]\OML/cmm/m/it/10 equirementsfile; suchasnumpy; seabornv
-\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 9\OML/cmm/m/it/10 :\OT1/cmr/
-m/n/10 0\OML/cmm/m/it/10 ; scikit \OMS/cmsy/m/n/10 ^^@
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 88--89
-\OML/cmm/m/it/10 learnv\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 20\OM
-L/cmm/m/it/10 :\OT1/cmr/m/n/10 2\OML/cmm/m/it/10 ; scipy; pytest; pytest \OMS/c
-msy/m/n/10 ^^@
- []
-
-
-Overfull \hbox (1638.78955pt too wide) in paragraph at lines 88--89
-\OML/cmm/m/it/10 cov; ipythonandipykernel:Inaddition; youneedtoinstallRDKit; py
-torchv\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 10\OML/cmm/m/it/10 :\O
-T1/cmr/m/n/10 2\OML/cmm/m/it/10 ; torchvisionv\OT1/cmr/m/n/10 0\OML/cmm/m/it/10
- :\OT1/cmr/m/n/10 11\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 3\OML/cmm/m/it/10 andcuda
-toolkitv\OT1/cmr/m/n/10 11\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 3\OML/cmm/m/it/10 :
-Youalsoneedtoinstallthepipdependencieslistedinthepip[]equirementsfile; suchasmo
-rdredv\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 :\OT
-1/cmr/m/n/10 2\OML/cmm/m/it/10 ; tensorboardv\OT1/cmr/m/n/10 2\OML/cmm/m/it/10 
-:\OT1/cmr/m/n/10 5\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 ; tensorf
-lowv\OT1/cmr/m/n/10 2\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 5\OML/cmm/m/it/10 :\OT1/
-cmr/m/n/10 0\OML/cmm/m/it/10 ; tqdmv\OT1/cmr/m/n/10 4\OML/cmm/m/it/10 :\OT1/cmr
-/m/n/10 64\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 andxgboostv\OT1/c
-mr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 81\OML/cmm/m/it/10 :Finally; youne
-edtoaddanewkerneltothejupyternotebookkernellistusingipykerneltomakethenewlycrea
-tedcondaenvironmentavailablewithinJupyter:$ 
+Overfull \hbox (6.0pt too wide) in paragraph at lines 116--117
+ [][] 
  []
 
 ! Misplaced alignment tab character &.
-l.92 ... was proposed in Popova, M., Isayev, O., &
+l.127 ...was proposed in Popova, M., Isayev, O., &
                                                    Tropsha, A. (2018). Deep ...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -590,44 +545,40 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 
-Underfull \hbox (badness 3138) in paragraph at lines 101--103
+Underfull \hbox (badness 3138) in paragraph at lines 136--138
 []\OT1/ptm/b/n/10 OpenMP. \OT1/ptm/m/n/10 The OpenMP API sup-ports multi-platfo
 rm
  []
 
+[3 <./images//parameter-optimization.png> <./images//smiles-to-predicted-proper
+ty.png>]
 LaTeX Font Info:    Trying to load font information for OML+ptm on input line 1
-27.
+62.
+
 (C:\Users\maiom\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omlptm.fd
 File: omlptm.fd 
 )
 LaTeX Font Info:    Font shape `OML/ptm/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 127.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 162.
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-27.
+62.
 
 (C:\Users\maiom\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 1
-28.
+63.
 
 (C:\Users\maiom\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 128.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 163.
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 142.
+nput line 177.
 
-[3]
-pdfTeX warning (ext4): destination with the same identifier (name{lstlisting.1}
-) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.168 ...ag -O0},label={lst:optimization-flags-0}]
-                                                  
 ! You can't use `macro parameter character #' in horizontal mode.
-l.185 ...ultiple threads, it has been used the ``#
+l.220 ...ultiple threads, it has been used the ``#
                                                   pragma omp parallel for'' ...
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
@@ -635,15 +586,7 @@ If you're in the wrong mode, you might be able to
 return to the right one by typing `I}' or `I$' or `I\par'.
 
 ! You can't use `macro parameter character #' in horizontal mode.
-l.185 ...e on both loops, it has been used the ``#
-                                                  pragma omp parallel for co...
-Sorry, but I'm not programmed to handle this case;
-I'll just pretend that you didn't ask for it.
-If you're in the wrong mode, you might be able to
-return to the right one by typing `I}' or `I$' or `I\par'.
-
-! You can't use `macro parameter character #' in horizontal mode.
-l.224 ...y} variables) it has been applied the ``#
+l.220 ...e on both loops, it has been used the ``#
                                                   pragma omp parallel for co...
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
@@ -651,48 +594,74 @@ If you're in the wrong mode, you might be able to
 return to the right one by typing `I}' or `I$' or `I\par'.
 
 [4
+pdfTeX warning (ext4): destination with the same identifier (name{lstlisting.1}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.228 {
+       
 pdfTeX warning (ext4): destination with the same identifier (name{lstnumber.1.1
 }) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.228 ...with size of 16384},label={lst:tiling-1}]
-                                                  
+l.228 {
+       
 pdfTeX warning (ext4): destination with the same identifier (name{lstlisting.2}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.228 ...with size of 16384},label={lst:tiling-1}]
-                                                  
+l.228 {
+       
 pdfTeX warning (ext4): destination with the same identifier (name{lstnumber.2.1
 }) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.228 ...with size of 16384},label={lst:tiling-1}]
-                                                  
+l.228 {
+       
 pdfTeX warning (ext4): destination with the same identifier (name{lstlisting.3}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.228 ...with size of 16384},label={lst:tiling-1}]
-                                                  
+l.228 {
+       
 pdfTeX warning (ext4): destination with the same identifier (name{lstnumber.3.1
 }) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.228 ...with size of 16384},label={lst:tiling-1}]
-                                                  
+l.228 {
+       ]
 pdfTeX warning (ext4): destination with the same identifier (name{lstlisting.4}
 ) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.228 ...with size of 16384},label={lst:tiling-1}]
+<to be read again> 
+                   \relax 
+l.236 ...l loop on Y},label={lst:parallel-loop-y}]
                                                   
 pdfTeX warning (ext4): destination with the same identifier (name{lstnumber.4.1
 }) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.228 ...with size of 16384},label={lst:tiling-1}]
-                                                  ] [5]
+<to be read again> 
+                   \relax 
+l.237 for 
+          (x = 1; x < N - 1; x++)
+! You can't use `macro parameter character #' in horizontal mode.
+l.259 ...y} variables) it has been applied the ``#
+                                                  pragma omp parallel for co...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+[5]
+LaTeX Font Info:    Trying to load font information for U+msa on input line 338
+.
+ (C:\Users\maiom\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 338
+.
+
+(C:\Users\maiom\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
 
 ! LaTeX Error: \begin{document} ended by \end{itemize}.
 
@@ -700,7 +669,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.322 \end{itemize}
+l.357 \end{itemize}
                    
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
@@ -709,12 +678,12 @@ or  <return>  to continue without it.
 ! Extra \endgroup.
 <recently read> \endgroup 
                           
-l.322 \end{itemize}
+l.357 \end{itemize}
                    
 Things are pretty mixed up, but I think the worst is over.
 
 
-LaTeX Warning: File `loop-interchange.png' not found on input line 365.
+LaTeX Warning: File `loop-interchange.png' not found on input line 400.
 
 
 ! Package pdftex.def Error: File `loop-interchange.png' not found: using draft 
@@ -724,22 +693,22 @@ See the pdftex.def package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.365 ...dth=0.50\textwidth]{loop-interchange.png}
+l.400 ...dth=0.50\textwidth]{loop-interchange.png}
                                                   
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 3
-65.
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 4
+00.
 (C:\Users\maiom\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Overfull \hbox (6.0pt too wide) in paragraph at lines 365--366
+Overfull \hbox (6.0pt too wide) in paragraph at lines 400--401
  [][] 
  []
 
 
-LaTeX Warning: File `optimization-flags.png' not found on input line 378.
+LaTeX Warning: File `optimization-flags.png' not found on input line 413.
 
 
 ! Package pdftex.def Error: File `optimization-flags.png' not found: using draf
@@ -749,19 +718,18 @@ See the pdftex.def package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.378 ...h=0.50\textwidth]{optimization-flags.png}
+l.413 ...h=0.50\textwidth]{optimization-flags.png}
                                                   
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 378--379
+Overfull \hbox (6.0pt too wide) in paragraph at lines 413--414
  [][] 
  []
 
-[6]
 
-LaTeX Warning: File `parallel-loops.png' not found on input line 390.
+LaTeX Warning: File `parallel-loops.png' not found on input line 425.
 
 
 ! Package pdftex.def Error: File `parallel-loops.png' not found: using draft se
@@ -771,18 +739,19 @@ See the pdftex.def package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.390 ...width=0.50\textwidth]{parallel-loops.png}
+l.425 ...width=0.50\textwidth]{parallel-loops.png}
                                                   
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 390--391
+Overfull \hbox (6.0pt too wide) in paragraph at lines 425--426
  [][] 
  []
 
+[6]
 
-LaTeX Warning: File `loop-tiling.png' not found on input line 403.
+LaTeX Warning: File `loop-tiling.png' not found on input line 438.
 
 
 ! Package pdftex.def Error: File `loop-tiling.png' not found: using draft setti
@@ -792,18 +761,19 @@ See the pdftex.def package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.403 ...cs[width=0.50\textwidth]{loop-tiling.png}
+l.438 ...cs[width=0.50\textwidth]{loop-tiling.png}
                                                   
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 403--404
+Overfull \hbox (6.0pt too wide) in paragraph at lines 438--439
  [][] 
  []
 
+[7]
 
-LaTeX Warning: File `dimension-augmentation.png' not found on input line 416.
+LaTeX Warning: File `dimension-augmentation.png' not found on input line 451.
 
 
 ! Package pdftex.def Error: File `dimension-augmentation.png' not found: using 
@@ -813,29 +783,32 @@ See the pdftex.def package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.416 ...50\textwidth]{dimension-augmentation.png}
+l.451 ...50\textwidth]{dimension-augmentation.png}
                                                   
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 416--417
+Overfull \hbox (6.0pt too wide) in paragraph at lines 451--452
  [][] 
  []
 
-[7]
-Overfull \hbox (14.30241pt too wide) in paragraph at lines 433--445
+
+Overfull \hbox (14.30241pt too wide) in paragraph at lines 468--480
 [][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 476--477
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 514--515
 []\OT1/ptm/m/n/8 Justin Holewin-ski, Louis-No[]el Pouchet, P. Sa-dayap-pan. Hig
 h-
  []
 
 
-Underfull \hbox (badness 2418) in paragraph at lines 476--477
+Underfull \hbox (badness 2418) in paragraph at lines 514--515
 \OT1/ptm/m/n/8 Performance Code Gen-er-a-tion for Sten-cil Com-pu-ta-tions on G
 PU
  []
@@ -851,38 +824,31 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[8
-
-] (documentation.aux)
-
-LaTeX Warning: There were undefined references.
-
+[8] (documentation.aux)
 Package rerunfilecheck Info: File `documentation.out' has not changed.
-(rerunfilecheck)             Checksum: D12406BC04D26FDFC87E3D4AD384A691;909.
+(rerunfilecheck)             Checksum: BA6D475D2EB6ECD25A84EBC617281C3A;882.
  ) 
 Here is how much of TeX's memory you used:
- 13741 strings out of 476406
- 222408 string characters out of 2789568
- 2016787 words of memory out of 3000000
- 33763 multiletter control sequences out of 15000+600000
+ 13790 strings out of 476406
+ 223970 string characters out of 2789568
+ 2036787 words of memory out of 3000000
+ 33801 multiletter control sequences out of 15000+600000
  548389 words of font info for 104 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,8n,77p,1368b,1940s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 72i,8n,77p,1282b,1942s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}<C:
 /Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi1
 0.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
-/cm/cmmi7.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-amsfonts/cm/cmr10.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1
-/public/amsfonts/cm/cmsy10.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/maiom/AppData/Local/Programs/M
-iKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/maiom/AppData/Local/Programs
-/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/maiom/AppData/Local/Programs
-/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/maiom/AppData/Local/Program
-s/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/maiom/AppData/Local/Program
-s/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on documentation.pdf (8 pages, 192040 bytes).
+/cm/cmsy10.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/amsfonts/cm/cmsy7.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type
+1/urw/courier/ucrr8a.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/urw/times/utmb8a.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/urw/times/utmbi8a.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/urw/times/utmr8a.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/urw/times/utmri8a.pfb>
+Output written on documentation.pdf (8 pages, 646712 bytes).
 PDF statistics:
- 347 PDF objects out of 1000 (max. 8388607)
- 163 named destinations out of 1000 (max. 500000)
- 57 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 366 PDF objects out of 1000 (max. 8388607)
+ 169 named destinations out of 1000 (max. 500000)
+ 77 words of extra memory for PDF output out of 10000 (max. 10000000)
 
