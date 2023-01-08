@@ -18,7 +18,7 @@ This work runs the developer [ReLeaSE](https://github.com/isayev/ReLeaSE/) metho
 ### Prerequisites
 
 - Linux OS or WSL2 on a Windows 10 (or higher) machine.
-- Modern NVIDIA GPU, [compute capability 3.5](https://developer.nvidia.com/cuda-gpus) or newer.
+- A Modern NVIDIA GPU, compatible with [CUDA 11.3](https://developer.nvidia.com/cuda-11.3.0-download-archive).
 - Docker and Docker Compose (Application containers engine). Install it from [here](https://www.docker.com).
 - The Docker GPU Support enabled on the machine; check it out [here](https://docs.docker.com/compose/gpu-support/).
 - The Nvidia Container Toolkit. Install it from [here](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#install-guide).
