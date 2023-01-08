@@ -29,7 +29,7 @@
 \title{A Stencil computation algorithm optimization}
 
 
-\author{\IEEEauthorblockN{Ivan Buccella}
+\author{\IEEEauthorblockN{Ivan Buccella e Matteo Maiorano}
 \IEEEauthorblockA{Department of Computer Science\\
  University of Salerno\\
  Italy}
@@ -42,7 +42,7 @@ ReLeaSE (Reinforcement Learning for Structural Evolution) is a new computational
 ReLeaSE uses a simple representation of molecules only through SMILES (simplified molecular-input line-entry system) strings.
 "Generative models are trained with a stack-increment memory network to produce chemically feasible SMILES strings, and predictive models are derived to predict the desired properties of the generated de novo compounds. In the first stage of the method, the generative and predictive models are trained separately with a supervised learning algorithm. In the second stage, both models are jointly trained with the RL approach to guide the generation of new chemical structures toward those with the desired physical and/or biological properties."
 the ReLeaSE method was used to design chemical libraries with a bias toward structural complexity or toward compounds with maximal, minimal or specific physical properties, such as melting point or hydrophobicity, or toward compounds with inhibitory activity toward Janus protein kinase 2.
-Based on these explanations, the main work focuses, with the use of OS. Linux, on the demonstration examples "RecurrentQSAR," i.e., training of a recurrent neural network to predict logP from SMILES using the [OpenChem] toolkit(https://github.com/Mariewelt/OpenChem), and "LogP_optimization," i.e., optimization of logP in a drug-like region from 0 to 5 according to [Lipinski's rule of five] (https://en.wikipedia.org/wiki/Lipinski%27s_rule_of_five).
+Based on these explanations, the main work focuses, with the use of OS. Linux, on the demonstration examples "RecurrentQSAR," i.e., training of a recurrent neural network to predict logP from SMILES using the [OpenChem] toolkit(https://github.com/Mariewelt/OpenChem), and "LogP\_optimization," i.e., optimization of logP in a drug-like region from 0 to 5 according to Lipinski's rule of five \cite{lipinski-rule}.
 The future goal is to use Docker software to simplify software application deployment processes.
 
 \end{abstract}
@@ -501,6 +501,9 @@ João M.P.Cardoso, José Gabriel F. Coutinho, Pedro C. Diniz. Chapter 5 - Source
 
 \bibitem{omp-collapse}
 \href{https://www.openmp.org/specifications/}{OpenMP API 5 Specification. Collapse.}
+
+\bibitem{lipinski-rule}
+\href{https://en.wikipedia.org/wiki/Lipinski\%27s_rule_of_five}{Lipinski's rule of five}
 
 \end{thebibliography}
 
