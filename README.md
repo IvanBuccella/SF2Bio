@@ -17,7 +17,7 @@ This work runs the developer [ReLeaSE](https://github.com/isayev/ReLeaSE/) metho
 
 ### Prerequisites
 
-- Linux OS or WSL2 on a Windows 10 (or higher) machine.
+- Linux OS or WSL 2 on a Windows 10 (or higher) machine. If you use WSL 2, follow the [official guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#getting-started-with-cuda-on-wsl).
 - A Modern NVIDIA GPU, compatible with [CUDA 11.3](https://developer.nvidia.com/cuda-11.3.0-download-archive).
 - Docker and Docker Compose (Application containers engine). Install it from [here](https://www.docker.com).
 - The Docker GPU Support enabled on the machine; check it out [here](https://docs.docker.com/compose/gpu-support/).
