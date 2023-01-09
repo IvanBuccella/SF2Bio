@@ -1,6 +1,6 @@
-\documentclass[conference]{IEEEtran}
+\documentclass[a4paper]{article}
 %\usepackage{spconf,amsmath,amssymb,graphicx}
-\usepackage{amsmath,amssymb,graphicx,caption,listings,hyperref,graphicx,verbatim}
+\usepackage{amsmath,amssymb,graphicx,caption,listings,hyperref,graphicx,verbatim, geometry}
 
 % Example definitions.
 % --------------------
@@ -11,6 +11,7 @@
 \newcommand{\mypar}[1]{{\bf #1.}}
 \newcommand{\mysubpar}[2]{{\bf #1.}}
 \graphicspath{ {./images/} }
+\geometry{a4paper, top=2cm, bottom=2cm, left=2.5cm, right=2.5cm, heightrounded, bindingoffset=5mm}
 
 \lstset{frame=tb,
   language=C,
@@ -30,21 +31,20 @@
 
 
 \author{\IEEEauthorblockN{Ivan Buccella and Matteo Maiorano}
-\IEEEauthorblockA{Department of Computer Science\\
+\IEEEauthorblockA{\\Department of Computer Science\\
  University of Salerno\\
  Italy}
 }
+\date{} % clear date
 
 \maketitle
 
-\begin{abstract}
+\section*{Abstract}
 The ReLeaSE (Reinforcement Learning for Structural Evolution) method is a new computational strategy for de novo design of molecules with desired properties. This strategy integrates two deep neural networks, one generative and one predictive, which are trained separately but used jointly to generate new targeted chemical libraries.
 ReLeaSE uses a simple representation of molecules only through SMILES (simplified molecular-input line-entry system) strings.
 The generative models are trained with a stack-augmented memory network to produce chemically feasible SMILES strings, and predictive models are derived to predict the desired properties of the generated de novo compounds. In the first stage of the method, the generative and predictive models are trained separately with a supervised learning algorithm. In the second stage, both models are jointly trained with the Reinforcement Learning approach to guide the generation of new chemical structures toward those with the desired physical and/or biological properties.
 The ReLeaSE method was used to design chemical libraries with a bias toward structural complexity or toward compounds with maximal, minimal or specific physical properties, such as melting point or hydrophobicity, or toward compounds with inhibitory activity toward Janus protein kinase 2.
 Based on these explanations, the main work focuses on the execution of the method by training a recurrent neural network to predict logP from SMILES; in addition, several optimizations to the code are applied in order to create a platform-independent execution using modern technologies like Docker and Docker Compose.
-
-\end{abstract}
 
 \section{Introduction}\label{sec:intro}
 
@@ -83,8 +83,8 @@ At each time step, during the training mode, the generative network takes a curr
 
 \begin{figure}[htbp]
 		\centering
-			\includegraphics[width=0.50\textwidth]{softmax-loss.png}
-		\caption{Training step of the generative Stack-RNN.}
+			\includegraphics[width=\textwidth]{softmax-loss.png}
+		\caption{Training step of the generative Stack-RNN}
 		\label{fig:softmax-loss}
 	\end{figure}
 	
@@ -93,8 +93,8 @@ At each time step, in generating mode, the generative network takes a prefix of 
 
 \begin{figure}[htbp]
 		\centering
-			\includegraphics[width=0.50\textwidth]{predicted-distribution.png}
-		\caption{Generator step of the generative Stack-RNN.}
+			\includegraphics[width=\textwidth]{predicted-distribution.png}
+		\caption{Generator step of the generative Stack-RNN}
 		\label{fig:predicted-distribution}
 	\end{figure}
 	
@@ -103,8 +103,8 @@ At the second stage, both generative and predictive models are combined into one
 
 \begin{figure}[htbp]
 		\centering
-			\includegraphics[width=0.50\textwidth]{parameter-optimization.png}
-		\caption{General pipeline of RL system for novel compound generation.}
+			\includegraphics[width=\textwidth]{parameter-optimization.png}
+		\caption{General pipeline of RL system for novel compound generation}
 		\label{fig:parameter-optimization}
 	\end{figure}
 
@@ -113,7 +113,7 @@ The predictive model P (Fig. \ref{fig:parameter-optimization}) is a model for es
 
 \begin{figure}[htbp]
 		\centering
-			\includegraphics[width=0.50\textwidth]{smiles-to-predicted-property.png}
+			\includegraphics[width=\textwidth]{smiles-to-predicted-property.png}
 		\caption{Scheme of predictive model.}
 		\label{fig:smiles-to-predicted-property}
 	\end{figure}
@@ -132,7 +132,7 @@ The policy gradient loss is defined as follow:
 
 \begin{figure}[htbp]
 		\centering
-			\includegraphics[width=0.50\textwidth]{formula.png}
+			\includegraphics[width=0.70\textwidth]{formula.png}
 		\label{fig:formula}
 	\end{figure}
 
@@ -236,12 +236,11 @@ As shown in the code above, the docker-compose file includes the GPU access \cit
 
 \begin{figure}[htbp]
 		\centering
-			\includegraphics[width=0.50\textwidth]{logp-optimization.png}
-		\caption{logP optimization on jupyter notebook}
+			\includegraphics[width=\textwidth]{logp-optimization.png}
 		\label{fig:logp-optimization}
 	\end{figure}
 
-In the figure \ref{fig:logp-optimization} is reported the configured jupyter notebook of the execution described in the following sections; it can be reached by visiting the \href{http://localhost:{HTTP_PORT}/LogP_optimization_demo.ipynb}{URL} into the host machine web browser.
+In the figure above is reported the configured jupyter notebook of the execution described in the following sections; it can be reached by visiting the \href{http://localhost:{HTTP_PORT}/LogP_optimization_demo.ipynb}{URL} into the host machine web browser.
 
 \section{Description of the execution}\label{sec:Description of the execution}
 
@@ -602,6 +601,14 @@ legends = ['log P = ' + str(prediction_biased[i]) for i in ind]
 Draw.MolsToGridImage(mols_to_draw, molsPerRow=5, 
                      subImgSize=(200,200), legends=legends)
 \end{lstlisting}
+
+The output will be something like:
+
+\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=\textwidth]{output.png}
+		\label{fig:output}
+	\end{figure}
 
 \section{Conclusions}\label{sec:Conclusions}
 
