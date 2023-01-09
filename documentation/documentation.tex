@@ -67,55 +67,52 @@ algorithmic patterns (34).
 
 \section{The Method}\label{sec:The Method}
 
-The ReLeaSE method implements a deep RL approach for de novo design of novel chemical compounds with desired properties. ReLeaSE is distinguished from other similar approaches by its simple representation of molecules through the molecular string input system (SMILES) only during the generation and prediction phases of the method and the integration of these phases into a single workflow that also includes an RL module. 
-The simplified molecular-input line-entry system (SMILES) is a specification in the form of a line notation for describing the structure of chemical species using short ASCII strings \cite{simplified-molecular-input-line-entry-system}. 
+The ReLeaSE method implements a DRL approach for de novo design of novel chemical compounds with desired properties. ReLeaSE is distinguished from other similar approaches by its simple representation of molecules through the molecular string input system (SMILES) only during the generation and prediction phases of the method and the integration of these phases into a single workflow that also includes an RL module. 
 The project makes use of QSPR (Quantitative Structure-Property Relationship) a technique that uses mathematical models to predict the properties of a chemical compound based on its chemical structure. QSPR models are based on the assumption that there is a quantitative relationship between the structure of a chemical compound and its properties. To build a QSPR model, data on the structure and properties of a large number of known chemical compounds (training set) are used, which are then used to train the model. Once the model has been trained, it can be used to predict the properties of unknown chemical compounds (test set). QSPR models are very useful because they make it possible to predict the properties of a chemical compound without having to synthesize or test it experimentally.
 The training process consists of two stages: in the first stage the generative model is built.
-Since Regular RNNs such as long short-term memory (LSTM) (31) and gated recurrent unit (GRU) (32) are unable to solve the sequence prediction problems because of their
-inability to count, for the generative model, a special type of stack-augmented RNN (Stack-RNN) (30) has been used; that has found success in inferring algorithmic patterns. This Stack-RNN defines a new neuron or cell structure on top of the standard gated recurrent unit \cite{arxiv} cell (see Fig. \ref{fig:softmax-loss} - A). It has two additional multiplicative gates referred to as the memory stack, which allow the Stack-RNN to learn meaningful long-range interdependencies. Stack memory is a differentiable structure onto and from which continuous vectors are inserted and removed. The objective of the Stack-RNN then is to learn hidden rules of forming sequences of letters that correspond to legitimate SMILES strings (SMILES strings as sentences
-composed of characters used in SMILES notation).
+Since Regular Recurring Neural Networks (RNNs) such as long short-term memory (LSTM) \cite{lstm} and gated recurrent unit (GRU) \cite{gru} are unable to solve the sequence prediction problems because of their inability to count, for the generative model, a special type of stack-augmented RNN (Stack-RNN) \cite{stack-rnn} has been used; that has found success in inferring algorithmic patterns. This Stack-RNN defines a new neuron or cell structure on top of the standard gated recurrent unit \cite{grnn} cell (see Fig. \ref{fig:softmax-loss} - A). It has two additional multiplicative gates referred to as the memory stack, which allow the Stack-RNN to learn meaningful long-range interdependencies. Stack memory is a differentiable structure onto and from which continuous vectors are inserted and removed. The objective of the Stack-RNN then is to learn hidden rules of forming sequences of letters that correspond to legitimate SMILES strings.
 The generative model has two modes of processing sequences—training and generating.  
-At each time step, during the training mode, the generative network takes a current prefix of the training object and predicts the probability distribution of the next character (Fig. \ref{fig:softmax-loss} - A). 
+At each time step, during the training mode, the generative network takes a current prefix of the training object and predicts the probability distribution of the next character (Fig. \ref{fig:softmax-loss}). 
 
 \begin{figure}[htbp]
-		\centering
-			\includegraphics[width=\textwidth]{softmax-loss.png}
-		\caption{Training step of the generative Stack-RNN}
-		\label{fig:softmax-loss}
-	\end{figure}
+    \centering
+        \includegraphics[width=\textwidth]{softmax-loss.png}
+    \caption{Training step of the generative Stack-RNN}
+    \label{fig:softmax-loss}
+\end{figure}
 	
 Then, the next character is sampled from this predicted probability distribution and is compared to the ground truth. Afterward, on the basis of this comparison, the cross-entropy loss function is calculated, and parameters of the model are updated. 
-At each time step, in generating mode, the generative network takes a prefix of already generated sequences and then, like in the training mode, predicts the probability distribution of the next character and samples it from this predicted distribution (Fig. \ref{fig:predicted-distribution} - B). 
+At each time step, in generating mode, the generative network takes a prefix of already generated sequences and then, like in the training mode, predicts the probability distribution of the next character and samples it from this predicted distribution (Fig. \ref{fig:predicted-distribution}). 
 
 \begin{figure}[htbp]
-		\centering
-			\includegraphics[width=\textwidth]{predicted-distribution.png}
-		\caption{Generator step of the generative Stack-RNN}
-		\label{fig:predicted-distribution}
-	\end{figure}
+    \centering
+        \includegraphics[width=\textwidth]{predicted-distribution.png}
+    \caption{Generator step of the generative Stack-RNN}
+    \label{fig:predicted-distribution}
+\end{figure}
 	
 In the generative model, the model parameters are not updated. 
-At the second stage, both generative and predictive models are combined into one RL system, as shown in figure \ref{fig:parameter-optimization}. 
+At the second stage, both generative and predictive models are combined into one Reinforcement Learning system, as shown in figure \ref{fig:parameter-optimization}. 
 
 \begin{figure}[htbp]
-		\centering
-			\includegraphics[width=\textwidth]{parameter-optimization.png}
-		\caption{General pipeline of RL system for novel compound generation}
-		\label{fig:parameter-optimization}
-	\end{figure}
+    \centering
+        \includegraphics[width=\textwidth]{parameter-optimization.png}
+    \caption{General pipeline of RL system for novel compound generation}
+    \label{fig:parameter-optimization}
+\end{figure}
 
-In this system, the generative model G (Fig. \ref{fig:parameter-optimization}) plays the role of an agent, whose action space is represented by the SMILES notation alphabet, and state space is represented by all possible strings in this alphabet.The predictive model plays the role of a critic estimating the agent’s behavior by assigning a numerical reward to every generated molecule (that is, SMILES string). 
-The predictive model P (Fig. \ref{fig:parameter-optimization}) is a model for estimating physical, chemical, or biological properties of molecules. This property prediction model is a deep neural network, which consists of an embedding layer, an LSTM layer, and two dense layers. This network is designed to calculate user-specified property (activity) of the molecule taking a SMILES string as an input data vector. This model takes a SMILES string as an input and provides one real number, which is an estimated property value, as an output (Fig. \ref{fig:smiles-to-predicted-property}). In a practical sense, this learning step is analogous to traditional  quantitative structure–activity relationships (QSAR) models. However, unlike conventional QSAR, no numerical descriptors are needed, as the model distinctly learns directly from the SMILES notation as to how to relate the comparison between SMILES strings to that between target properties. The predictor uses, as shown in the figure \ref{fig:smiles-to-predicted-property}, two unidirectional LSTM layers with hidden size of 128 each, with an embedding size of 128. The dense layer is a Multi-layer Perceptron with hidden size of 128 and ReLU activation function.
+In this system, the generative model G (Fig. \ref{fig:parameter-optimization}) plays the role of an agent, whose action space is represented by the SMILES notation alphabet, and state space is represented by all possible strings in this alphabet. The predictive model plays the role of a critic estimating the agent's behavior by assigning a numerical reward to every generated molecule. 
+The predictive model P (Fig. \ref{fig:parameter-optimization}) is a model for estimating physical, chemical, or biological properties of molecules. This property prediction model is a deep neural network, which consists of an embedding layer, an LSTM layer, and two dense layers. This network is designed to calculate user-specified property (activity) of the molecule taking a SMILES string as an input data vector. This model takes a SMILES string as an input and provides one real number, which is an estimated property value, as an output (Fig. \ref{fig:smiles-to-predicted-property}). In a practical sense, this learning step is analogous to traditional  quantitative structure-activity relationships (QSAR) models. However, unlike conventional QSAR, no numerical descriptors are needed, as the model distinctly learns directly from the SMILES notation as to how to relate the comparison between SMILES strings to that between target properties. The predictor uses, as shown in the figure \ref{fig:smiles-to-predicted-property}, two unidirectional LSTM layers with hidden size of 128 each, with an embedding size of 128. The dense layer is a Multi-layer Perceptron with hidden size of 128 and ReLU activation function.
 
 \begin{figure}[htbp]
-		\centering
-			\includegraphics[width=\textwidth]{smiles-to-predicted-property.png}
-		\caption{Scheme of predictive model.}
-		\label{fig:smiles-to-predicted-property}
-	\end{figure}
+    \centering
+        \includegraphics[width=\textwidth]{smiles-to-predicted-property.png}
+    \caption{Scheme of predictive model.}
+    \label{fig:smiles-to-predicted-property}
+\end{figure}
 	
 The reward (Fig. \ref{fig:parameter-optimization}) is a function of the numerical property calculated by the predictive model. At this stage, the generative model is trained to maximize the expected reward.
-The absolute majority of compounds generated de novo by the ReLeaSE method are novel structures as compared to the data sets used to train generative models, and any traditional quantitative structure–activity relationships model could be used to evaluate their properties.
+The absolute majority of compounds generated de novo by the ReLeaSE method are novel structures as compared to the data sets used to train generative models, and any traditional quantitative structure-activity relationships model could be used to evaluate their properties.
 As a proof of principle, the method has been tested on three diverse types of endpoints: physical properties, biological activity, and chemical substructure bias. The use of a flexible reward function enables different library optimization strategies where one can minimize,maximize, or impose a desired range to a property of interest in the generated compound libraries.
 
 \section{The execution}\label{sec:The execution}
@@ -127,10 +124,10 @@ In this execution the generator produces a new SMILES string, which is then eval
 The policy gradient loss is defined as follow:
 
 \begin{figure}[htbp]
-		\centering
-			\includegraphics[width=0.70\textwidth]{formula.png}
-		\label{fig:formula}
-	\end{figure}
+    \centering
+        \includegraphics[width=0.70\textwidth]{formula.png}
+    \label{fig:formula}
+\end{figure}
 
 where \textit{R} is the reward obtained at time step i. \begin{math}\gamma\end{math} is the discount factor and \begin{math} p(s_i | s_1,\cdots ,s_i_-_1,\theta) \end{math} is the probability of the next character given the prefix, which is obtained from the generator. The reward is the same for every time step and is equal to the reward for the whole molecule. 
 
@@ -160,10 +157,11 @@ In this section is described how to implement and run the ReLeaSe method on a ma
 As mentioned into the \href{https://github.com/IvanBuccella/SF2Bio#installation}{repository} of the project, the following instructions need to be performed for running the container:
 
 \begin{lstlisting}
-\$ git clone https://github.com/IvanBuccella/SF2Bio
-HTTP_PORT=8888
-\$ docker-compose build
-\$ docker-compose up
+1 git clone https://github.com/IvanBuccella/SF2Bio
+2 cd docker
+3 Set your own environment variables (the jupyter notebook port) by using the '.env-sample' file. You can just duplicate and rename it in '.env'.
+4 docker-compose build
+5 docker-compose up
 \end{lstlisting}
 
 \subsection{The Dockerfile}\label{sec:The Dockerfile}
@@ -171,60 +169,51 @@ HTTP_PORT=8888
 During the installation and initialization phases of the project, some changes had to be made to the code to resolve errors that prevented it from starting. This could have been caused by several factors, such as the presence of outdated dependencies or incompatible package versions. These changes allowed the use of newer versions of the packages, which were more stable and compatible with the code. 
 The result of this phase gave in output the construction of the Dockerfile which replicates the installation methodology described in the ReLeaSe method \href{https://github.com/isayev/ReLeaSE#installation-with-anaconda}{repository}. 
 
-\begin{lstlisting}
+\begin{lstlisting}[label={lst:dockerfile}]
 1 FROM nvidia/cuda:11.3.0-cudnn8-runtime-ubuntu20.04
-
 2 RUN apt-get update
 3 RUN apt-get install -y git
 4 RUN apt-get install -y wget
-
 5 RUN wget https://repo.anaconda.com/miniconda/ Miniconda3-latest-Linux-x86_64.sh
 6 RUN bash Miniconda3-latest-Linux-x86_64.sh -b -p /miniconda
 7 ENV PATH=\$PATH:/miniconda/pcondabin:/miniconda/bin
-
 8 RUN conda update -n base -c defaults conda
 9 RUN conda create -n release python=3.6
-
 10 SHELL ["conda","run","-n","release","/bin/bash", "-c"]
-
 11 COPY environment environment
 12 RUN conda install --yes --file environment/conda.txt
 13 RUN conda install -c rdkit rdkit nox cairo
 14 RUN conda install pytorch=1.10.1 torchvision=0.11.2 -c pytorch -c conda-forge
 15 RUN pip install -r environment/pip.txt
-
 16 WORKDIR /home
-
 17 RUN git clone https://github.com/isayev/ReLeaSE.git .
-
 18 ENTRYPOINT ["conda", "run", "-n", "release", "jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
 \end{lstlisting}
 
-As shown in the code above, build starts from the official \href{https://hub.docker.com/r/nvidia/cuda}{Nvidia CUDA docker image} with Ubuntu 20.04. To the initial image, several dependencies are added, like \href{https://docs.conda.io/en/latest/miniconda.html}{MiniConda} which is a bootstrap version of Anaconda [Row 5 del codice].
-Once Conda is installed, a new environment with Python is created [Row 11 del codice] and the required dependencies specified in the conda.txt file are installed [Row 12 del codice]. In addition, RDKit, Nox, Cairo, pytorch and torchvision are installed [Rows 13-14 del codice]. 
-Then the pip dependencies listed in the pip.txt file, such as \href{https://www.tensorflow.org/tensorboard}{tensorboard}, \href{https://www.tensorflow.org/}{tensorflow} are installed [Row 15 del codice].
+As shown in the code above, build starts from the official \href{https://hub.docker.com/r/nvidia/cuda}{Nvidia CUDA docker image} with Ubuntu 20.04. To the initial image, several dependencies are added, like \href{https://docs.conda.io/en/latest/miniconda.html}{MiniConda} which is a bootstrap version of Anaconda [Row 5 of \ref{lst:dockerfile}].
+Once Conda is installed, a new environment with Python is created [Row 11 of \ref{lst:dockerfile}] and the required dependencies specified in the conda.txt file are installed [Row 12 of \ref{lst:dockerfile}]. In addition, RDKit, Nox, Cairo, pytorch and torchvision are installed [Rows 13-14 of \ref{lst:dockerfile}]. 
+Then the pip dependencies listed in the pip.txt file, such as \href{https://www.tensorflow.org/tensorboard}{tensorboard}, \href{https://www.tensorflow.org/}{tensorflow} are installed [Row 15 of \ref{lst:dockerfile}].
 Finally, the ReLeaSe code repository is cloned into the workdir of the image and the entrypoint of the jupyter notebook is defined.
 
 \subsection{The Docker Compose}\label{sec:The Docker Compose}
 
 \begin{lstlisting}
-version: "3.8"
-
-services:
-  app:
-    platform: linux/amd64
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      - NVIDIA_DISABLE_REQUIRE=1
-    ports:
-      - \${HTTP_PORT}:8888
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities: [gpu]
+1  version: "3.8"
+2  services:
+3   app:
+4     platform: linux/amd64
+5     build:
+6       context: .
+7       dockerfile: Dockerfile
+8     environment:
+9       - NVIDIA_DISABLE_REQUIRE=1
+10    ports:
+11     - \${HTTP_PORT}:8888
+12    deploy:
+13      resources:
+14        reservations:
+15          devices:
+16            - capabilities: [gpu]
 \end{lstlisting}
 
 As shown in the code above, the docker-compose file includes the GPU access \cite{gpu-support} to the service container “app” including all the nvidia GPUs installed on the host machine. This access allows the container to use the nvidia GPUs shared for the execution; in particular this allows “pytorch” to find and to use the CUDA cores.
@@ -232,10 +221,10 @@ As shown in the code above, the docker-compose file includes the GPU access \cit
 \subsection{The running container}\label{sec:The running container}
 
 \begin{figure}[htbp]
-		\centering
-			\includegraphics[width=\textwidth]{logp-optimization.png}
-		\label{fig:logp-optimization}
-	\end{figure}
+    \centering
+        \includegraphics[width=\textwidth]{logp-optimization.png}
+    \label{fig:logp-optimization}
+\end{figure}
 
 In the figure above is reported the configured jupyter notebook of the execution described in the following sections; it can be reached by visiting the \href{http://localhost:{HTTP_PORT}/LogP_optimization_demo.ipynb}{URL} into the host machine web browser.
 
@@ -434,15 +423,9 @@ import numpy as np
 rmse = []
 auc_score = []
 for i in range(5):
-    test_dataset = SmilesDataset(tmp_data_dir + str(i) + '_test.smi',
-                                 delimiter=',', cols_to_read=[0, 1], tokens=tokens,
-                                flip=False)
+    test_dataset = SmilesDataset(tmp_data_dir + str(i) + '_test.smi', delimiter=',', cols_to_read=[0, 1], tokens=tokens, flip=False)
     test_dataset.target = test_dataset.target
-    val_loader = create_loader(test_dataset,
-														 batch_size= model_params['batch_size'],
-														 shuffle=False,
-														 num_workers=1,
-														 pin_memory=True)
+    val_loader = create_loader(test_dataset, batch_size= model_params['batch_size'], shuffle=False, num_workers=1, pin_memory=True)
     metrics = evaluate(models[i], val_loader, criterion)
     rmse.append(np.sqrt(metrics[0]))
     auc_score.append(metrics[1])
@@ -471,27 +454,24 @@ The unbiased distribution of the property by using the previous generator and pr
 
 \begin{lstlisting}
 my_predictor = RNNPredictor(path_to_params, path_to_checkpoint, predictor_tokens)
-smiles_unbiased, prediction_unbiased = estimate_and_update(my_generator,
-										 my_predictor,
-										 n_to_generate=10000)
+smiles_unbiased, prediction_unbiased = estimate_and_update(my_generator, my_predictor, n_to_generate=10000)
 \end{lstlisting}
 
 This phase produces in output:
 
 \begin{figure}[htbp]
-		\centering
-			\includegraphics[width=0.70\textwidth]{unbiased.png}
-		\label{fig:unbiased}
-	\end{figure}
+    \centering
+        \includegraphics[width=0.70\textwidth]{unbiased.png}
+    \caption{The unbiased distribution of predicted logP for generated molecules}
+    \label{fig:unbiased}
+\end{figure}
 
 \subsection{Second stage - Biasing the distribution of the generator with reinforcement learning}\label{sec:Second stage - Biasing the distribution of the generator with reinforcement learning}
 
 A copy of the generator is created:
 
 \begin{lstlisting}
-my_generator_max = StackAugmentedRNN(input_size=gen_data.n_characters, 
-												 hidden_size=hidden_size,
-												 output_size=gen_data.n_characters, 
+my_generator_max = StackAugmentedRNN(input_size=gen_data.n_characters, hidden_size=hidden_size, output_size=gen_data.n_characters, 
 												 layer_type=layer_type,
 												 n_layers=1, is_bidirectional=False, has_stack=True,
 												 stack_width=stack_width, stack_depth=stack_depth, 
@@ -521,9 +501,7 @@ def get_reward_logp(smiles, predictor, invalid_reward=0.0):
 And then the Reinforcement Learning (combining the generator, the predictor and the reward function depending on the goal) is started:
 
 \begin{lstlisting}
-RL_logp = Reinforcement(my_generator_max, 
-												my_predictor, 
-												get_reward_logp)
+RL_logp = Reinforcement(my_generator_max, my_predictor, get_reward_logp)
 
 rewards = []
 rl_losses = []
@@ -581,9 +559,7 @@ def estimate_and_update(generator, predictor, n_to_generate):
 After reached the goal, the biased distribution of the property is produced:
 
 \begin{lstlisting}
-smiles_biased, prediction_biased = estimate_and_update(RL_logp.generator, 
-                                                       my_predictor,
-                                                       n_to_generate=10000)
+smiles_biased, prediction_biased = estimate_and_update(RL_logp.generator, my_predictor, n_to_generate=10000)
 \end{lstlisting}
 
 This phase produces in output: 
@@ -591,6 +567,7 @@ This phase produces in output:
 \begin{figure}[htbp]
 		\centering
 			\includegraphics[width=0.70\textwidth]{biased.png}
+        \caption{The biased distribution of predicted logP for generated molecules}
 		\label{fig:biased}
 	\end{figure}
 
@@ -618,59 +595,28 @@ Draw.MolsToGridImage(mols_to_draw, molsPerRow=5,
 The output will be something like:
 
 \begin{figure}[htbp]
-		\centering
-			\includegraphics[width=\textwidth]{output.png}
-		\label{fig:output}
-	\end{figure}
-
-\section{Conclusions}\label{sec:Conclusions}
-
-
-
-
-
-
-
-
-\begin{comment}
-\section{Conclusions}
-This article presents a number of different approaches to optimize the above-detailed Stencil computation's algorithm on multi-core architectures, based on a range of micro benchmarks.
-For the \textbf{loop interchange} optimization, it indicates that the standard loop \textit{x-y} is faster than the \textit{y-x} loop, this is favored by the C programming language memory layout.
-For the \textbf{optimization flags} optimization, it indicates that the best flag to use to compile the code is the -O3.
-For the \textbf{parallel loop} optimization, it indicates that having only one parallel loop on the external loop is faster.
-For the \textbf{loop tiling} optimization, it indicates that having a \textit{tile\textunderscore size} of \textit{8192} is faster.
-About the \textbf{dimension} of the Stencil computation algorithm, it shows that by augmenting the number of dimensions of two, the computation is faster with \textbf{loop tiling} optimization than having a lower number of dimensions. In the table \ref{table:optimization-summary} is shown a summary with the best running time, relative and absolute speedups for every code optimization.
-
-\renewcommand{\tablename}{Table}
-
-\begin{table}[h!]
-\begin{tabular}{||l r r r||} 
-\hline
- Implementation & Running time & Rel. speedup & Abs. speedup \\ [0.5ex] 
- \hline\hline
- Starting algorithm & 5.0533 & 1.00 & 1.00 \\
- + Loop interchange & 5.0533 & 1.00 & 1.00 \\
- + Optimization flags & 0.5904 & 8.55 & 8.55 \\
- + Parallel loops & 0.4585 & 1.28 & 11.02 \\
- + Loop tiling & 0.4422 & 1.03 & 11.42 \\
- Dimension Augmentation & 0.2645 & 1.67 & 19.10 \\ [1ex] 
-\hline
-\end{tabular}
-\caption{Summary}
-\label{table:optimization-summary}
-\end{table}
-
-In future work, it would be interesting to try to implement what is the maximum number of dimension augmentation that offers a lower computation timing.
-
-\end{comment}
+    \centering
+        \includegraphics[width=\textwidth]{output.png}
+    \label{fig:output}
+\end{figure}
 
 \begin{thebibliography}{1}
 
 \bibitem{simplified-molecular-input-line-entry-system}
 \href{https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system/}{Simplified molecular-input line-entry system}
 
-\bibitem{arxiv}
-\href{http://arxiv.org/abs/1412.3555/}{J. Chung, C. Gulcehre, K. Cho, Y. Bengio, Empirical evaluation of gated recurrent neural networks on sequence modeling, (2014).}
+\bibitem{grnn}
+\href{http://arxiv.org/abs/1412.3555/}{J. Chung, C. Gulcehre, K. Cho, Y. Bengio, Empirical evaluation of gated recurrent neural networks on sequence modeling, \(2014\).}
+
+\bibitem{stack-rnn}
+\href{http://arxiv.org/abs/1503.01007}{A. Joulin, T. Mikolov, Inferring algorithmic patterns with stack-augmented recurrent nets. \(2015\)}
+
+\bibitem{lstm}
+{S. Hochreiter, J. Schmidhuber, Long short-term memory. Neural. Comput. 9, 1735-1780 \(1997\).}
+
+\bibitem{gru}
+\href{http://arxiv.org/abs/1412.3555}{J. Chung, C. Gulcehre, K. Cho, Y. Bengio, Empirical evaluation of gated recurrent neural
+networks on sequence modeling. \(2014\)}
 
 \bibitem{gpu-support}
 \href{https://docs.docker.com/compose/gpu-support/}{Docker GPU support}

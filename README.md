@@ -33,6 +33,7 @@ Clone the repository:
 
 ```sh
 $ git clone https://github.com/IvanBuccella/SF2Bio
+$ cd docker
 ```
 
 ### Environment Variables
