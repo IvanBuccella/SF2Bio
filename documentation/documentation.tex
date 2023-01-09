@@ -253,12 +253,7 @@ layer_type = 'GRU'
 lr = 0.001
 optimizer_instance = torch.optim.Adadelta
 
-my_generator = StackAugmentedRNN (input_size=gen_data.n_characters, hidden_size=hidden_size,
-									 output_size=gen_data.n_characters, layer_type=layer_type,
-									 n_layers=1, is_bidirectional=False, has_stack=True,
-									 stack_width=stack_width, stack_depth=stack_depth, 
-									 use_cuda=use_cuda, 
-									 optimizer_instance=optimizer_instance, lr=lr)
+my_generator = StackAugmentedRNN (input_size=gen_data.n_characters, hidden_size=hidden_size, output_size=gen_data.n_characters, layer_type=layer_type, n_layers=1, is_bidirectional=False, has_stack=True, stack_width=stack_width, stack_depth=stack_depth, use_cuda=use_cuda, optimizer_instance=optimizer_instance, lr=lr)
 model_path = './checkpoints/generator/checkpoint_biggest_rnn'
 losses = my_generator.fit(gen_data, 1500000)
 plt.plot(losses)
@@ -275,8 +270,7 @@ The data are read from the following code:
 
 \begin{lstlisting}
 from openchem.data.utils import read_smiles_property_file
-data = read_smiles_property_file('./data/logP_labels.csv', 
-                                 cols_to_read=[1, 2], keep_header=False)
+data = read_smiles_property_file('./data/logP_labels.csv', cols_to_read=[1, 2], keep_header=False)
 smiles = data[0]
 labels = data[1].astype('float32')
 \end{lstlisting}
@@ -286,9 +280,7 @@ The imported data are prepared:
 \begin{lstlisting}
 from openchem.data.utils import get_tokens
 tokens, _, _ = get_tokens(smiles)
-tokens = ['<', '>', '#', '%', ')', '(', '+', '-', '/', '.', '1', '0', '3', '2', '5', '4', '7',
-          '6', '9', '8', '=', 'A', '@', 'C', 'B', 'F', 'I', 'H', 'O', 'N', 'P', 'S', '[', ']',
-          '\\', 'c', 'e', 'i', 'l', 'o', 'n', 'p', 's', 'r', '\n']
+tokens = ['<', '>', '#', '\%', ')', '(', '+', '-', '/', '.', '1', '0', '3', '2', '5', '4', '7','6', '9', '8', '=', 'A', '@', 'C', 'B', 'F', 'I', 'H', 'O', 'N', 'P', 'S', '[', ']','\\', 'c', 'e', 'i', 'l', 'o', 'n', 'p', 's', 'r', '\n']
 tokens = ''.join(tokens) + ' '
 
 from sklearn.model_selection import KFold, train_test_split
@@ -375,18 +367,12 @@ for split in data:
     y_train = labels[train].reshape(-1)
     X_test = smiles[test]
     y_test = labels[test].reshape(-1)
-    save_smiles_property_file(tmp_data_dir + str(i) + '_train.smi', 
-                              X_train, y_train.reshape(-1, 1))
-    save_smiles_property_file(tmp_data_dir + str(i) + '_test.smi', 
-                              X_test, y_test.reshape(-1, 1))
+    save_smiles_property_file(tmp_data_dir + str(i) + '_train.smi', X_train, y_train.reshape(-1, 1))
+    save_smiles_property_file(tmp_data_dir + str(i) + '_test.smi', X_test, y_test.reshape(-1, 1))
 
-    train_dataset = SmilesDataset(tmp_data_dir + str(i) + '_train.smi',
-                           delimiter=',', cols_to_read=[0, 1], tokens=tokens,
-                                 flip=False,)
+    train_dataset = SmilesDataset(tmp_data_dir + str(i) + '_train.smi', delimiter=',', cols_to_read=[0, 1], tokens=tokens, flip=False,)
     train_dataset.target = train_dataset.target
-    test_dataset = SmilesDataset(tmp_data_dir + str(i) + '_test.smi',
-                       delimiter=',', cols_to_read=[0, 1], tokens=tokens,
-                                flip=False)
+    test_dataset = SmilesDataset(tmp_data_dir + str(i) + '_test.smi', delimiter=',', cols_to_read=[0, 1], tokens=tokens, flip=False)
     test_dataset.target = test_dataset.target
     model_params['train_data_layer'] = train_dataset
     model_params['val_data_layer'] = test_dataset
@@ -397,21 +383,11 @@ for split in data:
     except:
         os.mkdir(model_params['logdir'])
         os.mkdir(ckpt_dir)
-    train_loader = create_loader(train_dataset,
-                             batch_size=model_params['batch_size'],
-                             shuffle=True,
-                             num_workers=4,
-                             pin_memory=True,
-                             sampler=None)
-    val_loader = create_loader(test_dataset,
-                           batch_size=model_params['batch_size'],
-                           shuffle=False,
-                           num_workers=1,
-                           pin_memory=True)
+    train_loader = create_loader(train_dataset,  batch_size=model_params['batch_size'], shuffle=True, num_workers=4, pin_memory=True, sampler=None)
+    val_loader = create_loader(test_dataset, batch_size=model_params['batch_size'], shuffle=False, num_workers=1, pin_memory=True)
     models.append(model_object(params=model_params).cuda())
     criterion, optimizer, lr_scheduler = build_training(models[i], model_params)
-    results.append(fit(models[i], lr_scheduler, train_loader, optimizer, criterion,
-        model_params, eval=True, val_loader=val_loader))
+    results.append(fit(models[i], lr_scheduler, train_loader, optimizer, criterion, model_params, eval=True, val_loader=val_loader))
     
     i = i+1
 \end{lstlisting}
@@ -471,12 +447,7 @@ This phase produces in output:
 A copy of the generator is created:
 
 \begin{lstlisting}
-my_generator_max = StackAugmentedRNN(input_size=gen_data.n_characters, hidden_size=hidden_size, output_size=gen_data.n_characters, 
-												 layer_type=layer_type,
-												 n_layers=1, is_bidirectional=False, has_stack=True,
-												 stack_width=stack_width, stack_depth=stack_depth, 
-												 use_cuda=use_cuda, 
-												 optimizer_instance=optimizer_instance, lr=lr)
+my_generator_max = StackAugmentedRNN(input_size=gen_data.n_characters, hidden_size=hidden_size, output_size=gen_data.n_characters, layer_type=layer_type, n_layers=1, is_bidirectional=False, has_stack=True, stack_width=stack_width, stack_depth=stack_depth, use_cuda=use_cuda, optimizer_instance=optimizer_instance, lr=lr)
 
 my_generator_max.load_model(model_path)
 \end{lstlisting}
@@ -521,10 +492,7 @@ for i in range(n_iterations):
 	plt.ylabel('Loss')
 	plt.show()
 			
-	smiles_cur, prediction_cur = estimate_and_update(
-																				RL_logp.generator, 
-																				my_predictor, 
-																				n_to_generate)
+	smiles_cur, prediction_cur = estimate_and_update(RL_logp.generator, my_predictor, n_to_generate)
 																									
 	print('Sample trajectories:')
 	for sm in smiles_cur[:5]:

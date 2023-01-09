@@ -15,8 +15,10 @@
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \newlabel{sec:intro}{{1}{1}{Introduction}{section.1}{}}
-\citation{simplified-molecular-input-line-entry-system}
-\citation{arxiv}
+\citation{lstm}
+\citation{gru}
+\citation{stack-rnn}
+\citation{grnn}
 \@writefile{toc}{\contentsline {section}{\numberline {2}The Method}{2}{section.2}\protected@file@percent }
 \newlabel{sec:The Method}{{2}{2}{The Method}{section.2}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Training step of the generative Stack-RNN\relax }}{3}{figure.caption.2}\protected@file@percent }
@@ -26,11 +28,11 @@
 \newlabel{fig:predicted-distribution}{{2}{3}{Generator step of the generative Stack-RNN\relax }{figure.caption.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces General pipeline of RL system for novel compound generation\relax }}{4}{figure.caption.4}\protected@file@percent }
 \newlabel{fig:parameter-optimization}{{3}{4}{General pipeline of RL system for novel compound generation\relax }{figure.caption.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Scheme of predictive model.\relax }}{4}{figure.caption.5}\protected@file@percent }
-\newlabel{fig:smiles-to-predicted-property}{{4}{4}{Scheme of predictive model.\relax }{figure.caption.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}The execution}{5}{section.3}\protected@file@percent }
-\newlabel{sec:The execution}{{3}{5}{The execution}{section.3}{}}
-\newlabel{fig:formula}{{\caption@xref {fig:formula}{ on input line 132}}{5}{The execution}{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}The execution}{4}{section.3}\protected@file@percent }
+\newlabel{sec:The execution}{{3}{4}{The execution}{section.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Scheme of predictive model.\relax }}{5}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:smiles-to-predicted-property}{{4}{5}{Scheme of predictive model.\relax }{figure.caption.5}{}}
+\newlabel{fig:formula}{{\caption@xref {fig:formula}{ on input line 129}}{5}{The execution}{figure.caption.6}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Prerequisites}{5}{subsection.3.1}\protected@file@percent }
 \newlabel{sec:Prerequisites}{{3.1}{5}{Prerequisites}{subsection.3.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Installation}{5}{section.4}\protected@file@percent }
@@ -39,12 +41,13 @@
 \newlabel{sec:Instructions}{{4.1}{5}{Instructions}{subsection.4.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}The Dockerfile}{6}{subsection.4.2}\protected@file@percent }
 \newlabel{sec:The Dockerfile}{{4.2}{6}{The Dockerfile}{subsection.4.2}{}}
+\newlabel{lst:dockerfile}{{4.2}{6}{}{lstlisting.-2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3}The Docker Compose}{6}{subsection.4.3}\protected@file@percent }
 \newlabel{sec:The Docker Compose}{{4.3}{6}{The Docker Compose}{subsection.4.3}{}}
 \citation{gpu-support}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}The running container}{7}{subsection.4.4}\protected@file@percent }
 \newlabel{sec:The running container}{{4.4}{7}{The running container}{subsection.4.4}{}}
-\newlabel{fig:logp-optimization}{{\caption@xref {fig:logp-optimization}{ on input line 237}}{7}{The running container}{figure.caption.7}{}}
+\newlabel{fig:logp-optimization}{{\caption@xref {fig:logp-optimization}{ on input line 226}}{7}{The running container}{figure.caption.7}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Description of the execution}{7}{section.5}\protected@file@percent }
 \newlabel{sec:Description of the execution}{{5}{7}{Description of the execution}{section.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}First stage - Setting up the generator}{7}{subsection.5.1}\protected@file@percent }
@@ -53,16 +56,19 @@
 \newlabel{sec:First stage - Build the Predictive Recurrent Neural Network}{{5.2}{8}{First stage - Build the Predictive Recurrent Neural Network}{subsection.5.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3}First stage - Setting up the predictor}{11}{subsection.5.3}\protected@file@percent }
 \newlabel{sec:First stage - Setting up the predictor}{{5.3}{11}{First stage - Setting up the predictor}{subsection.5.3}{}}
-\newlabel{fig:unbiased}{{\caption@xref {fig:unbiased}{ on input line 484}}{11}{First stage - Setting up the predictor}{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces The unbiased distribution of predicted logP for generated molecules\relax }}{11}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:unbiased}{{5}{11}{The unbiased distribution of predicted logP for generated molecules\relax }{figure.caption.8}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Second stage - Biasing the distribution of the generator with reinforcement learning}{11}{subsection.5.4}\protected@file@percent }
 \newlabel{sec:Second stage - Biasing the distribution of the generator with reinforcement learning}{{5.4}{11}{Second stage - Biasing the distribution of the generator with reinforcement learning}{subsection.5.4}{}}
-\newlabel{fig:biased}{{\caption@xref {fig:biased}{ on input line 594}}{13}{Second stage - Biasing the distribution of the generator with reinforcement learning}{figure.caption.9}{}}
+\bibcite{simplified-molecular-input-line-entry-system}{1}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces The biased distribution of predicted logP for generated molecules\relax }}{13}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:biased}{{6}{13}{The biased distribution of predicted logP for generated molecules\relax }{figure.caption.9}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Output - Drawing random molecules}{13}{subsection.5.5}\protected@file@percent }
 \newlabel{sec:Output - Drawing random molecules}{{5.5}{13}{Output - Drawing random molecules}{subsection.5.5}{}}
-\bibcite{simplified-molecular-input-line-entry-system}{1}
-\bibcite{arxiv}{2}
-\bibcite{gpu-support}{3}
-\newlabel{fig:output}{{\caption@xref {fig:output}{ on input line 623}}{14}{Output - Drawing random molecules}{figure.caption.10}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusions}{14}{section.6}\protected@file@percent }
-\newlabel{sec:Conclusions}{{6}{14}{Conclusions}{section.6}{}}
+\bibcite{grnn}{2}
+\bibcite{stack-rnn}{3}
+\bibcite{lstm}{4}
+\bibcite{gru}{5}
+\bibcite{gpu-support}{6}
+\newlabel{fig:output}{{\caption@xref {fig:output}{ on input line 600}}{14}{Output - Drawing random molecules}{figure.caption.10}{}}
 \gdef \@abspage@last{14}
