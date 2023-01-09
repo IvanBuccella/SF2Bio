@@ -138,7 +138,8 @@ The policy gradient loss is defined as follow:
 
 where \textit{R} is the reward obtained at time step i. \begin{math}\gamma\end{math} is the discount factor and \begin{math} p(s_i | s_1,\cdots ,s_i_-_1,\theta) \end{math} is the probability of the next character given the prefix, which is obtained from the generator. The reward is the same for every time step and is equal to the reward for the whole molecule. 
 
-\section{Prerequisites}\label{sec:Prerequisites}
+\subsection{Prerequisites}\label{sec:Prerequisites}
+
 \begin{itemize}
 	\item Linux OS or WSL 2 on a Windows 10 (or higher) machine. If you use WSL 2, follow the \href{https://docs.nvidia.com/cuda/wsl-user-guide/index.html#getting-started-with-cuda-on-wsl}{[official guide]}.
 	\item A Modern NVIDIA GPU, compatible with \href{https://developer.nvidia.com/cuda-11.3.0-download-archive}{[CUDA 11.3]}.
@@ -479,6 +480,14 @@ smiles_unbiased, prediction_unbiased = estimate_and_update(my_generator,
 										 n_to_generate=10000)
 \end{lstlisting}
 
+This phase produces in output:
+
+\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.70\textwidth]{unbiased.png}
+		\label{fig:unbiased}
+	\end{figure}
+
 \subsection{Second stage - Biasing the distribution of the generator with reinforcement learning}\label{sec:Second stage - Biasing the distribution of the generator with reinforcement learning}
 
 A copy of the generator is created:
@@ -576,10 +585,18 @@ def estimate_and_update(generator, predictor, n_to_generate):
 After reached the goal, the biased distribution of the property is produced:
 
 \begin{lstlisting}
-smiles_unbiased, prediction_unbiased = estimate_and_update(my_generator,
-														 my_predictor,
-														 n_to_generate=10000)
+smiles_biased, prediction_biased = estimate_and_update(RL_logp.generator, 
+                                                       my_predictor,
+                                                       n_to_generate=10000)
 \end{lstlisting}
+
+This phase produces in output: 
+
+\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.70\textwidth]{biased.png}
+		\label{fig:biased}
+	\end{figure}
 
 \subsection{Output - Drawing random molecules}\label{sec:Output - Drawing random molecules}
 
