@@ -59,6 +59,9 @@ For example, the model could be trained to select molecules with a high logP bec
 In the following sections we will look in detail at the use of ReLeaSe.
 
 \mypar{Related work} 
+In the "Generating focused molecule libraries for drug discovery with recurrent neural networks." \cite{generating-focused-molecule} work, it is shown that recurrent neural networks can be trained as generative models for molecular structures, similar to statistical language models in natural language processing. The work has demonstrated that the properties of the generated molecules correlate very well with the properties of the molecules used to train the model. In order to enrich libraries with molecules active toward a given biological target, it has been proposed to fine-tune the model with small sets of molecules, which are known to be active against that target. Against Staphylococcus aureus, the model reproduced 14\% of 6051 hold-out test molecules that medicinal chemists designed, whereas, against Plasmodium falciparum (Malaria), it reproduced 28\% of 1240 test molecules. When coupled with a scoring function, the model can perform the complete de novo drug design cycle to generate large sets of novel molecules for drug discovery. 
+In the "Molecular de novo design through deep reinforcement learning" \cite{molecular-denovo-design} has beeen introduce a method to tune a sequence-based generative model for molecular de novo design that through augmented episodic likelihood can learn to generate structures with certain specified desirable properties. The work has demonstrated how this model can execute a range of tasks such as generating analogues to a query structure and generating compounds predicted to be active against a biological target. As proof of principle, the model is first trained to generate molecules that do not contain sulphur. As a second example, the model is trained to generate analogues to the drug Celecoxib, a technique that could be used for scaffold hopping or library expansion starting from a single molecule. Finally, when tuning the model towards generating compounds predicted to be active against the dopamine receptor type 2, the model generates structures of which more than 95\% are predicted to be active, including experimentally confirmed actives that have not been included in either the generative model or the activity prediction model.
+
 \textit{The generative
 model in references (23, 37) is a “vanilla” RNN without augmented
 memory stack, which does not have the capacity to count and infer
@@ -614,9 +617,14 @@ The output will be something like:
 \bibitem{lstm}
 {S. Hochreiter, J. Schmidhuber, Long short-term memory. Neural. Comput. 9, 1735-1780 \(1997\).}
 
+\bibitem{generating-focused-molecule}
+\href{https://pubs.acs.org/doi/10.1021/acscentsci.7b00512}{M. H. S. Segler, T. Kogej, C. Tyrchan, M. P. Waller, Generating focused molecule libraries for drug discovery with recurrent neural networks. ACS Cent. Sci. 4, 120-131 \(2018\).}
+
+\bibitem{molecular-denovo-design}
+\href{http://arxiv.org/abs/1704.07555}{M. Olivecrona, T. Blaschke, O. Engkvist, H. Chen, Molecular de novo design through deep reinforcement learning \(2017\).}
+
 \bibitem{gru}
-\href{http://arxiv.org/abs/1412.3555}{J. Chung, C. Gulcehre, K. Cho, Y. Bengio, Empirical evaluation of gated recurrent neural
-networks on sequence modeling. \(2014\)}
+\href{http://arxiv.org/abs/1412.3555}{J. Chung, C. Gulcehre, K. Cho, Y. Bengio, Empirical evaluation of gated recurrent neural networks on sequence modeling \(2014\)}
 
 \bibitem{gpu-support}
 \href{https://docs.docker.com/compose/gpu-support/}{Docker GPU support}
