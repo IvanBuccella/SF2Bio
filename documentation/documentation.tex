@@ -60,20 +60,17 @@ In the following sections we will look in detail at the use of ReLeaSe.
 
 \mypar{Related work} 
 In the "Generating focused molecule libraries for drug discovery with recurrent neural networks." \cite{generating-focused-molecule} work, it is shown that recurrent neural networks can be trained as generative models for molecular structures, similar to statistical language models in natural language processing. The work has demonstrated that the properties of the generated molecules correlate very well with the properties of the molecules used to train the model. In order to enrich libraries with molecules active toward a given biological target, it has been proposed to fine-tune the model with small sets of molecules, which are known to be active against that target. Against Staphylococcus aureus, the model reproduced 14\% of 6051 hold-out test molecules that medicinal chemists designed, whereas, against Plasmodium falciparum (Malaria), it reproduced 28\% of 1240 test molecules. When coupled with a scoring function, the model can perform the complete de novo drug design cycle to generate large sets of novel molecules for drug discovery. 
-In the "Molecular de novo design through deep reinforcement learning" \cite{molecular-denovo-design} has beeen introduce a method to tune a sequence-based generative model for molecular de novo design that through augmented episodic likelihood can learn to generate structures with certain specified desirable properties. The work has demonstrated how this model can execute a range of tasks such as generating analogues to a query structure and generating compounds predicted to be active against a biological target. As proof of principle, the model is first trained to generate molecules that do not contain sulphur. As a second example, the model is trained to generate analogues to the drug Celecoxib, a technique that could be used for scaffold hopping or library expansion starting from a single molecule. Finally, when tuning the model towards generating compounds predicted to be active against the dopamine receptor type 2, the model generates structures of which more than 95\% are predicted to be active, including experimentally confirmed actives that have not been included in either the generative model or the activity prediction model.
 
-\textit{The generative
-model in references (23, 37) is a “vanilla” RNN without augmented
-memory stack, which does not have the capacity to count and infer
-algorithmic patterns (34).
-}
+
+
+In the "Molecular de novo design through deep reinforcement learning" \cite{molecular-denovo-design} has beeen introduce a method to tune a sequence-based generative model for molecular de novo design that through augmented episodic likelihood can learn to generate structures with certain specified desirable properties. The work has demonstrated how this model can execute a range of tasks such as generating analogues to a query structure and generating compounds predicted to be active against a biological target. As proof of principle, the model is first trained to generate molecules that do not contain sulphur. As a second example, the model is trained to generate analogues to the drug Celecoxib, a technique that could be used for scaffold hopping or library expansion starting from a single molecule. Finally, when tuning the model towards generating compounds predicted to be active against the dopamine receptor type 2, the model generates structures of which more than 95\% are predicted to be active, including experimentally confirmed actives that have not been included in either the generative model or the activity prediction model.
 
 \section{The Method}\label{sec:The Method}
 
 The ReLeaSE method implements a DRL approach for de novo design of novel chemical compounds with desired properties. ReLeaSE is distinguished from other similar approaches by its simple representation of molecules through the molecular string input system (SMILES) only during the generation and prediction phases of the method and the integration of these phases into a single workflow that also includes an RL module. 
 The project makes use of QSPR (Quantitative Structure-Property Relationship) a technique that uses mathematical models to predict the properties of a chemical compound based on its chemical structure. QSPR models are based on the assumption that there is a quantitative relationship between the structure of a chemical compound and its properties. To build a QSPR model, data on the structure and properties of a large number of known chemical compounds (training set) are used, which are then used to train the model. Once the model has been trained, it can be used to predict the properties of unknown chemical compounds (test set). QSPR models are very useful because they make it possible to predict the properties of a chemical compound without having to synthesize or test it experimentally.
 The training process consists of two stages: in the first stage the generative model is built.
-Since Regular Recurring Neural Networks (RNNs) such as long short-term memory (LSTM) \cite{lstm} and gated recurrent unit (GRU) \cite{gru} are unable to solve the sequence prediction problems because of their inability to count, for the generative model, a special type of stack-augmented RNN (Stack-RNN) \cite{stack-rnn} has been used; that has found success in inferring algorithmic patterns. This Stack-RNN defines a new neuron or cell structure on top of the standard gated recurrent unit \cite{grnn} cell (see Fig. \ref{fig:softmax-loss} - A). It has two additional multiplicative gates referred to as the memory stack, which allow the Stack-RNN to learn meaningful long-range interdependencies. Stack memory is a differentiable structure onto and from which continuous vectors are inserted and removed. The objective of the Stack-RNN then is to learn hidden rules of forming sequences of letters that correspond to legitimate SMILES strings.
+Since Regular Recurring Neural Networks (RNNs) such as long short-term memory (LSTM) \cite{lstm} and gated recurrent unit (GRU) \cite{gru} are unable to solve the sequence prediction problems because of their inability to count, for the generative model, a special type of stack-augmented RNN (Stack-RNN) \cite{stack-rnn} has been used; that has found success in inferring algorithmic patterns. This Stack-RNN defines a new neuron or cell structure on top of the standard gated recurrent unit \cite{grnn} cell (see Fig. \ref{fig:softmax-loss}). It has two additional multiplicative gates referred to as the memory stack, which allow the Stack-RNN to learn meaningful long-range interdependencies. Stack memory is a differentiable structure onto and from which continuous vectors are inserted and removed. The objective of the Stack-RNN then is to learn hidden rules of forming sequences of letters that correspond to legitimate SMILES strings.
 The generative model has two modes of processing sequences—training and generating.  
 At each time step, during the training mode, the generative network takes a current prefix of the training object and predicts the probability distribution of the next character (Fig. \ref{fig:softmax-loss}). 
 
@@ -563,11 +560,12 @@ Draw.MolsToGridImage(mols_to_draw, molsPerRow=5,
                      subImgSize=(200,200), legends=legends)
 \end{lstlisting}
 
-The output will be something like:
+The output will be something like in figure \ref{fig:output}
 
 \begin{figure}[htbp]
     \centering
         \includegraphics[width=\textwidth]{output.png}
+		\caption{Some random compounds from the biased library}
     \label{fig:output}
 \end{figure}
 

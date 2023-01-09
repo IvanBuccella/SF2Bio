@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.12) (preloaded format=pdflatex 2023.1.5)  9 JAN 2023 23:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.12) (preloaded format=pdflatex 2023.1.5)  9 JAN 2023 23:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -494,27 +494,27 @@ Try to go on, since this might almost work.
 
 [1
 
-{C:/Users/maiom/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-<./images//softmax-loss.png, id=79, 874.467pt x 437.83575pt>
+{C:/Users/maiom/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2]
+<./images//softmax-loss.png, id=88, 874.467pt x 437.83575pt>
 File: ./images//softmax-loss.png Graphic file (type png)
 <use ./images//softmax-loss.png>
 Package pdftex.def Info: ./images//softmax-loss.png  used on input line 79.
 (pdftex.def)             Requested size: 441.01775pt x 220.8147pt.
-<./images//predicted-distribution.png, id=82, 871.45575pt x 359.54324pt>
+<./images//predicted-distribution.png, id=91, 871.45575pt x 359.54324pt>
 File: ./images//predicted-distribution.png Graphic file (type png)
 <use ./images//predicted-distribution.png>
 Package pdftex.def Info: ./images//predicted-distribution.png  used on input li
 ne 89.
 (pdftex.def)             Requested size: 441.01775pt x 181.95467pt.
- [2]
+
 [3 <./images//softmax-loss.png> <./images//predicted-distribution.png>]
-<./images//parameter-optimization.png, id=102, 711.8595pt x 478.78876pt>
+<./images//parameter-optimization.png, id=105, 711.8595pt x 478.78876pt>
 File: ./images//parameter-optimization.png Graphic file (type png)
 <use ./images//parameter-optimization.png>
 Package pdftex.def Info: ./images//parameter-optimization.png  used on input li
 ne 99.
 (pdftex.def)             Requested size: 441.01775pt x 296.62679pt.
-<./images//smiles-to-predicted-property.png, id=107, 950.3505pt x 398.08725pt>
+<./images//smiles-to-predicted-property.png, id=110, 950.3505pt x 398.08725pt>
 File: ./images//smiles-to-predicted-property.png Graphic file (type png)
 <use ./images//smiles-to-predicted-property.png>
 Package pdftex.def Info: ./images//smiles-to-predicted-property.png  used on in
@@ -522,7 +522,7 @@ put line 109.
 (pdftex.def)             Requested size: 441.01775pt x 184.73204pt.
 
 [4 <./images//parameter-optimization.png>]
-<./images//formula.png, id=116, 308.352pt x 54.2025pt>
+<./images//formula.png, id=119, 308.352pt x 54.2025pt>
 File: ./images//formula.png Graphic file (type png)
 <use ./images//formula.png>
 Package pdftex.def Info: ./images//formula.png  used on input line 128.
@@ -549,7 +549,7 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 179.
 
 [6]
-<./images//logp-optimization.png, id=190, 896.148pt x 526.96875pt>
+<./images//logp-optimization.png, id=192, 896.148pt x 526.96875pt>
 File: ./images//logp-optimization.png Graphic file (type png)
 <use ./images//logp-optimization.png>
 Package pdftex.def Info: ./images//logp-optimization.png  used on input line 22
@@ -564,32 +564,33 @@ LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 239.
 
 [7 <./images//logp-optimization.png>] [8] [9] [10]
-<./images//unbiased.png, id=386, 231.86626pt x 151.767pt>
+<./images//unbiased.png, id=370, 231.86626pt x 151.767pt>
 File: ./images//unbiased.png Graphic file (type png)
 <use ./images//unbiased.png>
-Package pdftex.def Info: ./images//unbiased.png  used on input line 464.
+Package pdftex.def Info: ./images//unbiased.png  used on input line 440.
 (pdftex.def)             Requested size: 308.71107pt x 202.08377pt.
- [11 <./images//unbiased.png>] [12]
-<./images//biased.png, id=464, 237.88875pt x 151.16475pt>
+ [11 <./images//unbiased.png>]
+<./images//biased.png, id=397, 237.88875pt x 151.16475pt>
 File: ./images//biased.png Graphic file (type png)
 <use ./images//biased.png>
-Package pdftex.def Info: ./images//biased.png  used on input line 569.
+Package pdftex.def Info: ./images//biased.png  used on input line 537.
 (pdftex.def)             Requested size: 308.71107pt x 196.17737pt.
-<./images//output.png, id=465, 1003.75pt x 803.0pt>
+ [12]
+<./images//output.png, id=450, 1003.75pt x 803.0pt>
 File: ./images//output.png Graphic file (type png)
 <use ./images//output.png>
-Package pdftex.def Info: ./images//output.png  used on input line 599.
+Package pdftex.def Info: ./images//output.png  used on input line 567.
 (pdftex.def)             Requested size: 441.01775pt x 352.81873pt.
  [13 <./images//biased.png>] [14 <./images//output.png (PNG copy)>]
-(documentation.aux)
+[15] (documentation.aux)
 Package rerunfilecheck Info: File `documentation.out' has not changed.
 (rerunfilecheck)             Checksum: 11445EBF5A62CC24D5B5A1B55BDD82E6;2951.
  ) 
 Here is how much of TeX's memory you used:
- 14034 strings out of 476406
- 221254 string characters out of 2789568
- 1964787 words of memory out of 3000000
- 33881 multiletter control sequences out of 15000+600000
+ 14007 strings out of 476406
+ 220893 string characters out of 2789568
+ 1971787 words of memory out of 3000000
+ 33883 multiletter control sequences out of 15000+600000
  521208 words of font info for 66 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  72i,7n,77p,1280b,1987s stack positions out of 10000i,1000n,20000p,200000b,80000s
@@ -609,9 +610,9 @@ fb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
 onts/cm/cmsy10.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/pu
 blic/amsfonts/cm/cmsy7.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/
 type1/public/amsfonts/cm/cmti10.pfb>
-Output written on documentation.pdf (14 pages, 1563459 bytes).
+Output written on documentation.pdf (15 pages, 1560741 bytes).
 PDF statistics:
- 648 PDF objects out of 1000 (max. 8388607)
- 351 named destinations out of 1000 (max. 500000)
+ 623 PDF objects out of 1000 (max. 8388607)
+ 322 named destinations out of 1000 (max. 500000)
  166 words of extra memory for PDF output out of 10000 (max. 10000000)
 
