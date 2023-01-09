@@ -139,19 +139,20 @@ The policy gradient loss is defined as follow:
 where \textit{R} is the reward obtained at time step i. \begin{math}\gamma\end{math} is the discount factor and \begin{math} p(s_i | s_1,\cdots ,s_i_-_1,\theta) \end{math} is the probability of the next character given the prefix, which is obtained from the generator. The reward is the same for every time step and is equal to the reward for the whole molecule. 
 
 \section{Prerequisites}\label{sec:Prerequisites}
+\begin{itemize}
+	\item Linux OS or WSL 2 on a Windows 10 (or higher) machine. If you use WSL 2, follow the \href{https://docs.nvidia.com/cuda/wsl-user-guide/index.html#getting-started-with-cuda-on-wsl}{[official guide]}.
+	\item A Modern NVIDIA GPU, compatible with \href{https://developer.nvidia.com/cuda-11.3.0-download-archive}{[CUDA 11.3]}.
+	\item Docker and Docker Compose (Application containers engine). Install it from \href{https://www.docker.com}{[here]}.
+	\item The Docker GPU Support enabled on the machine; check it out \href{https://docs.docker.com/compose/gpu-support/}{[here]}.
+	\item The Nvidia Container Toolkit. Install it from \href{https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#install-guide}{[here]}.
+\end{itemize}
 
-\mypar{Hardware}
-Linux OS or WSL 2 on a Windows 10 (or higher) machine.
-A Modern NVIDIA GPU, compatible with CUDA 11.3.
-
-\mypar{Docker and Docker Compose}
-Docker and Docker Compose (Application containers engine) are required; they can be installed from \href{https://www.docker.com}{here}.
-The GPU Support is enabled on the machine; check it out \href{https://docs.docker.com/compose/gpu-support/}{here} 
-
-\mypar{Nvidia Container Toolkit}
-The Nvidia Container Toolkit is required; it can be installed from \href{https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#install-guide}{here}.
+\begin{flushleft}
 Note that you do not need to install the CUDA Toolkit on the host system.
+
 Note that you have to install the NVIDIA drivers on your system.
+\end{flushleft}
+
 
 \section{Installation}\label{sec:Installation}
 
@@ -236,299 +237,382 @@ As shown in the code above, the docker-compose file includes the GPU access \cit
 \begin{figure}[htbp]
 		\centering
 			\includegraphics[width=0.50\textwidth]{logp-optimization.png}
+		\caption{logP optimization on jupyter notebook}
 		\label{fig:logp-optimization}
 	\end{figure}
 
-In the figure above is reported the configured jupyter notebook of the execution described in the following sections; it can be reached by visiting the \href{http://localhost:{HTTP_PORT}/LogP_optimization_demo.ipynb}{URL} into the host machine web browser.
+In the figure \ref{fig:logp-optimization} is reported the configured jupyter notebook of the execution described in the following sections; it can be reached by visiting the \href{http://localhost:{HTTP_PORT}/LogP_optimization_demo.ipynb}{URL} into the host machine web browser.
+
+\section{Description of the execution}\label{sec:Description of the execution}
+
+\subsection{First stage - Setting up the generator}\label{sec:First stage - Setting up the generator}
+
+The real SMILES strings, aka the data, are read from the ChEMBL database; they are included into a .smi file:
+
+\begin{lstlisting}
+gen_data_path = './data/chembl_22_clean_1576904_sorted_std_final.smi'
+tokens = ['<', '>', '#', '%', ')', '(', '+', '-', '/', '.', '1', '0', '3', '2', '5', '4', '7',
+          '6', '9', '8', '=', 'A', '@', 'C', 'B', 'F', 'I', 'H', 'O', 'N', 'P', 'S', '[', ']',
+          '\\', 'c', 'e', 'i', 'l', 'o', 'n', 'p', 's', 'r', '\n']
+gen_data = GeneratorData(training_data_path=gen_data_path, delimiter='\t', 
+                         cols_to_read=[0], keep_header=True, tokens=tokens)
+\end{lstlisting}
+
+Then the stack-augmented generative RNN is initialized:
+
+\begin{lstlisting}
+hidden_size = 1500
+stack_width = 1500
+stack_depth = 200
+layer_type = 'GRU'
+lr = 0.001
+optimizer_instance = torch.optim.Adadelta
+
+my_generator = StackAugmentedRNN (input_size=gen_data.n_characters, hidden_size=hidden_size,
+									 output_size=gen_data.n_characters, layer_type=layer_type,
+									 n_layers=1, is_bidirectional=False, has_stack=True,
+									 stack_width=stack_width, stack_depth=stack_depth, 
+									 use_cuda=use_cuda, 
+									 optimizer_instance=optimizer_instance, lr=lr)
+model_path = './checkpoints/generator/checkpoint_biggest_rnn'
+losses = my_generator.fit(gen_data, 1500000)
+plt.plot(losses)
+my_generator.evaluate(gen_data)
+my_generator.save_model(model_path)
+my_generator.load_model(model_path)
+\end{lstlisting}
+
+\subsection{First stage - Build the Predictive Recurrent Neural Network}\label{sec:First stage - Build the Predictive Recurrent Neural Network}
+
+The stack-augmented predictive RNN is generated. 
+
+The data are read from the following code:
+
+\begin{lstlisting}
+from openchem.data.utils import read_smiles_property_file
+data = read_smiles_property_file('./data/logP_labels.csv', 
+                                 cols_to_read=[1, 2], keep_header=False)
+smiles = data[0]
+labels = data[1].astype('float32')
+\end{lstlisting}
+
+The imported data are prepared:
+
+\begin{lstlisting}
+from openchem.data.utils import get_tokens
+tokens, _, _ = get_tokens(smiles)
+tokens = ['<', '>', '#', '%', ')', '(', '+', '-', '/', '.', '1', '0', '3', '2', '5', '4', '7',
+          '6', '9', '8', '=', 'A', '@', 'C', 'B', 'F', 'I', 'H', 'O', 'N', 'P', 'S', '[', ']',
+          '\\', 'c', 'e', 'i', 'l', 'o', 'n', 'p', 's', 'r', '\n']
+tokens = ''.join(tokens) + ' '
+
+from sklearn.model_selection import KFold, train_test_split
+
+cross_validation_split = KFold(n_splits=5, shuffle=True)
+
+data = list(cross_validation_split.split(smiles, labels))
+\end{lstlisting}
+
+The model parameters are configured as follow:
+
+\begin{lstlisting}
+import torch
+from openchem.utils.utils import identity
+from openchem.modules.embeddings.basic_embedding import Embedding
+model_object = Smiles2Label
+
+n_hidden = 128
+batch_size = 128
+num_epochs = 26
+lr = 0.005
+
+model_params = {
+    'use_cuda': True,
+    'random_seed': 42,
+    'world_size': 1,
+    'task': 'regression',
+    'data_layer': SmilesDataset,
+    'use_clip_grad': False,
+    'batch_size': batch_size,
+    'num_epochs': num_epochs,
+    'logdir': './checkpoints/logP/',
+    'print_every': 1,
+    'save_every': 5,
+    'train_data_layer': None,
+    'val_data_layer': None,
+    'eval_metrics': r2_score,
+    'criterion': nn.MSELoss(),
+    'optimizer': Adam,
+    'optimizer_params': {
+        'lr': lr,
+    },
+    'lr_scheduler': ExponentialLR,
+    'lr_scheduler_params': {
+        'gamma': 0.98
+    },
+    'embedding': Embedding,
+    'embedding_params': {
+        'num_embeddings': len(tokens),
+        'embedding_dim': n_hidden,
+        'padding_idx': tokens.index(' ')
+    },
+    'encoder': RNNEncoder,
+    'encoder_params': {
+        'input_size': n_hidden,
+        'layer': "LSTM",
+        'encoder_dim': n_hidden,
+        'n_layers': 2,
+        'dropout': 0.8,
+        'is_bidirectional': False
+    },
+    'mlp': OpenChemMLP,
+    'mlp_params': {
+        'input_size': n_hidden,
+        'n_layers': 2,
+        'hidden_size': [n_hidden, 1],
+        'activation': [F.relu, identity],
+        'dropout': 0.0
+    }
+}
+\end{lstlisting}
+
+The training is done from the following code:
+
+\begin{lstlisting}
+import os
+i = 0
+models = []
+results = []
+for split in data:
+    print('Cross validation, fold number ' + str(i) + ' in progress...')
+    train, test = split
+    X_train = smiles[train]
+    y_train = labels[train].reshape(-1)
+    X_test = smiles[test]
+    y_test = labels[test].reshape(-1)
+    save_smiles_property_file(tmp_data_dir + str(i) + '_train.smi', 
+                              X_train, y_train.reshape(-1, 1))
+    save_smiles_property_file(tmp_data_dir + str(i) + '_test.smi', 
+                              X_test, y_test.reshape(-1, 1))
+
+    train_dataset = SmilesDataset(tmp_data_dir + str(i) + '_train.smi',
+                           delimiter=',', cols_to_read=[0, 1], tokens=tokens,
+                                 flip=False,)
+    train_dataset.target = train_dataset.target
+    test_dataset = SmilesDataset(tmp_data_dir + str(i) + '_test.smi',
+                       delimiter=',', cols_to_read=[0, 1], tokens=tokens,
+                                flip=False)
+    test_dataset.target = test_dataset.target
+    model_params['train_data_layer'] = train_dataset
+    model_params['val_data_layer'] = test_dataset
+    model_params['logdir'] = log_dir + 'fold_' + str(i)  
+    ckpt_dir = model_params['logdir'] + '/checkpoint/'
+    try:
+        os.stat(ckpt_dir)
+    except:
+        os.mkdir(model_params['logdir'])
+        os.mkdir(ckpt_dir)
+    train_loader = create_loader(train_dataset,
+                             batch_size=model_params['batch_size'],
+                             shuffle=True,
+                             num_workers=4,
+                             pin_memory=True,
+                             sampler=None)
+    val_loader = create_loader(test_dataset,
+                           batch_size=model_params['batch_size'],
+                           shuffle=False,
+                           num_workers=1,
+                           pin_memory=True)
+    models.append(model_object(params=model_params).cuda())
+    criterion, optimizer, lr_scheduler = build_training(models[i], model_params)
+    results.append(fit(models[i], lr_scheduler, train_loader, optimizer, criterion,
+        model_params, eval=True, val_loader=val_loader))
+    
+    i = i+1
+\end{lstlisting}
+
+The evaluation is done from the following code:
+
+\begin{lstlisting}
+import numpy as np
+rmse = []
+auc_score = []
+for i in range(5):
+    test_dataset = SmilesDataset(tmp_data_dir + str(i) + '_test.smi',
+                                 delimiter=',', cols_to_read=[0, 1], tokens=tokens,
+                                flip=False)
+    test_dataset.target = test_dataset.target
+    val_loader = create_loader(test_dataset,
+														 batch_size= model_params['batch_size'],
+														 shuffle=False,
+														 num_workers=1,
+														 pin_memory=True)
+    metrics = evaluate(models[i], val_loader, criterion)
+    rmse.append(np.sqrt(metrics[0]))
+    auc_score.append(metrics[1])
+\end{lstlisting}
+
+And then the evaluated data are saved in order to be used in the next steps:
+
+\begin{lstlisting}
+! mv ./checkpoints/logP/fold_0/checkpoint/epoch_25 ./checkpoints/logP/fold_0.pkl
+! mv ./checkpoints/logP/fold_1/checkpoint/epoch_25 ./checkpoints/logP/fold_1.pkl
+! mv ./checkpoints/logP/fold_2/checkpoint/epoch_25 ./checkpoints/logP/fold_2.pkl
+! mv ./checkpoints/logP/fold_3/checkpoint/epoch_25 ./checkpoints/logP/fold_3.pkl
+! mv ./checkpoints/logP/fold_4/checkpoint/epoch_25 ./checkpoints/logP/fold_4.pkl
+\end{lstlisting}
+
+\subsection{First stage - Setting up the predictor}\label{sec:First stage - Setting up the predictor}
+
+The path of the generated data from the Predictive RNN is configured:
+
+\begin{lstlisting}
+path_to_params = './checkpoints/logP/model_parameters.pkl'
+path_to_checkpoint = './checkpoints/logP/fold_'
+\end{lstlisting}
+
+The unbiased distribution of the property by using the previous generator and predictor created is produced:
+
+\begin{lstlisting}
+my_predictor = RNNPredictor(path_to_params, path_to_checkpoint, predictor_tokens)
+smiles_unbiased, prediction_unbiased = estimate_and_update(my_generator,
+										 my_predictor,
+										 n_to_generate=10000)
+\end{lstlisting}
+
+\subsection{Second stage - Biasing the distribution of the generator with reinforcement learning}\label{sec:Second stage - Biasing the distribution of the generator with reinforcement learning}
+
+A copy of the generator is created:
+
+\begin{lstlisting}
+my_generator_max = StackAugmentedRNN(input_size=gen_data.n_characters, 
+												 hidden_size=hidden_size,
+												 output_size=gen_data.n_characters, 
+												 layer_type=layer_type,
+												 n_layers=1, is_bidirectional=False, has_stack=True,
+												 stack_width=stack_width, stack_depth=stack_depth, 
+												 use_cuda=use_cuda, 
+												 optimizer_instance=optimizer_instance, lr=lr)
+
+my_generator_max.load_model(model_path)
+\end{lstlisting}
+
+The reward function used here is the following:
+
+$$
+R =  \begin{cases} 11.0, & \mbox{if } 1.0 < \log P < 4.0 \\ 1.0, & \mbox{otherwise}  \end{cases}
+$$
+
+\begin{lstlisting}
+def get_reward_logp(smiles, predictor, invalid_reward=0.0):
+    mol, prop, nan_smiles = predictor.predict([smiles])
+    if len(nan_smiles) == 1:
+        return invalid_reward
+    if (prop[0] >= 1.0) and (prop[0] <= 4.0):
+        return 11.0
+    else:
+        return 1.0
+\end{lstlisting}
+
+And then the Reinforcement Learning (combining the generator, the predictor and the reward function depending on the goal) is started:
+
+\begin{lstlisting}
+RL_logp = Reinforcement(my_generator_max, 
+												my_predictor, 
+												get_reward_logp)
+
+rewards = []
+rl_losses = []
+
+for i in range(n_iterations):
+	for j in trange(n_policy, desc='Policy gradient...'):
+			cur_reward, cur_loss = RL_logp.policy_gradient(gen_data)
+			rewards.append(simple_moving_average(rewards, cur_reward)) 
+			rl_losses.append(simple_moving_average(rl_losses, cur_loss))
+	
+	plt.plot(rewards)
+	plt.xlabel('Training iteration')
+	plt.ylabel('Average reward')
+	plt.show()
+	plt.plot(rl_losses)
+	plt.xlabel('Training iteration')
+	plt.ylabel('Loss')
+	plt.show()
+			
+	smiles_cur, prediction_cur = estimate_and_update(
+																				RL_logp.generator, 
+																				my_predictor, 
+																				n_to_generate)
+																									
+	print('Sample trajectories:')
+	for sm in smiles_cur[:5]:
+			print(sm)
+\end{lstlisting}
+
+In this step is used an important function ''estimate\_and\_update'' which:
+\begin{enumerate}
+	\item generates n\_to\_generate number of SMILES strings
+	\item filters invalid SMILES
+	\item predicts logP for valid SMILES
+	\item Returns valid SMILES and their predicted logPs
+\end{enumerate}
+
+\begin{lstlisting}
+def estimate_and_update(generator, predictor, n_to_generate):
+    generated = []
+    pbar = tqdm(range(n_to_generate))
+    for i in pbar:
+        pbar.set_description("Generating molecules...")
+        generated.append(generator.evaluate(gen_data, predict_len=120)[1:-1])
+
+    sanitized = canonical_smiles(generated, sanitize=False, throw_warning=False)[:-1]
+    unique_smiles = list(np.unique(sanitized))[1:]
+    smiles, prediction, nan_smiles = predictor.predict(unique_smiles, use_tqdm=True)  
+                                                       
+    plot_hist(prediction, n_to_generate)
+        
+    return smiles, prediction
+\end{lstlisting}
+
+After reached the goal, the biased distribution of the property is produced:
+
+\begin{lstlisting}
+smiles_unbiased, prediction_unbiased = estimate_and_update(my_generator,
+														 my_predictor,
+														 n_to_generate=10000)
+\end{lstlisting}
+
+\subsection{Output - Drawing random molecules}\label{sec:Output - Drawing random molecules}
+
+For drawing some random compounds from the biased library, the following code can be executed:
+
+\begin{lstlisting}
+from rdkit.Chem import Draw
+from rdkit.Chem.Draw import DrawingOptions
+from rdkit.Chem import Draw
+DrawingOptions.atomLabelFontSize = 50
+DrawingOptions.dotsPerAngstrom = 100
+DrawingOptions.bondLineWidth = 3
+generated_mols = [Chem.MolFromSmiles(sm, sanitize=True) for sm in smiles_biased]
+sanitized_gen_mols = [generated_mols[i] for i in np.where(np.array(generated_mols) != None)[0]]
+n_to_draw = 20
+ind = np.random.randint(0, len(sanitized_gen_mols), n_to_draw)
+mols_to_draw = [sanitized_gen_mols[i] for i in ind]
+legends = ['log P = ' + str(prediction_biased[i]) for i in ind]
+Draw.MolsToGridImage(mols_to_draw, molsPerRow=5, 
+                     subImgSize=(200,200), legends=legends)
+\end{lstlisting}
+
+\section{Conclusions}\label{sec:Conclusions}
+
+
+
+
+
+
 
 
 \begin{comment}
-\mypar{Loop interchange}
-The first step is editing the starting algorithm by exchanging the order of the iteration variables \textbf{x} and \textbf{y} used by nested loops. The result is two different algorithms:
-
-\setcounter{lstlisting}{0}
-\renewcommand{\lstlistingname}{Algorithm}
-
-\begin{lstlisting}[caption={The starting algorithm},label={lst:loop-interchange-x-y}]
-for (x = 1; x < N - 1; x++)
-{
-		for (y = 1; y < N - 1; y++)
-		{
-				B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
-		}
-}
-\end{lstlisting}
-
-\begin{lstlisting}[caption={A new algorithm with x and y swapped},label={lst:loop-interchange-y-x}]
-for (y = 1; y < N - 1; y++)
-{
-		for (x = 1; x < N - 1; x++)
-		{
-				B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
-		}
-}
-\end{lstlisting}
-
-\mypar{Optimization flags}
-The next step is editing the optimization flag used for compiling the source code; the clang compiler offers four different flag specifications: O0, O1, O2, and O3. The result is four different commands:
-
-\setcounter{lstlisting}{0}
-\renewcommand{\lstlistingname}{Command}
-
-\begin{lstlisting}[caption={Flag -O0},label={lst:optimization-flags-0}]
-clang code.c -o code.out -fopenmp -O0
-\end{lstlisting}
-
-\begin{lstlisting}[caption={Flag -O1},label={lst:optimization-flags-1}]
-clang code.c -o code.out -fopenmp -O1
-\end{lstlisting}
-
-\begin{lstlisting}[caption={Flag -O2},label={lst:optimization-flags-2}]
-clang code.c -o code.out -fopenmp -O2
-\end{lstlisting}
-
-\begin{lstlisting}[caption={Flag -O3},label={lst:optimization-flags-3}]
-clang code.c -o code.out -fopenmp -O3
-\end{lstlisting}
-
-\mypar{Parallel Loops}
-The next step is editing the code by applying the parallel loops optimization. In order to distribute the execution of a loop into multiple threads, it has been used the ``#pragma omp parallel for'' \cite{omp-parallel}\cite{omp-for} directive; this directive opens a parallel region and schedules the loop into multiple threads. The directive could be applied to each loop, also on both. To apply the directive on both loops, it has been used the ``#pragma omp parallel for collapse(2)'' \cite{omp-collapse} directive which is able to distribute two nested loops on multiple threads. The result of this step is three different algorithms:
-
-\setcounter{lstlisting}{2}
-\renewcommand{\lstlistingname}{Algorithm}
-
-\begin{lstlisting}[caption={Parallel loop on X},label={lst:parallel-loop-x}]
-#pragma omp parallel for
-for (x = 1; x < N - 1; x++)
-{
-		for (y = 1; y < N - 1; y++)
-		{
-				B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
-		}
-}
-\end{lstlisting}
-
-\begin{lstlisting}[caption={Parallel loop on Y},label={lst:parallel-loop-y}]
-for (x = 1; x < N - 1; x++)
-{
-		#pragma omp parallel for
-		for (y = 1; y < N - 1; y++)
-		{
-				B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
-		}
-}
-\end{lstlisting}
-
-\begin{lstlisting}[caption={Parallel loop on X and Y},label={lst:parallel-loop-x-y}]
-#pragma omp parallel for collapse(2)
-for (x = 1; x < N - 1; x++)
-{
-		for (y = 1; y < N - 1; y++)
-		{
-				B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
-		}
-}
-\end{lstlisting}
-
-\mypar{Loop tiling}
-The next step is editing the code by applying tiling optimization. In order to apply this type of optimization it has been necessary to cut the \textbf{A} matrix into multiple smaller \textit{tiles}; For this a new variable has been introduced into the code ``tile\textunderscore size'' which expresses the tile size, and two nested loops that have the goal of executing the code on the different tiles. On the tiling loops (with \textit{xx} and \textit{yy} variables) it has been applied the ``#pragma omp parallel for collapse(2)'' directive in order to distribute the matrices tiles on multiple threads. Different tile sizes have been chosen depending on several points of view like L2 Cache size, etc. The result of this step is four different algorithms, identical but with different tile sizes:
-
-\renewcommand{\lstlistingname}{Algorithm}
-
-\begin{lstlisting}[caption={Loop tiling with size of 16384},label={lst:tiling-1}]
-const int tile_size = 16384;
-#pragma omp parallel for collapse(2)
-for (int xx = 0; xx < N; xx += tile_size)
-{
-		for (int yy = 0; yy < N; yy += tile_size)
-		{
-				for (x = xx + 1; x < MIN(xx + tile_size, N - 1); x++)
-				{
-						for (y = yy + 1; y < MIN(yy + tile_size, N - 1); y++)
-						{
-								B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
-						}
-				}
-		}
-}
-\end{lstlisting}
-
-\begin{lstlisting}[caption={Loop tiling with size of 10922},label={lst:tiling-2}]
-const int tile_size = 10922;
-...same as before
-\end{lstlisting}
-
-\begin{lstlisting}[caption={Loop tiling with size of 8192},label={lst:tiling-3}]
-const int tile_size = 8192;
-...same as before
-\end{lstlisting} 
-
-\begin{lstlisting}[caption={Loop tiling with size of 5461},label={lst:tiling-4}]
-const int tile_size = 5461;
-...same as before
-\end{lstlisting}
-
-\mypar{Dimension augmentation}
-The next step is editing the \textit{tiled} code by applying two more dimensions to the original Stencil code. In order to apply this step, it has been necessary to edit the internal loops (with \textit{x} and \textit{y} variables) condition from ``MIN(xx + tile\textunderscore size, N - 1)'' to ``MIN(xx + tile\textunderscore size, N - 3)''. Because of the tiling optimization, the code has been executed on different tile sizes depending on several points of view like L2 Cache size, etc. The result of this step is four different algorithms, identical but with different tile sizes:
-
-\renewcommand{\lstlistingname}{Algorithm}
-
-\begin{lstlisting}[caption={Dimension augmentation + loop tiling with size of 16384},label={lst:augmentation-1}]
-const int tile_size = 16384;
-#pragma omp parallel for collapse(2)
-for (int xx = 0; xx < N; xx += tile_size)
-{
-		for (int yy = 0; yy < N; yy += tile_size)
-		{
-				for (x = xx + 3; x < MIN(xx + tile_size, N - 3); x = x + 3)
-				{
-						for (y = yy + 3; y < MIN(yy + tile_size, N - 3); y = y + 3)
-						{
-								B[x][y] = a * A[x][y] + b * (A[x - 3][y] + A[x - 2][y] + A[x - 1][y] + A[x + 1][y] + A[x + 2][y] + A[x + 3][y] + A[x][y - 3] + A[x][y - 2] + A[x][y - 1] + A[x][y + 1] + A[x][y + 2] + A[x][y + 3]);
-						}
-				}
-		}
-}
-\end{lstlisting}
-
-\begin{lstlisting}[caption={Dimension augmentation + loop tiling with size of 10922},label={lst:augmentation-2}]
-const int tile_size = 10922;
-...same as before
-\end{lstlisting}
-
-\begin{lstlisting}[caption={Dimension augmentation + loop tiling with size of 8192},label={lst:augmentation-3}]
-const int tile_size = 8192;
-...same as before
-\end{lstlisting} 
-
-\begin{lstlisting}[caption={Dimension augmentation + loop tiling with size of 5461},label={lst:augmentation-4}]
-const int tile_size = 5461;
-...same as before
-\end{lstlisting}
-
-\section{Experimental Results}\label{sec:exp}
-
-\mypar{Experimental setup} The execution timing is obtained by using the OpenMP primitives \cite{omp-get-wtime}, an example is shown in Algorithm \ref{lst:omp-get-time-alg}. The OpenMP settings are shown in Algorithm \ref{lst:omp-configs-alg}. The experiment is executed on two matrices, A and B (initialized with the Algorithm \ref{lst:initialization-alg}), with a size of constant \textbf{N = 32768} and on a PC with current specifications: 
-\begin{itemize}
-	\item \textbf{CPU}
-	\begin{itemize}
-		\item \textbf{Model name}: Intel(R) Core(TM) i5-9600K CPU @ 3.70GHz
-		\item \textbf{CPU(s)}: 6
-		\item \textbf{Socket(s)}: 1
-		\item \textbf{Core(s) per socket}: 6
-		\item \textbf{Thread(s) per core}: 1
-		\item \textbf{Cache L1d}: 192 KiB (6 instances)
-		\item \textbf{Cache L1i}: 192 KiB (6 instances)
-		\item \textbf{Cache L2}: 1.5 MiB (6 instances)
-		\item \textbf{Cache L3}: 9 MiB (1 instance)
-		\item \textbf{Intel Hyper-Threading Technology}: No
-	\end{itemize}
-	\item \textbf{Memory} 
-	\begin{itemize}
-		\item \textbf{Size}: 26164116 kB
-	\end{itemize}
-	\item \textbf{Compiler}: clang 14.0.5 with OpenMP 5.0
-	\end{itemize}
-\end{itemize}
-
-\renewcommand{\lstlistingname}{Algorithm}
-
-\begin{lstlisting}[caption={An example of code for obtaining the execution timing},label={lst:omp-get-time-alg}]
-double t_init = omp_get_wtime()
-//Your code's here
-printf("\%0.15f", omp_get_wtime() - t_init);
-\end{lstlisting}
-
-\begin{lstlisting}[caption={OpenMP Configs},label={lst:omp-configs-alg}]
-int n_threads = omp_get_max_threads();
-omp_set_max_active_levels(1);
-omp_set_num_threads(n_threads);
-omp_set_dynamic(0);
-\end{lstlisting}
-
-\begin{lstlisting}[caption={A and B matrices initialization},label={lst:initialization-alg}]
-float **A = (float **)malloc(N * sizeof(float *));
-float **B = (float **)malloc(N * sizeof(float *));
-for (x = 0; x < N; x++)
-{
-		A[x] = (float *)malloc(N * sizeof(float));
-		B[x] = (float *)malloc(N * sizeof(float));
-		for (y = 0; y < N; y++)
-		{
-				A[x][y] = 1.0f;
-				B[x][y] = 0.0f;
-		}
-}
-\end{lstlisting}
-
-\mypar{Results}
-Here the following execution timings are represented for every experiment that has been done.
-
-\begin{itemize}
-	\item \textbf{Loop interchange} computation time of: 
-	\begin{itemize}
-		\item the Algorithm \ref{lst:loop-interchange-x-y} is: 5.0533 (s) 
-		\item the Algorithm \ref{lst:loop-interchange-y-x} is: 55.8343 (s)
-	\end{itemize}
-	\begin{figure}[htbp]
-		\centering
-			\includegraphics[width=0.50\textwidth]{loop-interchange.png}
-		\caption{Loop interchange computation timings}
-		\label{fig:loop-interchange}
-	\end{figure}
-	\item \textbf{Optimization flags}:
-	\begin{itemize}
-		\item the Algorithm \ref{lst:loop-interchange-x-y} by compiling with the command \ref{lst:optimization-flags-0} is: 5.0493 (s)
-		\item the Algorithm \ref{lst:loop-interchange-x-y} by compiling with the command \ref{lst:optimization-flags-1} is: 1.3734 (s)
-		\item the Algorithm \ref{lst:loop-interchange-x-y} by compiling with the command \ref{lst:optimization-flags-2} is: 0.5931 (s)
-		\item the Algorithm \ref{lst:loop-interchange-x-y} by compiling with the command \ref{lst:optimization-flags-3} is: 0.5904 (s)
-	\end{itemize}
-	\begin{figure}[htbp]
-		\centering
-			\includegraphics[width=0.50\textwidth]{optimization-flags.png}
-		\caption{Optimization flags computation timings}
-		\label{fig:optimization-flags}
-	\end{figure}	
-	\item \textbf{Parallel loops}: 
-	\begin{itemize}
-		\item the Algorithm \ref{lst:parallel-loop-x} is: 0.4585 (s)
-		\item the Algorithm \ref{lst:parallel-loop-y} is: 0.4760 (s)
-		\item the Algorithm \ref{lst:parallel-loop-x-y} is: 0.7419 (s)
-	\end{itemize}
-	\begin{figure}[htbp]
-		\centering
-			\includegraphics[width=0.50\textwidth]{parallel-loops.png}
-		\caption{Parallel loops computation timings}
-		\label{fig:parallel-loops}
-	\end{figure}		
-	\item \textbf{Loop tiling}: 
-	\begin{itemize}
-		\item the Algorithm \ref{lst:tiling-1} is: 0.4451 (s)
-		\item the Algorithm \ref{lst:tiling-2} is: 0.4599 (s)
-		\item the Algorithm \ref{lst:tiling-3} is: 0.4422 (s)
-		\item the Algorithm \ref{lst:tiling-4} is: 0.4537 (s)
-	\end{itemize}	
-	\begin{figure}[htbp]
-		\centering
-			\includegraphics[width=0.50\textwidth]{loop-tiling.png}
-		\caption{Loop tiling computation timings}
-		\label{fig:loop-tiling}
-	\end{figure}		
-	\item \textbf{Dimension augmentation}: 
-	\begin{itemize}
-		\item the Algorithm \ref{lst:augmentation-1} is: 0.2649 (s)
-		\item the Algorithm \ref{lst:augmentation-2} is: 0.2911 (s)
-		\item the Algorithm \ref{lst:augmentation-3} is: 0.2645 (s)
-		\item the Algorithm \ref{lst:augmentation-4} is: 0.2676 (s)
-	\end{itemize}	
-	\begin{figure}[htbp]
-		\centering
-			\includegraphics[width=0.50\textwidth]{dimension-augmentation.png}
-		\caption{Dimension augmentation computation timings}
-		\label{fig:dimension-augmentation}
-	\end{figure}
-\end{itemize}
-
 \section{Conclusions}
 This article presents a number of different approaches to optimize the above-detailed Stencil computation's algorithm on multi-core architectures, based on a range of micro benchmarks.
 For the \textbf{loop interchange} optimization, it indicates that the standard loop \textit{x-y} is faster than the \textit{y-x} loop, this is favored by the C programming language memory layout.
@@ -557,65 +641,10 @@ About the \textbf{dimension} of the Stencil computation algorithm, it shows that
 \end{table}
 
 In future work, it would be interesting to try to implement what is the maximum number of dimension augmentation that offers a lower computation timing.
+
 \end{comment}
 
 \begin{thebibliography}{1}
-
-\begin{comment}
-\bibitem{taflove}
-A. Taflove. Computational electrodynamics: The finite-difference time-domain method. 1995.
-
-\bibitem{smith}
-G. Smith. Numerical Solution of Partial Differential Equations: Finite Difference Methods. Oxford University Press, 2004.
-
-\bibitem{cong-huang-zou}
-J. Cong, M. Huang, and Y. Zou. Accelerating fluid registration algorithm on multi-FPGA platforms. FPL, 2011.
-
-\bibitem{cong-zou}
-On the Transformation Optimization for Stencil Computation
-
-\bibitem{su-zhang-mei}
-Huayou Su *, Kaifang Zhang and Songzhu Mei. On the Transformation Optimization for Stencil Computation
-
-\bibitem{cruz}
-Cruz, R.D.L.; Araya-Polo, M. Algorithm 942: Semi-Stencil. ACM Trans. Math. Softw. 2014, 40, 1–39.
-
-\bibitem{barigou}
-Youcef Barigou. Acceleration of real-life stencil codes on GPUs. Hardware Architecture [cs.AR]. 2011.
-
-\bibitem{lipinski-rule}
-\href{https://en.wikipedia.org/wiki/Lipinski\%27s_rule_of_five}{Lipinski's rule of five}
-
-\bibitem{holewinski-pouchet-sadayappan}
-Justin Holewinski, Louis-Noël Pouchet, P. Sadayappan. High-Performance Code Generation for Stencil Computations on GPU Architectures.
-
-\bibitem{techopedia}
-\href{https://www.techopedia.com/definition/5305/multicore}{Multi-core}
-
-\bibitem{openmp}
-\href{https://www.openmp.org/}{OpenMP}
-
-\bibitem{loop-interchange}
-\href{https://en.wikipedia.org/wiki/Loop_interchange}{Loop interchange}
-
-\bibitem{optimization-flags}
-\href{https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html}{Options That Control Optimization}
- 
-\bibitem{loop-tiling}
-João M.P.Cardoso, José Gabriel F. Coutinho, Pedro C. Diniz. Chapter 5 - Source code transformations and optimizations. Embedded Computing for High Performance
-
-\bibitem{omp-get-wtime}
-\href{https://www.openmp.org/spec-html/5.0/openmpsu160.html}{omp\textunderscore get\textunderscore wtime() function}
-
-\bibitem{omp-parallel} 
-\href{https://www.openmp.org/specifications/}{OpenMP API 5 Specification. OMP Parallel.}
-
-\bibitem{omp-for}
-\href{https://www.openmp.org/specifications/}{OpenMP API 5 Specification. OMP For.}
-
-\bibitem{omp-collapse}
-\href{https://www.openmp.org/specifications/}{OpenMP API 5 Specification. Collapse.}
-\end{comment}
 
 \bibitem{simplified-molecular-input-line-entry-system}
 \href{https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system/}{Simplified molecular-input line-entry system}

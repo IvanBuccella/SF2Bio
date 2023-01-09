@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.12) (preloaded format=pdflatex 2023.1.5)  9 JAN 2023 12:56
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.12) (preloaded format=pdflatex 2023.1.5)  9 JAN 2023 16:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -496,7 +496,7 @@ Package hyperref Info: Link coloring OFF on input line 27.
 
 
 ]
-<./images//softmax-loss.png, id=55, 874.467pt x 437.83575pt>
+<./images//softmax-loss.png, id=83, 874.467pt x 437.83575pt>
 File: ./images//softmax-loss.png Graphic file (type png)
 <use ./images//softmax-loss.png>
 Package pdftex.def Info: ./images//softmax-loss.png  used on input line 86.
@@ -506,7 +506,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 86--87
  [][] 
  []
 
-<./images//predicted-distribution.png, id=58, 871.45575pt x 359.54324pt>
+<./images//predicted-distribution.png, id=86, 871.45575pt x 359.54324pt>
 File: ./images//predicted-distribution.png Graphic file (type png)
 <use ./images//predicted-distribution.png>
 Package pdftex.def Info: ./images//predicted-distribution.png  used on input li
@@ -517,7 +517,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 96--97
  [][] 
  []
 
-<./images//parameter-optimization.png, id=60, 711.8595pt x 478.78876pt>
+<./images//parameter-optimization.png, id=88, 711.8595pt x 478.78876pt>
 File: ./images//parameter-optimization.png Graphic file (type png)
 <use ./images//parameter-optimization.png>
 Package pdftex.def Info: ./images//parameter-optimization.png  used on input li
@@ -529,7 +529,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 106--107
  []
 
 [2 <./images//softmax-loss.png> <./images//predicted-distribution.png>]
-<./images//smiles-to-predicted-property.png, id=77, 950.3505pt x 398.08725pt>
+<./images//smiles-to-predicted-property.png, id=105, 950.3505pt x 398.08725pt>
 File: ./images//smiles-to-predicted-property.png Graphic file (type png)
 <use ./images//smiles-to-predicted-property.png>
 Package pdftex.def Info: ./images//smiles-to-predicted-property.png  used on in
@@ -540,7 +540,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 116--117
  [][] 
  []
 
-<./images//formula.png, id=79, 308.352pt x 54.2025pt>
+<./images//formula.png, id=107, 308.352pt x 54.2025pt>
 File: ./images//formula.png Graphic file (type png)
 <use ./images//formula.png>
 Package pdftex.def Info: ./images//formula.png  used on input line 135.
@@ -571,33 +571,100 @@ l.139 ...d \begin{math} p(s_i | s_1,\cdots ,s_i_-_
                                                   1,\theta) \end{math} is th...
 I treat `x_1_2' essentially like `x_1{}_2'.
 
+[3 <./images//parameter-optimization.png> <./images//smiles-to-predicted-proper
+ty.png> <./images//formula.png>]
 LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 1
-65.
+66.
+
 (C:\Users\maiom\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 165.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 166.
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-65.
+66.
 
 (C:\Users\maiom\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-[3 <./images//parameter-optimization.png> <./images//smiles-to-predicted-proper
-ty.png> <./images//formula.png>]
-<./images//logp-optimization.png, id=105, 1156.32pt x 526.96875pt>
+<./images//logp-optimization.png, id=135, 896.148pt x 526.96875pt>
 File: ./images//logp-optimization.png Graphic file (type png)
 <use ./images//logp-optimization.png>
 Package pdftex.def Info: ./images//logp-optimization.png  used on input line 23
-8.
-(pdftex.def)             Requested size: 258.0pt x 117.57382pt.
+9.
+(pdftex.def)             Requested size: 258.0pt x 151.71541pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 238--240
+Overfull \hbox (6.0pt too wide) in paragraph at lines 239--240
  [][] 
  []
 
-[4 <./images//logp-optimization.png>]
+[4]
+Overfull \hbox (6.35832pt too wide) in paragraph at lines 253--254
+[][][][][][][][][]  
+ []
+
+LaTeX Font Info:    Trying to load font information for OML+ptm on input line 2
+54.
+(C:\Users\maiom\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omlptm.fd
+File: omlptm.fd 
+)
+LaTeX Font Info:    Font shape `OML/ptm/m/n' in size <10> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 254.
+
+Overfull \hbox (8.99823pt too wide) in paragraph at lines 276--277
+[][][][][][][][][] 
+ []
+
+
+Underfull \vbox (badness 1331) has occurred while \output is active []
+
+ [5 <./images//logp-optimization.png>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (49.49794pt too wide) in paragraph at lines 416--417
+[][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (40.498pt too wide) in paragraph at lines 422--423
+[][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (15.59763pt too wide) in paragraph at lines 426--427
+[][][][][][][][][][][][][][][][][][]  
+ []
+
+[6]
+Overfull \hbox (19.85826pt too wide) in paragraph at lines 446--447
+[][][][][][][]  
+ []
+
+
+Overfull \hbox (13.49815pt too wide) in paragraph at lines 490--491
+[][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (35.99805pt too wide) in paragraph at lines 495--497
+[][][][][][][][][] 
+ []
+
+[7]
+Overfull \hbox (8.99823pt too wide) in paragraph at lines 543--544
+[][][][][][][][]  
+ []
+
+
+Underfull \hbox (badness 5924) in paragraph at lines 552--554
+[]\OT1/ptm/m/n/10 In this step is used an im-por-tant func-tion ''es-ti-
+ []
+
+
+Underfull \vbox (badness 1137) has occurred while \output is active []
+
+
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -609,35 +676,34 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[5
-
-] (documentation.aux)
+[8] (documentation.aux)
 Package rerunfilecheck Info: File `documentation.out' has not changed.
-(rerunfilecheck)             Checksum: 7BDCB45367F695504E74BE8AC7456809;1184.
+(rerunfilecheck)             Checksum: 3FC4112AF470AA8ACC4D633BD33EAC7A;3131.
  ) 
 Here is how much of TeX's memory you used:
- 13551 strings out of 476406
- 218612 string characters out of 2789568
- 1949787 words of memory out of 3000000
- 33683 multiletter control sequences out of 15000+600000
+ 14301 strings out of 476406
+ 229539 string characters out of 2789568
+ 2018787 words of memory out of 3000000
+ 34144 multiletter control sequences out of 15000+600000
  545107 words of font info for 91 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,8n,77p,1282b,1985s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 72i,8n,77p,1282b,1950s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}<C:
-/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi1
+/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex1
 0.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
-/cm/cmmi7.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-amsfonts/cm/cmr10.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1
-/public/amsfonts/cm/cmr7.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/font
-s/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/maiom/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/maiom/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/maiom/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/maiom/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/maiom/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on documentation.pdf (5 pages, 1343951 bytes).
+/cm/cmmi10.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/amsfonts/cm/cmmi7.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type
+1/public/amsfonts/cm/cmr10.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/maiom/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/maiom/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/maiom/AppData/
+Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/maiom/AppData/
+Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/maiom/AppData
+/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/maiom/AppData
+/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
+Output written on documentation.pdf (8 pages, 1411739 bytes).
 PDF statistics:
- 233 PDF objects out of 1000 (max. 8388607)
- 75 named destinations out of 1000 (max. 500000)
- 111 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 617 PDF objects out of 1000 (max. 8388607)
+ 361 named destinations out of 1000 (max. 500000)
+ 167 words of extra memory for PDF output out of 10000 (max. 10000000)
 
