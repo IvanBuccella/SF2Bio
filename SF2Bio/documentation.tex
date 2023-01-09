@@ -1,6 +1,6 @@
 \documentclass[conference]{IEEEtran}
 %\usepackage{spconf,amsmath,amssymb,graphicx}
-\usepackage{amsmath,amssymb,graphicx,caption,listings,hyperref,graphicx}
+\usepackage{amsmath,amssymb,graphicx,caption,listings,hyperref,graphicx,verbatim}
 
 % Example definitions.
 % --------------------
@@ -26,10 +26,10 @@
 
 \begin{document}
 
-\title{A Stencil computation algorithm optimization}
+\title{The Reinforcement Learning for Structural Evolution method on a Docker Environment}
 
 
-\author{\IEEEauthorblockN{Ivan Buccella e Matteo Maiorano}
+\author{\IEEEauthorblockN{Ivan Buccella and Matteo Maiorano}
 \IEEEauthorblockA{Department of Computer Science\\
  University of Salerno\\
  Italy}
@@ -40,7 +40,7 @@
 \begin{abstract}
 The ReLeaSE (Reinforcement Learning for Structural Evolution) method is a new computational strategy for de novo design of molecules with desired properties. This strategy integrates two deep neural networks, one generative and one predictive, which are trained separately but used jointly to generate new targeted chemical libraries.
 ReLeaSE uses a simple representation of molecules only through SMILES (simplified molecular-input line-entry system) strings.
-The generative models are trained with a stack-augmented memory network to produce chemically feasible SMILES strings, and predictive models are derived to predict the desired properties of the generated de novo compounds. In the first stage of the method, the generative and predictive models are trained separately with a supervised learning algorithm. In the second stage, both models are jointly trained with the RL approach to guide the generation of new chemical structures toward those with the desired physical and/or biological properties.
+The generative models are trained with a stack-augmented memory network to produce chemically feasible SMILES strings, and predictive models are derived to predict the desired properties of the generated de novo compounds. In the first stage of the method, the generative and predictive models are trained separately with a supervised learning algorithm. In the second stage, both models are jointly trained with the Reinforcement Learning approach to guide the generation of new chemical structures toward those with the desired physical and/or biological properties.
 The ReLeaSE method was used to design chemical libraries with a bias toward structural complexity or toward compounds with maximal, minimal or specific physical properties, such as melting point or hydrophobicity, or toward compounds with inhibitory activity toward Janus protein kinase 2.
 Based on these explanations, the main work focuses on the execution of the method by training a recurrent neural network to predict logP from SMILES; in addition, several optimizations to the code are applied in order to create a platform-independent execution using modern technologies like Docker and Docker Compose.
 
@@ -84,7 +84,7 @@ At each time step, during the training mode, the generative network takes a curr
 \begin{figure}[htbp]
 		\centering
 			\includegraphics[width=0.50\textwidth]{softmax-loss.png}
-		\caption{A}
+		\caption{Training step of the generative Stack-RNN.}
 		\label{fig:softmax-loss}
 	\end{figure}
 	
@@ -94,7 +94,7 @@ At each time step, in generating mode, the generative network takes a prefix of 
 \begin{figure}[htbp]
 		\centering
 			\includegraphics[width=0.50\textwidth]{predicted-distribution.png}
-		\caption{B}
+		\caption{Generator step of the generative Stack-RNN.}
 		\label{fig:predicted-distribution}
 	\end{figure}
 	
@@ -104,7 +104,7 @@ At the second stage, both generative and predictive models are combined into one
 \begin{figure}[htbp]
 		\centering
 			\includegraphics[width=0.50\textwidth]{parameter-optimization.png}
-		\caption{generative and predictive models}
+		\caption{General pipeline of RL system for novel compound generation.}
 		\label{fig:parameter-optimization}
 	\end{figure}
 
@@ -114,7 +114,7 @@ The predictive model P (Fig. \ref{fig:parameter-optimization}) is a model for es
 \begin{figure}[htbp]
 		\centering
 			\includegraphics[width=0.50\textwidth]{smiles-to-predicted-property.png}
-		\caption{SMILES strings to predicted property}
+		\caption{Scheme of predictive model.}
 		\label{fig:smiles-to-predicted-property}
 	\end{figure}
 	
@@ -122,52 +122,127 @@ The reward (Fig. \ref{fig:parameter-optimization}) is a function of the numerica
 The absolute majority of compounds generated de novo by the ReLeaSE method are novel structures as compared to the data sets used to train generative models, and any traditional quantitative structure–activity relationships model could be used to evaluate their properties.
 As a proof of principle, the method has been tested on three diverse types of endpoints: physical properties, biological activity, and chemical substructure bias. The use of a flexible reward function enables different library optimization strategies where one can minimize,maximize, or impose a desired range to a property of interest in the generated compound libraries.
 
-\section{Esempio di utilizzo di ReLeaSe}\label{sec:Esempio di utilizzo di ReLeaSe}
+\section{The execution}\label{sec:The execution}
 
-In this experiment we will optimize parameters of pretrained generative RNN to produce molecules with values of logP within drug-like region according to Lipinsky rule. We use policy gradient algorithm with custom reward function to bias the properties of generated molecules aka Reinforcement Learning for Structural Evolution (ReLeaSE) as was proposed in Popova, M., Isayev, O., & Tropsha, A. (2018). Deep reinforcement learning for de novo drug design. Science advances, 4(7), eaap7885.
-
+In this experiment we will optimize parameters of pretrained generative RNN to produce molecules with values of logP within drug-like regions according to Lipinsky rule. We use policy gradient algorithm with custom reward function to bias the properties of generated molecules.
 The following example uses real SMILES strings, contained in a given input file (we used the ChEMBL database of drug-like compounds).
+In this execution the generator produces a new SMILES string, which is then evaluated by the predictor. Based on the obtained prediction and the goal, it is assigned a numerical reward value and updated the parameters of the generator using policy gradient algorithm.
+ 
+The policy gradient loss is defined as follow:
 
-We will used stack augmented generative GRU as a generator. The model was trained to predict the next symbol from SMILES alphabet using the already generated prefix. Model was trained to minimize the cross-entropy loss between predicted symbol and ground truth symbol.
+\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.50\textwidth]{formula.png}
+		\label{fig:formula}
+	\end{figure}
 
-\mypar{The multi-core architecture}
-Multicore refers to an architecture in which a single physical processor incorporates the core logic of more than one processor. A single integrated circuit is used to package or hold these processors. These single integrated circuits are known as a die. Multicore architecture places multiple processor cores and bundles them as a single physical processor. The objective is to create a system that can complete more tasks at the same time, thereby gaining better overall system performance \cite{techopedia}.
+where \textit{R} is the reward obtained at time step i. \begin{math}\gamma\end{math} is the discount factor and \begin{math} p(s_i | s_1,\cdots ,s_i_-_1,\theta) \end{math} is the probability of the next character given the prefix, which is obtained from the generator. The reward is the same for every time step and is equal to the reward for the whole molecule. 
 
-\mypar{OpenMP}
-The OpenMP API supports multi-platform shared-memory parallel programming in C/C++ and Fortran. The OpenMP API defines a portable, scalable model with a simple and flexible interface for developing parallel applications on platforms from the desktop to the supercomputer \cite{openmp}.
+\section{Prerequisites}\label{sec:Prerequisites}
 
-\mypar{Loop interchange}
-In compiler theory, loop interchange is the process of exchanging the order of two iteration variables used by a nested loop. The variable used in the inner loop switches to the outer loop, and vice versa. It is often done to ensure that the elements of a multi-dimensional array are accessed in the order in which they are present in memory, improving the locality of reference \cite{loop-interchange}.
+\mypar{Hardware}
+Linux OS or WSL 2 on a Windows 10 (or higher) machine.
+A Modern NVIDIA GPU, compatible with CUDA 11.3.
 
-\mypar{Optimization flags}
-Without any optimization option, the compiler's goal is to reduce the cost of compilation and to make debugging produce the expected results. Statements are independent: if you stop the program with a breakpoint between statements, you can then assign a new value to any variable or change the program counter to any other statement in the function and get exactly the results you expect from the source code. 
-Turning on optimization flags makes the compiler attempt to improve the performance and/or code size at the expense of compilation time and possibly the ability to debug the program. 
-The compiler performs optimization based on the knowledge it has of the program. 
-Depending on the target and how the compiler was configured, a slightly different set of optimizations may be enabled at each -O level (\textit{-O0},\textit{-O1},\textit{-O2},\textit{-O3}) \cite{optimization-flags}.
+\mypar{Docker and Docker Compose}
+Docker and Docker Compose (Application containers engine) are required; they can be installed from \href{https://www.docker.com}{here}.
+The GPU Support is enabled on the machine; check it out \href{https://docs.docker.com/compose/gpu-support/}{here} 
 
-\mypar{Parallel loops}
-A parallel for loop is a for loop in which the statements in the loop can be run in parallel: on separate cores, processors, or threads. 
-In OpenMP the \textit{parallel loop} construct is a shortcut for specifying a parallel construct containing a loop construct with one or more associated loops and no other statements \cite{omp-parallel}. 
+\mypar{Nvidia Container Toolkit}
+The Nvidia Container Toolkit is required; it can be installed from \href{https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#install-guide}{here}.
+Note that you do not need to install the CUDA Toolkit on the host system.
+Note that you have to install the NVIDIA drivers on your system.
 
-\mypar{Loop tiling}
-Loop tiling transformation (or simply tiling) consists of partitioning an iteration domain into many regular and uniform tiles \cite{barigou}. A tile is thus a subset of iteration points. Executing a tile corresponds to the execution of all the iteration points it contains. A tile's execution is independent, which means if a tile execution starts, it cannot be interrupted until it reaches its last iteration point. This condition implies that no data can be exchanged between two concurrent tiles. This transformation allows data to be accessed in blocks (tiles), with the block size defined as a parameter of this transformation. Each loop is transformed into two loops: one iterating inside each block (intratile) and the other one iterating over the blocks (intertile) \cite{loop-tiling}. 
+\section{Installation}\label{sec:Installation}
 
-\section{The applied method}\label{sec:yourmethod}
+In this section is described how to implement and run the ReLeaSe method on a machine.
 
-The main goal of this experiment is to minimize the computation time of the chosen algorithm for Stencil Computation as soon as possible. This operation is done by using the above explained techniques: \textit{loop interchange}, \textit{optimization flags}, \textit{parallel loops} and \textit{loop tiling}.
+\subsection{Instructions}\label{sec:Instructions}
 
-\mypar{Starting Alogrithm}
-First of all, it's important to show what the used algorithm that the experiment tries to improve is.
+As mentioned into the \href{https://github.com/IvanBuccella/SF2Bio#installation}{repository} of the project, the following instructions need to be performed for running the container:
+
 \begin{lstlisting}
-for (x = 1; x < N - 1; x++)
-{
-		for (y = 1; y < N - 1; y++)
-		{
-				B[x][y] = a * A[x][y] + b * (A[x - 1][y] + A[x + 1][y] + A[x][y - 1] + A[x][y + 1]);
-		}
-}
+\$ git clone https://github.com/IvanBuccella/SF2Bio
+HTTP_PORT=8888
+\$ docker-compose build
+\$ docker-compose up
 \end{lstlisting}
 
+\subsection{The Dockerfile}\label{sec:The Dockerfile}
+
+During the installation and initialization phases of the project, some changes had to be made to the code to resolve errors that prevented it from starting. This could have been caused by several factors, such as the presence of outdated dependencies or incompatible package versions. These changes allowed the use of newer versions of the packages, which were more stable and compatible with the code. 
+The result of this phase gave in output the construction of the Dockerfile which replicates the installation methodology described in the ReLeaSe method \href{https://github.com/isayev/ReLeaSE#installation-with-anaconda}{repository}. 
+
+\begin{lstlisting}
+1 FROM nvidia/cuda:11.3.0-cudnn8-runtime-ubuntu20.04
+
+2 RUN apt-get update
+3 RUN apt-get install -y git
+4 RUN apt-get install -y wget
+
+5 RUN wget https://repo.anaconda.com/miniconda/ Miniconda3-latest-Linux-x86_64.sh
+6 RUN bash Miniconda3-latest-Linux-x86_64.sh -b -p /miniconda
+7 ENV PATH=\$PATH:/miniconda/pcondabin:/miniconda/bin
+
+8 RUN conda update -n base -c defaults conda
+9 RUN conda create -n release python=3.6
+
+10 SHELL ["conda","run","-n","release","/bin/bash", "-c"]
+
+11 COPY environment environment
+12 RUN conda install --yes --file environment/conda.txt
+13 RUN conda install -c rdkit rdkit nox cairo
+14 RUN conda install pytorch=1.10.1 torchvision=0.11.2 -c pytorch -c conda-forge
+15 RUN pip install -r environment/pip.txt
+
+16 WORKDIR /home
+
+17 RUN git clone https://github.com/isayev/ReLeaSE.git .
+
+18 ENTRYPOINT ["conda", "run", "-n", "release", "jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
+\end{lstlisting}
+
+As shown in the code above, build starts from the official \href{https://hub.docker.com/r/nvidia/cuda}{Nvidia CUDA docker image} with Ubuntu 20.04. To the initial image, several dependencies are added, like \href{https://docs.conda.io/en/latest/miniconda.html}{MiniConda} which is a bootstrap version of Anaconda [Row 5 del codice].
+Once Conda is installed, a new environment with Python is created [Row 11 del codice] and the required dependencies specified in the conda.txt file are installed [Row 12 del codice]. In addition, RDKit, Nox, Cairo, pytorch and torchvision are installed [Rows 13-14 del codice]. 
+Then the pip dependencies listed in the pip.txt file, such as \href{https://www.tensorflow.org/tensorboard}{tensorboard}, \href{https://www.tensorflow.org/}{tensorflow} are installed [Row 15 del codice].
+Finally, the ReLeaSe code repository is cloned into the workdir of the image and the entrypoint of the jupyter notebook is defined.
+
+\subsection{The Docker Compose}\label{sec:The Docker Compose}
+
+\begin{lstlisting}
+version: "3.8"
+
+services:
+  app:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NVIDIA_DISABLE_REQUIRE=1
+    ports:
+      - \${HTTP_PORT}:8888
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+\end{lstlisting}
+
+As shown in the code above, the docker-compose file includes the GPU access \cite{gpu-support} to the service container “app” including all the nvidia GPUs installed on the host machine. This access allows the container to use the nvidia GPUs shared for the execution; in particular this allows “pytorch” to find and to use the CUDA cores.
+
+\subsection{The running container}\label{sec:The running container}
+
+\begin{figure}[htbp]
+		\centering
+			\includegraphics[width=0.50\textwidth]{logp-optimization.png}
+		\label{fig:logp-optimization}
+	\end{figure}
+
+In the figure above is reported the configured jupyter notebook of the execution described in the following sections; it can be reached by visiting the \href{http://localhost:{HTTP_PORT}/LogP_optimization_demo.ipynb}{URL} into the host machine web browser.
+
+
+\begin{comment}
 \mypar{Loop interchange}
 The first step is editing the starting algorithm by exchanging the order of the iteration variables \textbf{x} and \textbf{y} used by nested loops. The result is two different algorithms:
 
@@ -482,10 +557,11 @@ About the \textbf{dimension} of the Stencil computation algorithm, it shows that
 \end{table}
 
 In future work, it would be interesting to try to implement what is the maximum number of dimension augmentation that offers a lower computation timing.
-
+\end{comment}
 
 \begin{thebibliography}{1}
 
+\begin{comment}
 \bibitem{taflove}
 A. Taflove. Computational electrodynamics: The finite-difference time-domain method. 1995.
 
@@ -539,12 +615,16 @@ João M.P.Cardoso, José Gabriel F. Coutinho, Pedro C. Diniz. Chapter 5 - Source
 
 \bibitem{omp-collapse}
 \href{https://www.openmp.org/specifications/}{OpenMP API 5 Specification. Collapse.}
+\end{comment}
 
 \bibitem{simplified-molecular-input-line-entry-system}
 \href{https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system/}{Simplified molecular-input line-entry system}
 
 \bibitem{arxiv}
 \href{http://arxiv.org/abs/1412.3555/}{J. Chung, C. Gulcehre, K. Cho, Y. Bengio, Empirical evaluation of gated recurrent neural networks on sequence modeling, (2014).}
+
+\bibitem{gpu-support}
+\href{https://docs.docker.com/compose/gpu-support/}{Docker GPU support}
 
 \end{thebibliography}
 
