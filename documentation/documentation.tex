@@ -40,7 +40,7 @@
 \maketitle
 
 \section*{Abstract}
-The ReLeaSE (Reinforcement Learning for Structural Evolution) method is a new computational strategy for de novo design of molecules with desired properties.
+The ReLeaSE (Reinforcement Learning for Structural Evolution) \cite{reinforcement-learning} method is a new computational strategy for de novo design of molecules with desired properties.
 In this document we present an execution of a novel method to generate de novo chemical compounds with desired physical, chemical and/or bioactive properties based on Deep Reinforcement Learning. The execution of the method uses a simple representation of molecules only through SMILES (simplified molecular-input line-entry system) strings and is able to predict different properties like logP, Tm, and pIC50; thanks to that, the model can learn to select the most promising molecules for further study or new drug development. 
 The model integrates two deep neural networks, one generative and one predictive, which are trained separately but used jointly to generate new targeted chemical libraries. The generative models are trained with a stack-augmented memory network to produce chemically feasible SMILES strings, and predictive models are derived to predict the desired properties of the generated de novo compounds. In the first stage of the method, the generative and predictive models are trained separately with a supervised learning algorithm. In the second stage, both models are jointly trained with the Reinforcement Learning approach to guide the generation of new chemical structures toward those with the desired physical and/or biological properties.
 Based on these explanations, the main work focuses on the execution of the method by training a recurrent neural network to predict logP from SMILES; in addition, several optimizations to the code are applied in order to create a platform-independent executable code using modern technologies like Docker and Docker Compose.
@@ -84,7 +84,7 @@ In the "Molecular de novo design through deep reinforcement learning" \cite{mole
 
 \section{The Method}\label{sec:The Method}
 
-The ReLeaSE method implements a DRL approach for de novo design of novel chemical compounds with desired properties. ReLeaSE is distinguished from other similar approaches by its simple representation of molecules through the molecular string input system (SMILES) only during the generation and prediction phases of the method and the integration of these phases into a single workflow that also includes an RL module. 
+The ReLeaSE \cite{reinforcement-learning} method implements a DRL approach for de novo design of novel chemical compounds with desired properties. ReLeaSE is distinguished from other similar approaches by its simple representation of molecules through the molecular string input system (SMILES) only during the generation and prediction phases of the method and the integration of these phases into a single workflow that also includes an RL module. 
 The project makes use of QSPR (Quantitative Structure-Property Relationship) a technique that uses mathematical models to predict the properties of a chemical compound based on its chemical structure. 
 
 
@@ -145,11 +145,17 @@ The reward (Fig. \ref{fig:parameter-optimization}) is a function of the numerica
 
 
 The absolute majority of compounds generated de novo by the ReLeaSE method are novel structures as compared to the data sets used to train generative models, and any traditional quantitative structure-activity relationships model could be used to evaluate their properties.
-As a proof of principle, the method has been tested on three diverse types of endpoints: physical properties, biological activity, and chemical substructure bias. The use of a flexible reward function enables different library optimization strategies where one can minimize,maximize, or impose a desired range to a property of interest in the generated compound libraries.
+As a proof of principle, the method has been tested on three diverse types of endpoints: physical properties, biological activity, and chemical substructure bias. 
+
+
+The use of a flexible reward function enables different library optimization strategies where one can minimize,maximize, or impose a desired range to a property of interest in the generated compound libraries.
 
 \section{The execution}\label{sec:The execution}
 
-In this experiment we will optimize parameters of pretrained generative RNN to produce molecules with values of logP within drug-like regions according to Lipinsky rule. Lipinski's rule is a set of criteria that are used to evaluate the "oral pharmacokinetics" (the ability of a chemical compound to be absorbed and distributed in the body through oral ingestion) of a chemical. Lipinski's rule was developed to identify chemical compounds that are likely to be suitable for the drug treatment of humans through oral ingestion. 
+In this experiment we will optimize parameters of pretrained generative RNN to produce molecules with values of logP within drug-like regions according to Lipinsky rule. 
+
+
+Lipinski's rule is a set of criteria that are used to evaluate the "oral pharmacokinetics" (the ability of a chemical compound to be absorbed and distributed in the body through oral ingestion) of a chemical. Lipinski's rule was developed to identify chemical compounds that are likely to be suitable for the drug treatment of humans through oral ingestion. 
 
 
 We use policy gradient algorithm with custom reward function to bias the properties of generated molecules.
@@ -177,11 +183,11 @@ The reward is the same for every time step and is equal to the reward for the wh
 \subsection{Prerequisites}\label{sec:Prerequisites}
 
 \begin{itemize}
-	\item Linux OS or WSL 2 on a Windows 10 (or higher) machine. If you use WSL 2, follow the \href{https://docs.nvidia.com/cuda/wsl-user-guide/index.html#getting-started-with-cuda-on-wsl}{[official guide]}.
-	\item A Modern NVIDIA GPU, compatible with \href{https://developer.nvidia.com/cuda-11.3.0-download-archive}{[CUDA 11.3]}.
-	\item Docker and Docker Compose (Application containers engine). Install it from \href{https://www.docker.com}{[here]}.
-	\item The Docker GPU Support enabled on the machine; check it out \href{https://docs.docker.com/compose/gpu-support/}{[here]}.
-	\item The Nvidia Container Toolkit. Install it from \href{https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#install-guide}{[here]}.
+	\item Linux OS or WSL 2 on a Windows 10 (or higher) machine. If you use WSL 2, follow the official guide \cite{wsl-user-guide}.
+	\item A Modern NVIDIA GPU, compatible with CUDA 11.3 \cite{cuda-download}.
+	\item Docker and Docker Compose (Application containers engine). Install it from here \cite{docker-guide}.
+	\item The Docker GPU Support enabled on the machine; check it out here \cite{gpu-support}.
+	\item The Nvidia Container Toolkit. Install it from here \cite{nvidia-toolkit}.
 \end{itemize}
 
 \begin{flushleft}
@@ -197,7 +203,7 @@ In this section is described how to implement and run the ReLeaSe method on a ma
 
 \subsubsection{Instructions}\label{sec:Instructions}
 
-As mentioned into the \href{https://github.com/IvanBuccella/SF2Bio#installation}{repository} of the project, the following instructions need to be performed for running the container:
+As mentioned into the repository \cite{git-sf2bio} of the project, the following instructions need to be performed for running the container:
 
 \begin{lstlisting}
 1 git clone https://github.com/IvanBuccella/SF2Bio
@@ -210,7 +216,7 @@ As mentioned into the \href{https://github.com/IvanBuccella/SF2Bio#installation}
 \subsubsection{The Dockerfile}\label{sec:The Dockerfile}
 
 During the installation and initialization phases of the project, some changes had to be made to the code to resolve errors that prevented it from starting. This could have been caused by several factors, such as the presence of outdated dependencies or incompatible package versions. These changes allowed the use of newer versions of the packages, which were more stable and compatible with the code. 
-The result of this phase gave in output the construction of the Dockerfile which replicates the installation methodology described in the ReLeaSe method \href{https://github.com/isayev/ReLeaSE#installation-with-anaconda}{repository}. 
+The result of this phase gave in output the construction of the Dockerfile which replicates the installation methodology described in the ReLeaSe method repository \cite{git-isayev-release}. 
 
 \begin{lstlisting}[label={lst:dockerfile}]
 1 FROM nvidia/cuda:11.3.0-cudnn8-runtime-ubuntu20.04
@@ -233,9 +239,9 @@ The result of this phase gave in output the construction of the Dockerfile which
 18 ENTRYPOINT ["conda", "run", "-n", "release", "jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
 \end{lstlisting}
 
-As shown in the code above, build starts from the official \href{https://hub.docker.com/r/nvidia/cuda}{Nvidia CUDA docker image} with Ubuntu 20.04. To the initial image, several dependencies are added, like \href{https://docs.conda.io/en/latest/miniconda.html}{MiniConda} which is a bootstrap version of Anaconda (Row 5 of \ref{lst:dockerfile}).
+As shown in the code above, build starts from the official Nvidia CUDA docker image \cite{nvidia-cuda-docker-image} with Ubuntu 20.04. To the initial image, several dependencies are added, like MiniConda \cite{miniconda} which is a bootstrap version of Anaconda (Row 5 of \ref{lst:dockerfile}).
 Once Conda is installed, a new environment with Python is created (Row 11 of \ref{lst:dockerfile}) and the required dependencies specified in the conda.txt file are installed (Row 12 of \ref{lst:dockerfile}). In addition, RDKit, Nox, Cairo, pytorch and torchvision are installed (Rows 13-14 of \ref{lst:dockerfile}). 
-Then the pip dependencies listed in the pip.txt file, such as \href{https://www.tensorflow.org/tensorboard}{tensorboard}, \href{https://www.tensorflow.org/}{tensorflow} are installed (Row 15 of \ref{lst:dockerfile}).
+Then the pip dependencies listed in the pip.txt file, such as tensorboard \cite{tensorboard}, tensorflow \cite{tensorflow} are installed (Row 15 of \ref{lst:dockerfile}).
 Finally, the ReLeaSe code repository is cloned into the workdir of the image and the entrypoint of the jupyter notebook is defined.
 
 \subsubsection{The Docker Compose}\label{sec:The Docker Compose}
@@ -269,7 +275,7 @@ As shown in the code above, the docker-compose file includes the GPU access \cit
     \label{fig:logp-optimization}
 \end{figure}
 
-In the figure above is reported the configured jupyter notebook of the execution described in the following sections; it can be reached by visiting the URL 'http://localhost:\${HTTP_PORT}/LogP_optimization_demo.ipynb' into the host machine web browser.
+In the figure above is reported the configured jupyter notebook of the execution described in the following sections; it can be reached by visiting the URL 'http://localhost:\${HTTP\_PORT}/LogP\_optimization\_demo.ipynb' into the host machine web browser.
 
 \subsection{Description of the execution}\label{sec:Description of the execution}
 
@@ -611,6 +617,9 @@ The output will be something like in figure \ref{fig:output}
 \pagebreak
 \begin{thebibliography}{1}
 
+\bibitem{reinforcement-learning}
+{Mariya Popova, Olexandr Isayev, Alexander Tropsha. Deep Reinforcement Learning for de-novo Drug Design. Science Advances, 2018, Vol. 4, no. 7, eaap7885. DOI: 10.1126/sciadv.aap7885}
+
 \bibitem{simplified-molecular-input-line-entry-system}
 \href{https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system/}{Simplified molecular-input line-entry system}
 
@@ -632,8 +641,38 @@ The output will be something like in figure \ref{fig:output}
 \bibitem{gru}
 \href{http://arxiv.org/abs/1412.3555}{J. Chung, C. Gulcehre, K. Cho, Y. Bengio, Empirical evaluation of gated recurrent neural networks on sequence modeling \(2014\)}
 
+\bibitem{wsl-user-guide}
+\href{https://docs.nvidia.com/cuda/wsl-user-guide/index.html#getting-started-with-cuda-on-wsl}{WSL user official guide}
+
+\bibitem{cuda-download}
+\href{https://developer.nvidia.com/cuda-11.3.0-download-archive}{CUDA 11.3 download}
+
+\bibitem{docker-guide}
+\href{https://www.docker.com}{Docker official guide} 
+
 \bibitem{gpu-support}
 \href{https://docs.docker.com/compose/gpu-support/}{Docker GPU support}
+
+\bibitem{nvidia-toolkit}
+\href{https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#install-guide}{Nvidia Toolkit download}
+
+\bibitem{git-sf2bio}
+\href{https://github.com/IvanBuccella/SF2Bio#installation}{Git Repository SF2bio}
+
+\bibitem{git-isayev-release}
+\href{https://github.com/isayev/ReLeaSE#installation-with-anaconda}{Git repository ReLeaSE} 
+
+\bibitem{nvidia-cuda-docker-image}
+\href{https://hub.docker.com/r/nvidia/cuda}{Nvidia CUDA docker image}
+
+\bibitem{miniconda}
+\href{https://docs.conda.io/en/latest/miniconda.html}{MiniConda} 
+
+\bibitem{tensorboard}
+\href{https://www.tensorflow.org/tensorboard}{Tensorboard} 
+
+\bibitem{tensorflow}
+\href{https://www.tensorflow.org/}{Tensorflow} 
 
 \end{thebibliography}
 
