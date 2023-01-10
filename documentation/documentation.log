@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.12) (preloaded format=pdflatex 2023.1.5)  9 JAN 2023 23:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.12) (preloaded format=pdflatex 2023.1.5)  10 JAN 2023 11:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -549,7 +549,7 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 179.
 
 [6]
-<./images//logp-optimization.png, id=192, 896.148pt x 526.96875pt>
+<./images//logp-optimization.png, id=195, 896.148pt x 526.96875pt>
 File: ./images//logp-optimization.png Graphic file (type png)
 <use ./images//logp-optimization.png>
 Package pdftex.def Info: ./images//logp-optimization.png  used on input line 22
@@ -567,29 +567,29 @@ LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
 <./images//unbiased.png, id=370, 231.86626pt x 151.767pt>
 File: ./images//unbiased.png Graphic file (type png)
 <use ./images//unbiased.png>
-Package pdftex.def Info: ./images//unbiased.png  used on input line 440.
+Package pdftex.def Info: ./images//unbiased.png  used on input line 437.
 (pdftex.def)             Requested size: 308.71107pt x 202.08377pt.
  [11 <./images//unbiased.png>]
 <./images//biased.png, id=397, 237.88875pt x 151.16475pt>
 File: ./images//biased.png Graphic file (type png)
 <use ./images//biased.png>
-Package pdftex.def Info: ./images//biased.png  used on input line 537.
+Package pdftex.def Info: ./images//biased.png  used on input line 534.
 (pdftex.def)             Requested size: 308.71107pt x 196.17737pt.
  [12]
-<./images//output.png, id=450, 1003.75pt x 803.0pt>
+<./images//output.png, id=447, 1003.75pt x 803.0pt>
 File: ./images//output.png Graphic file (type png)
 <use ./images//output.png>
-Package pdftex.def Info: ./images//output.png  used on input line 567.
+Package pdftex.def Info: ./images//output.png  used on input line 563.
 (pdftex.def)             Requested size: 441.01775pt x 352.81873pt.
  [13 <./images//biased.png>] [14 <./images//output.png (PNG copy)>]
 [15] (documentation.aux)
 Package rerunfilecheck Info: File `documentation.out' has not changed.
-(rerunfilecheck)             Checksum: 11445EBF5A62CC24D5B5A1B55BDD82E6;2951.
+(rerunfilecheck)             Checksum: E8BC79C99EE7A678532E86B02C49DE6B;3069.
  ) 
 Here is how much of TeX's memory you used:
- 14007 strings out of 476406
- 220893 string characters out of 2789568
- 1971787 words of memory out of 3000000
+ 14003 strings out of 476406
+ 220945 string characters out of 2789568
+ 1967787 words of memory out of 3000000
  33883 multiletter control sequences out of 15000+600000
  521208 words of font info for 66 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -610,9 +610,9 @@ fb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
 onts/cm/cmsy10.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/pu
 blic/amsfonts/cm/cmsy7.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/
 type1/public/amsfonts/cm/cmti10.pfb>
-Output written on documentation.pdf (15 pages, 1560741 bytes).
+Output written on documentation.pdf (15 pages, 1562056 bytes).
 PDF statistics:
- 623 PDF objects out of 1000 (max. 8388607)
- 322 named destinations out of 1000 (max. 500000)
+ 618 PDF objects out of 1000 (max. 8388607)
+ 318 named destinations out of 1000 (max. 500000)
  166 words of extra memory for PDF output out of 10000 (max. 10000000)
 

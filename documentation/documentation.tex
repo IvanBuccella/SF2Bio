@@ -148,11 +148,11 @@ Note that you have to install the NVIDIA drivers on your system.
 \end{flushleft}
 
 
-\section{Installation}\label{sec:Installation}
+\subsection{Installation}\label{sec:Installation}
 
 In this section is described how to implement and run the ReLeaSe method on a machine.
 
-\subsection{Instructions}\label{sec:Instructions}
+\subsubsection{Instructions}\label{sec:Instructions}
 
 As mentioned into the \href{https://github.com/IvanBuccella/SF2Bio#installation}{repository} of the project, the following instructions need to be performed for running the container:
 
@@ -164,7 +164,7 @@ As mentioned into the \href{https://github.com/IvanBuccella/SF2Bio#installation}
 5 docker-compose up
 \end{lstlisting}
 
-\subsection{The Dockerfile}\label{sec:The Dockerfile}
+\subsubsection{The Dockerfile}\label{sec:The Dockerfile}
 
 During the installation and initialization phases of the project, some changes had to be made to the code to resolve errors that prevented it from starting. This could have been caused by several factors, such as the presence of outdated dependencies or incompatible package versions. These changes allowed the use of newer versions of the packages, which were more stable and compatible with the code. 
 The result of this phase gave in output the construction of the Dockerfile which replicates the installation methodology described in the ReLeaSe method \href{https://github.com/isayev/ReLeaSE#installation-with-anaconda}{repository}. 
@@ -195,7 +195,7 @@ Once Conda is installed, a new environment with Python is created [Row 11 of \re
 Then the pip dependencies listed in the pip.txt file, such as \href{https://www.tensorflow.org/tensorboard}{tensorboard}, \href{https://www.tensorflow.org/}{tensorflow} are installed [Row 15 of \ref{lst:dockerfile}].
 Finally, the ReLeaSe code repository is cloned into the workdir of the image and the entrypoint of the jupyter notebook is defined.
 
-\subsection{The Docker Compose}\label{sec:The Docker Compose}
+\subsubsection{The Docker Compose}\label{sec:The Docker Compose}
 
 \begin{lstlisting}
 1  version: "3.8"
@@ -218,7 +218,7 @@ Finally, the ReLeaSe code repository is cloned into the workdir of the image and
 
 As shown in the code above, the docker-compose file includes the GPU access \cite{gpu-support} to the service container “app” including all the nvidia GPUs installed on the host machine. This access allows the container to use the nvidia GPUs shared for the execution; in particular this allows “pytorch” to find and to use the CUDA cores.
 
-\subsection{The running container}\label{sec:The running container}
+\subsubsection{The running container}\label{sec:The running container}
 
 \begin{figure}[htbp]
     \centering
@@ -228,19 +228,16 @@ As shown in the code above, the docker-compose file includes the GPU access \cit
 
 In the figure above is reported the configured jupyter notebook of the execution described in the following sections; it can be reached by visiting the \href{http://localhost:{HTTP_PORT}/LogP_optimization_demo.ipynb}{URL} into the host machine web browser.
 
-\section{Description of the execution}\label{sec:Description of the execution}
+\subsection{Description of the execution}\label{sec:Description of the execution}
 
-\subsection{First stage - Setting up the generator}\label{sec:First stage - Setting up the generator}
+\subsubsection{First stage - Setting up the generator}\label{sec:First stage - Setting up the generator}
 
 The real SMILES strings, aka the data, are read from the ChEMBL database; they are included into a .smi file:
 
 \begin{lstlisting}
 gen_data_path = './data/chembl_22_clean_1576904_sorted_std_final.smi'
-tokens = ['<', '>', '#', '%', ')', '(', '+', '-', '/', '.', '1', '0', '3', '2', '5', '4', '7',
-          '6', '9', '8', '=', 'A', '@', 'C', 'B', 'F', 'I', 'H', 'O', 'N', 'P', 'S', '[', ']',
-          '\\', 'c', 'e', 'i', 'l', 'o', 'n', 'p', 's', 'r', '\n']
-gen_data = GeneratorData(training_data_path=gen_data_path, delimiter='\t', 
-                         cols_to_read=[0], keep_header=True, tokens=tokens)
+tokens = ['<', '>', '#', '\%', ')', '(', '+', '-', '/', '.', '1', '0', '3', '2', '5', '4', '7', '6', '9', '8', '=', 'A', '@', 'C', 'B', 'F', 'I', 'H', 'O', 'N', 'P', 'S', '[', ']', '\\', 'c', 'e', 'i', 'l', 'o', 'n', 'p', 's', 'r', '\n']
+gen_data = GeneratorData(training_data_path=gen_data_path, delimiter='\t', cols_to_read=[0], keep_header=True, tokens=tokens)
 \end{lstlisting}
 
 Then the stack-augmented generative RNN is initialized:
@@ -262,7 +259,7 @@ my_generator.save_model(model_path)
 my_generator.load_model(model_path)
 \end{lstlisting}
 
-\subsection{First stage - Build the Predictive Recurrent Neural Network}\label{sec:First stage - Build the Predictive Recurrent Neural Network}
+\subsubsection{First stage - Build the Predictive Recurrent Neural Network}\label{sec:First stage - Build the Predictive Recurrent Neural Network}
 
 The stack-augmented predictive RNN is generated. 
 
@@ -417,7 +414,7 @@ And then the evaluated data are saved in order to be used in the next steps:
 ! mv ./checkpoints/logP/fold_4/checkpoint/epoch_25 ./checkpoints/logP/fold_4.pkl
 \end{lstlisting}
 
-\subsection{First stage - Setting up the predictor}\label{sec:First stage - Setting up the predictor}
+\subsubsection{First stage - Setting up the predictor}\label{sec:First stage - Setting up the predictor}
 
 The path of the generated data from the Predictive RNN is configured:
 
@@ -442,7 +439,7 @@ This phase produces in output:
     \label{fig:unbiased}
 \end{figure}
 
-\subsection{Second stage - Biasing the distribution of the generator with reinforcement learning}\label{sec:Second stage - Biasing the distribution of the generator with reinforcement learning}
+\subsubsection{Second stage - Biasing the distribution of the generator with reinforcement learning}\label{sec:Second stage - Biasing the distribution of the generator with reinforcement learning}
 
 A copy of the generator is created:
 
@@ -533,13 +530,13 @@ smiles_biased, prediction_biased = estimate_and_update(RL_logp.generator, my_pre
 This phase produces in output: 
 
 \begin{figure}[htbp]
-		\centering
-			\includegraphics[width=0.70\textwidth]{biased.png}
-        \caption{The biased distribution of predicted logP for generated molecules}
-		\label{fig:biased}
-	\end{figure}
+	\centering
+		\includegraphics[width=0.70\textwidth]{biased.png}
+			\caption{The biased distribution of predicted logP for generated molecules}
+	\label{fig:biased}
+\end{figure}
 
-\subsection{Output - Drawing random molecules}\label{sec:Output - Drawing random molecules}
+\subsubsection{Output - Drawing random molecules}\label{sec:Output - Drawing random molecules}
 
 For drawing some random compounds from the biased library, the following code can be executed:
 
@@ -556,19 +553,19 @@ n_to_draw = 20
 ind = np.random.randint(0, len(sanitized_gen_mols), n_to_draw)
 mols_to_draw = [sanitized_gen_mols[i] for i in ind]
 legends = ['log P = ' + str(prediction_biased[i]) for i in ind]
-Draw.MolsToGridImage(mols_to_draw, molsPerRow=5, 
-                     subImgSize=(200,200), legends=legends)
+Draw.MolsToGridImage(mols_to_draw, molsPerRow=5, subImgSize=(200,200), legends=legends)
 \end{lstlisting}
 
 The output will be something like in figure \ref{fig:output}
 
 \begin{figure}[htbp]
-    \centering
-        \includegraphics[width=\textwidth]{output.png}
-		\caption{Some random compounds from the biased library}
-    \label{fig:output}
+	\centering
+			\includegraphics[width=\textwidth]{output.png}
+	\caption{Some random compounds from the biased library}
+	\label{fig:output}
 \end{figure}
 
+\pagebreak
 \begin{thebibliography}{1}
 
 \bibitem{simplified-molecular-input-line-entry-system}
