@@ -27,10 +27,10 @@
 
 \begin{document}
 
-\title{The Reinforcement Learning for Structural Evolution method on a Docker Environment}
+\title{The Reinforcement Learning for Structural Evolution method execution on a Docker Environment}
 
 
-\author{\IEEEauthorblockN{Ivan Buccella and Matteo Maiorano}
+\author{\IEEEauthorblockN{Ivan Buccella, Matteo Maiorano}
 \IEEEauthorblockA{\\Department of Computer Science\\
  University of Salerno\\
  Italy}
@@ -48,17 +48,34 @@ Based on these explanations, the main work focuses on the execution of the metho
 \section{Introduction}\label{sec:intro}
 
 The World Economic Forum has called the combination of big data and artificial intelligence (AI) the fourth industrial revolution, capable of radically transforming science. AI is revolutionizing several fields of medicine, such as radiology, pathology and other specialties, and has begun to be used in drug discovery through deep reinforcement learning (DRL) technologies. 
-Deep reinforcement learning (DRL) combines the capabilities of deep learning and reinforcement learning (RL). In RL, an agent learns to interact with its environment in order to maximize a reward. He does this through trial and error, receiving positive rewards for actions that bring him closer to his goal and negative rewards for actions that take him further away. DRL involves using deep neural networks as function approximators to learn the value function or policy in a RL problem. The value function tells the agent how good a particular state is, while the policy tells the agent what actions to take in a specific state. Although there are many synthetically feasible chemicals that could be considered as possible drug-like molecules, their huge number makes it impossible to systematically examine all of them and verify them through the construction and evaluation of each individual compound. Deep neural networks are particularly suited to this task as they can process high-dimensional data and can learn complex relationships between states and actions. These technologies are being applied in different areas, such as molecular docking, transcriptomics, understanding reaction mechanisms, and molecular energy prediction.
+
+
+Deep reinforcement learning (DRL) combines the capabilities of deep learning and reinforcement learning (RL). In RL, an agent learns to interact with its environment in order to maximize a reward. He does this through trial and error, receiving positive rewards for actions that bring him closer to his goal and negative rewards for actions that take him further away. DRL involves using deep neural networks as function approximators to learn the value function or policy in a RL problem. The value function tells the agent how good a particular state is, while the policy tells the agent what actions to take in a specific state. Although there are many synthetically feasible chemicals that could be considered as possible drug-like molecules, their huge number makes it impossible to systematically examine all of them and verify them through the construction and evaluation of each individual compound. Deep neural networks are particularly suited to this task as they can process high-dimensional data and can learn complex relationships between states and actions. 
+
+
+These technologies are being applied in different areas, such as molecular docking, transcriptomics, understanding reaction mechanisms, and molecular energy prediction.
 In drug discovery, a crucial step is to formulate a well-reasoned hypothesis on how to synthesize new compounds or select them from available chemical libraries based on structure-activity relationship (SAR) data. Automated design approaches to create compounds with specific properties have been the subject of research for the past 15 years. 
+
+
 Tm (melting point) is the temperature at which a solid changes to a liquid state. In chemistry and medicinal chemistry, the melting point of a substance is often used as an identifying property because each substance has a specific melting point. Melting point is an important chemical property because it can affect a compound's stability and shelf life, as well as its safety and bioavailability.
+
+
 Inhibitory concentration (IC) is a measure of the effectiveness of a chemical compound in inhibiting the activity of a particular biological target, such as an enzyme or protein. The pIC50 is a measure of the biological activity of a chemical compound, and is often used to evaluate the efficacy of a drug or other biological compound. The pIC50 is calculated as the negative logarithm of the concentration of a compound that is required to achieve a specific biological effect. The higher the pIC50 of a compound, the higher its biological activity.
-The partition coefficient (P) measures how much of a solute dissolves in the water portion relative to the organic portion. It is often used to predict the distribution of a compound within the human body, as LogP can help determine whether a compound will be more soluble in fat or water.In the field of machine learning, the partition coefficient (logP) can be used as a property of a chemical compound to predict its toxicity or biological activity.
+
+
+The partition coefficient (P) measures how much of a solute dissolves in the water portion relative to the organic portion. It is often used to predict the distribution of a compound within the human body, as LogP can help determine whether a compound will be more soluble in fat or water. In the field of machine learning, the partition coefficient (logP) can be used as a property of a chemical compound to predict its toxicity or biological activity.
+
+
 In this document we present an execution of a novel method to generate de novo chemical compounds with desired physical, chemical and/or bioactive properties based on DRL. The execution of the method, called ReLeaSE (Reinforcement Learning for Structural Evolution), uses a simple representation of molecules only through SMILES (simplified molecular-input line-entry system) strings and is able to predict different properties like logP, Tm, and pIC50; thanks to that, the model can learn to select the most promising molecules for further study or new drug development. 
+
+
 The simplified molecular-input line-entry system (SMILES) is a specification in the form of a line notation for describing the structure of chemical species using short ASCII strings. SMILES strings can be imported by most molecule editors for conversion back into two-dimensional drawings or three-dimensional models of the molecules.
+
+
 For example, the model could be trained to select molecules with a high logP because they have a higher probability of being biologically active. Conversely, the model could be trained to exclude molecules with too high a logP because they might be too toxic.
 In the following sections we will look in detail at the use of ReLeaSe.
 
-\mypar{Related work} 
+\mypar{Related works} 
 In the "Generating focused molecule libraries for drug discovery with recurrent neural networks." \cite{generating-focused-molecule} work, it is shown that recurrent neural networks can be trained as generative models for molecular structures, similar to statistical language models in natural language processing. The work has demonstrated that the properties of the generated molecules correlate very well with the properties of the molecules used to train the model. In order to enrich libraries with molecules active toward a given biological target, it has been proposed to fine-tune the model with small sets of molecules, which are known to be active against that target. Against Staphylococcus aureus, the model reproduced 14\% of 6051 hold-out test molecules that medicinal chemists designed, whereas, against Plasmodium falciparum (Malaria), it reproduced 28\% of 1240 test molecules. When coupled with a scoring function, the model can perform the complete de novo drug design cycle to generate large sets of novel molecules for drug discovery. 
 
 
@@ -68,9 +85,18 @@ In the "Molecular de novo design through deep reinforcement learning" \cite{mole
 \section{The Method}\label{sec:The Method}
 
 The ReLeaSE method implements a DRL approach for de novo design of novel chemical compounds with desired properties. ReLeaSE is distinguished from other similar approaches by its simple representation of molecules through the molecular string input system (SMILES) only during the generation and prediction phases of the method and the integration of these phases into a single workflow that also includes an RL module. 
-The project makes use of QSPR (Quantitative Structure-Property Relationship) a technique that uses mathematical models to predict the properties of a chemical compound based on its chemical structure. QSPR models are based on the assumption that there is a quantitative relationship between the structure of a chemical compound and its properties. To build a QSPR model, data on the structure and properties of a large number of known chemical compounds (training set) are used, which are then used to train the model. Once the model has been trained, it can be used to predict the properties of unknown chemical compounds (test set). QSPR models are very useful because they make it possible to predict the properties of a chemical compound without having to synthesize or test it experimentally.
+The project makes use of QSPR (Quantitative Structure-Property Relationship) a technique that uses mathematical models to predict the properties of a chemical compound based on its chemical structure. 
+
+
+QSPR models are based on the assumption that there is a quantitative relationship between the structure of a chemical compound and its properties. To build a QSPR model, data on the structure and properties of a large number of known chemical compounds (training set) are used, which are then used to train the model. Once the model has been trained, it can be used to predict the properties of unknown chemical compounds (test set). QSPR models are very useful because they make it possible to predict the properties of a chemical compound without having to synthesize or test it experimentally.
+
+
 The training process consists of two stages: in the first stage the generative model is built.
+
+
 Since Regular Recurring Neural Networks (RNNs) such as long short-term memory (LSTM) \cite{lstm} and gated recurrent unit (GRU) \cite{gru} are unable to solve the sequence prediction problems because of their inability to count, for the generative model, a special type of stack-augmented RNN (Stack-RNN) \cite{stack-rnn} has been used; that has found success in inferring algorithmic patterns. This Stack-RNN defines a new neuron or cell structure on top of the standard gated recurrent unit \cite{grnn} cell (see Fig. \ref{fig:softmax-loss}). It has two additional multiplicative gates referred to as the memory stack, which allow the Stack-RNN to learn meaningful long-range interdependencies. Stack memory is a differentiable structure onto and from which continuous vectors are inserted and removed. The objective of the Stack-RNN then is to learn hidden rules of forming sequences of letters that correspond to legitimate SMILES strings.
+
+
 The generative model has two modes of processing sequences—training and generating.  
 At each time step, during the training mode, the generative network takes a current prefix of the training object and predicts the probability distribution of the next character (Fig. \ref{fig:softmax-loss}). 
 
@@ -92,6 +118,8 @@ At each time step, in generating mode, the generative network takes a prefix of 
 \end{figure}
 	
 In the generative model, the model parameters are not updated. 
+
+
 At the second stage, both generative and predictive models are combined into one Reinforcement Learning system, as shown in figure \ref{fig:parameter-optimization}. 
 
 \begin{figure}[htbp]
@@ -102,6 +130,8 @@ At the second stage, both generative and predictive models are combined into one
 \end{figure}
 
 In this system, the generative model G (Fig. \ref{fig:parameter-optimization}) plays the role of an agent, whose action space is represented by the SMILES notation alphabet, and state space is represented by all possible strings in this alphabet. The predictive model plays the role of a critic estimating the agent's behavior by assigning a numerical reward to every generated molecule. 
+
+
 The predictive model P (Fig. \ref{fig:parameter-optimization}) is a model for estimating physical, chemical, or biological properties of molecules. This property prediction model is a deep neural network, which consists of an embedding layer, an LSTM layer, and two dense layers. This network is designed to calculate user-specified property (activity) of the molecule taking a SMILES string as an input data vector. This model takes a SMILES string as an input and provides one real number, which is an estimated property value, as an output (Fig. \ref{fig:smiles-to-predicted-property}). In a practical sense, this learning step is analogous to traditional  quantitative structure-activity relationships (QSAR) models. However, unlike conventional QSAR, no numerical descriptors are needed, as the model distinctly learns directly from the SMILES notation as to how to relate the comparison between SMILES strings to that between target properties. The predictor uses, as shown in the figure \ref{fig:smiles-to-predicted-property}, two unidirectional LSTM layers with hidden size of 128 each, with an embedding size of 128. The dense layer is a Multi-layer Perceptron with hidden size of 128 and ReLU activation function.
 
 \begin{figure}[htbp]
@@ -112,14 +142,24 @@ The predictive model P (Fig. \ref{fig:parameter-optimization}) is a model for es
 \end{figure}
 	
 The reward (Fig. \ref{fig:parameter-optimization}) is a function of the numerical property calculated by the predictive model. At this stage, the generative model is trained to maximize the expected reward.
+
+
 The absolute majority of compounds generated de novo by the ReLeaSE method are novel structures as compared to the data sets used to train generative models, and any traditional quantitative structure-activity relationships model could be used to evaluate their properties.
 As a proof of principle, the method has been tested on three diverse types of endpoints: physical properties, biological activity, and chemical substructure bias. The use of a flexible reward function enables different library optimization strategies where one can minimize,maximize, or impose a desired range to a property of interest in the generated compound libraries.
 
 \section{The execution}\label{sec:The execution}
 
-In this experiment we will optimize parameters of pretrained generative RNN to produce molecules with values of logP within drug-like regions according to Lipinsky rule. We use policy gradient algorithm with custom reward function to bias the properties of generated molecules.
+In this experiment we will optimize parameters of pretrained generative RNN to produce molecules with values of logP within drug-like regions according to Lipinsky rule. Lipinski's rule is a set of criteria that are used to evaluate the "oral pharmacokinetics" (the ability of a chemical compound to be absorbed and distributed in the body through oral ingestion) of a chemical. Lipinski's rule was developed to identify chemical compounds that are likely to be suitable for the drug treatment of humans through oral ingestion. 
+
+
+We use policy gradient algorithm with custom reward function to bias the properties of generated molecules.
+
+
 The following example uses real SMILES strings, contained in a given input file (we used the ChEMBL database of drug-like compounds).
-In this execution the generator produces a new SMILES string, which is then evaluated by the predictor. Based on the obtained prediction and the goal, it is assigned a numerical reward value and updated the parameters of the generator using policy gradient algorithm.
+In this execution the generator produces a new SMILES string, which is then evaluated by the predictor. 
+
+
+Based on the obtained prediction and the goal, it is assigned a numerical reward value and updated the parameters of the generator using policy gradient algorithm.
  
 The policy gradient loss is defined as follow:
 
@@ -129,7 +169,10 @@ The policy gradient loss is defined as follow:
     \label{fig:formula}
 \end{figure}
 
-where \textit{R} is the reward obtained at time step i. \begin{math}\gamma\end{math} is the discount factor and \begin{math} p(s_i | s_1,\cdots ,s_i_-_1,\theta) \end{math} is the probability of the next character given the prefix, which is obtained from the generator. The reward is the same for every time step and is equal to the reward for the whole molecule. 
+where \textit{R} is the reward obtained at time step i. \begin{math}\gamma\end{math} is the discount factor and \begin{math} p(s_i | s_1,\cdots ,s_i_-_1,\theta) \end{math} is the probability of the next character given the prefix, which is obtained from the generator. 
+
+
+The reward is the same for every time step and is equal to the reward for the whole molecule. 
 
 \subsection{Prerequisites}\label{sec:Prerequisites}
 
@@ -190,9 +233,9 @@ The result of this phase gave in output the construction of the Dockerfile which
 18 ENTRYPOINT ["conda", "run", "-n", "release", "jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
 \end{lstlisting}
 
-As shown in the code above, build starts from the official \href{https://hub.docker.com/r/nvidia/cuda}{Nvidia CUDA docker image} with Ubuntu 20.04. To the initial image, several dependencies are added, like \href{https://docs.conda.io/en/latest/miniconda.html}{MiniConda} which is a bootstrap version of Anaconda [Row 5 of \ref{lst:dockerfile}].
-Once Conda is installed, a new environment with Python is created [Row 11 of \ref{lst:dockerfile}] and the required dependencies specified in the conda.txt file are installed [Row 12 of \ref{lst:dockerfile}]. In addition, RDKit, Nox, Cairo, pytorch and torchvision are installed [Rows 13-14 of \ref{lst:dockerfile}]. 
-Then the pip dependencies listed in the pip.txt file, such as \href{https://www.tensorflow.org/tensorboard}{tensorboard}, \href{https://www.tensorflow.org/}{tensorflow} are installed [Row 15 of \ref{lst:dockerfile}].
+As shown in the code above, build starts from the official \href{https://hub.docker.com/r/nvidia/cuda}{Nvidia CUDA docker image} with Ubuntu 20.04. To the initial image, several dependencies are added, like \href{https://docs.conda.io/en/latest/miniconda.html}{MiniConda} which is a bootstrap version of Anaconda (Row 5 of \ref{lst:dockerfile}).
+Once Conda is installed, a new environment with Python is created (Row 11 of \ref{lst:dockerfile}) and the required dependencies specified in the conda.txt file are installed (Row 12 of \ref{lst:dockerfile}). In addition, RDKit, Nox, Cairo, pytorch and torchvision are installed (Rows 13-14 of \ref{lst:dockerfile}). 
+Then the pip dependencies listed in the pip.txt file, such as \href{https://www.tensorflow.org/tensorboard}{tensorboard}, \href{https://www.tensorflow.org/}{tensorflow} are installed (Row 15 of \ref{lst:dockerfile}).
 Finally, the ReLeaSe code repository is cloned into the workdir of the image and the entrypoint of the jupyter notebook is defined.
 
 \subsubsection{The Docker Compose}\label{sec:The Docker Compose}
@@ -226,7 +269,7 @@ As shown in the code above, the docker-compose file includes the GPU access \cit
     \label{fig:logp-optimization}
 \end{figure}
 
-In the figure above is reported the configured jupyter notebook of the execution described in the following sections; it can be reached by visiting the \href{http://localhost:{HTTP_PORT}/LogP_optimization_demo.ipynb}{URL} into the host machine web browser.
+In the figure above is reported the configured jupyter notebook of the execution described in the following sections; it can be reached by visiting the URL 'http://localhost:\${HTTP_PORT}/LogP_optimization_demo.ipynb' into the host machine web browser.
 
 \subsection{Description of the execution}\label{sec:Description of the execution}
 
@@ -430,7 +473,7 @@ my_predictor = RNNPredictor(path_to_params, path_to_checkpoint, predictor_tokens
 smiles_unbiased, prediction_unbiased = estimate_and_update(my_generator, my_predictor, n_to_generate=10000)
 \end{lstlisting}
 
-This phase produces in output:
+This phase produces in output: (Figure: \ref{fig:unbiased})
 
 \begin{figure}[htbp]
     \centering
@@ -527,7 +570,7 @@ After reached the goal, the biased distribution of the property is produced:
 smiles_biased, prediction_biased = estimate_and_update(RL_logp.generator, my_predictor, n_to_generate=10000)
 \end{lstlisting}
 
-This phase produces in output: 
+This phase produces in output: (Figure: \ref{fig:biased})
 
 \begin{figure}[htbp]
 	\centering
