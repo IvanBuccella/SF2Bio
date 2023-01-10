@@ -218,7 +218,8 @@ As mentioned into the repository \cite{git-sf2bio} of the project, the following
 During the installation and initialization phases of the project, some changes had to be made to the code to resolve errors that prevented it from starting. This could have been caused by several factors, such as the presence of outdated dependencies or incompatible package versions. These changes allowed the use of newer versions of the packages, which were more stable and compatible with the code. 
 The result of this phase gave in output the construction of the Dockerfile which replicates the installation methodology described in the ReLeaSe method repository \cite{git-isayev-release}. 
 
-\begin{lstlisting}[label={lst:dockerfile}, caption={DockerFile}]
+\renewcommand{\lstlistingname}{Code}% Listing -> Code
+\begin{lstlisting}[label={lst:dockerfile}, caption={The DockerFile}]% Listing -> Code
 1 FROM nvidia/cuda:11.3.0-cudnn8-runtime-ubuntu20.04
 2 RUN apt-get update
 3 RUN apt-get install -y git
@@ -246,7 +247,7 @@ Finally, the ReLeaSe code repository is cloned into the workdir of the image and
 
 \subsubsection{The Docker Compose}\label{sec:The Docker Compose}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={The docker compose file}]
 1  version: "3.8"
 2  services:
 3   app:
@@ -639,10 +640,10 @@ The output will be something like in figure \ref{fig:output}
 \href{http://arxiv.org/abs/1412.3555}{J. Chung, C. Gulcehre, K. Cho, Y. Bengio, Empirical evaluation of gated recurrent neural networks on sequence modeling \(2014\)}
 
 \bibitem{wsl-user-guide}
-\href{https://docs.nvidia.com/cuda/wsl-user-guide/index.html#getting-started-with-cuda-on-wsl}{WSL 2 official guide}
+\href{https://docs.nvidia.com/cuda/wsl-user-guide/index.html#getting-started-with-cuda-on-wsl}{CUDA on WSL User Guide}
 
 \bibitem{cuda-download}
-\href{https://developer.nvidia.com/cuda-11.3.0-download-archive}{CUDA 11.3}
+\href{https://developer.nvidia.com/cuda-11.3.0-download-archive}{CUDA Toolkit 11.3}
 
 \bibitem{docker-guide}
 \href{https://www.docker.com}{Docker official guide} 
