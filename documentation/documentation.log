@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.12) (preloaded format=pdflatex 2023.1.5)  10 JAN 2023 13:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.12) (preloaded format=pdflatex 2023.1.5)  10 JAN 2023 16:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -538,6 +538,8 @@ l.178 ...d \begin{math} p(s_i | s_1,\cdots ,s_i_-_
 I treat `x_1_2' essentially like `x_1{}_2'.
 
 [5 <./images//smiles-to-predicted-property.png> <./images//formula.png>]
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
+nput line 221.
 LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 2
 28.
 
@@ -593,13 +595,13 @@ Package rerunfilecheck Info: File `documentation.out' has not changed.
 (rerunfilecheck)             Checksum: E8BC79C99EE7A678532E86B02C49DE6B;3069.
  ) 
 Here is how much of TeX's memory you used:
- 14025 strings out of 476406
- 221336 string characters out of 2789568
+ 14024 strings out of 476406
+ 221230 string characters out of 2789568
  1971787 words of memory out of 3000000
  33894 multiletter control sequences out of 15000+600000
  521208 words of font info for 66 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,7n,77p,1280b,1930s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 72i,7n,77p,1280b,1956s stack positions out of 10000i,1000n,20000p,200000b,80000s
  <C:\Users\maiom\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcti
 1000.pk> <C:\Users\maiom\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi60
 0\tcrm1000.pk><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public/
@@ -616,9 +618,9 @@ fb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
 onts/cm/cmsy10.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/type1/pu
 blic/amsfonts/cm/cmsy7.pfb><C:/Users/maiom/AppData/Local/Programs/MiKTeX/fonts/
 type1/public/amsfonts/cm/cmti10.pfb>
-Output written on documentation.pdf (15 pages, 1567409 bytes).
+Output written on documentation.pdf (15 pages, 1567370 bytes).
 PDF statistics:
  644 PDF objects out of 1000 (max. 8388607)
- 329 named destinations out of 1000 (max. 500000)
+ 328 named destinations out of 1000 (max. 500000)
  166 words of extra memory for PDF output out of 10000 (max. 10000000)
 

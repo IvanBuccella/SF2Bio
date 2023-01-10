@@ -185,9 +185,9 @@ The reward is the same for every time step and is equal to the reward for the wh
 \begin{itemize}
 	\item Linux OS or WSL 2 on a Windows 10 (or higher) machine. If you use WSL 2, follow the official guide \cite{wsl-user-guide}.
 	\item A Modern NVIDIA GPU, compatible with CUDA 11.3 \cite{cuda-download}.
-	\item Docker and Docker Compose (Application containers engine). Install it from here \cite{docker-guide}.
-	\item The Docker GPU Support enabled on the machine; check it out here \cite{gpu-support}.
-	\item The Nvidia Container Toolkit. Install it from here \cite{nvidia-toolkit}.
+	\item Docker and Docker Compose (Application containers engine). Install it from \cite{docker-guide}.
+	\item The Docker GPU Support enabled on the machine; check it out \cite{gpu-support}.
+	\item The Nvidia Container Toolkit. Install it from \cite{nvidia-toolkit}.
 \end{itemize}
 
 \begin{flushleft}
@@ -218,7 +218,7 @@ As mentioned into the repository \cite{git-sf2bio} of the project, the following
 During the installation and initialization phases of the project, some changes had to be made to the code to resolve errors that prevented it from starting. This could have been caused by several factors, such as the presence of outdated dependencies or incompatible package versions. These changes allowed the use of newer versions of the packages, which were more stable and compatible with the code. 
 The result of this phase gave in output the construction of the Dockerfile which replicates the installation methodology described in the ReLeaSe method repository \cite{git-isayev-release}. 
 
-\begin{lstlisting}[label={lst:dockerfile}]
+\begin{lstlisting}[label={lst:dockerfile}, caption={DockerFile}]
 1 FROM nvidia/cuda:11.3.0-cudnn8-runtime-ubuntu20.04
 2 RUN apt-get update
 3 RUN apt-get install -y git
@@ -618,10 +618,7 @@ The output will be something like in figure \ref{fig:output}
 \begin{thebibliography}{1}
 
 \bibitem{reinforcement-learning}
-{Mariya Popova, Olexandr Isayev, Alexander Tropsha. Deep Reinforcement Learning for de-novo Drug Design. Science Advances, 2018, Vol. 4, no. 7, eaap7885. DOI: 10.1126/sciadv.aap7885}
-
-\bibitem{simplified-molecular-input-line-entry-system}
-\href{https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system/}{Simplified molecular-input line-entry system}
+\href{https://www.science.org/doi/10.1126/sciadv.aap7885}{Mariya Popova, Olexandr Isayev, Alexander Tropsha. Deep Reinforcement Learning for de-novo Drug Design. Science Advances, 2018, Vol. 4, no. 7, eaap7885.}
 
 \bibitem{grnn}
 \href{http://arxiv.org/abs/1412.3555/}{J. Chung, C. Gulcehre, K. Cho, Y. Bengio, Empirical evaluation of gated recurrent neural networks on sequence modeling, \(2014\).}
@@ -642,10 +639,10 @@ The output will be something like in figure \ref{fig:output}
 \href{http://arxiv.org/abs/1412.3555}{J. Chung, C. Gulcehre, K. Cho, Y. Bengio, Empirical evaluation of gated recurrent neural networks on sequence modeling \(2014\)}
 
 \bibitem{wsl-user-guide}
-\href{https://docs.nvidia.com/cuda/wsl-user-guide/index.html#getting-started-with-cuda-on-wsl}{WSL user official guide}
+\href{https://docs.nvidia.com/cuda/wsl-user-guide/index.html#getting-started-with-cuda-on-wsl}{WSL 2 official guide}
 
 \bibitem{cuda-download}
-\href{https://developer.nvidia.com/cuda-11.3.0-download-archive}{CUDA 11.3 download}
+\href{https://developer.nvidia.com/cuda-11.3.0-download-archive}{CUDA 11.3}
 
 \bibitem{docker-guide}
 \href{https://www.docker.com}{Docker official guide} 
@@ -654,13 +651,13 @@ The output will be something like in figure \ref{fig:output}
 \href{https://docs.docker.com/compose/gpu-support/}{Docker GPU support}
 
 \bibitem{nvidia-toolkit}
-\href{https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#install-guide}{Nvidia Toolkit download}
+\href{https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#install-guide}{Nvidia Container Toolkit}
 
 \bibitem{git-sf2bio}
 \href{https://github.com/IvanBuccella/SF2Bio#installation}{Git Repository SF2bio}
 
 \bibitem{git-isayev-release}
-\href{https://github.com/isayev/ReLeaSE#installation-with-anaconda}{Git repository ReLeaSE} 
+\href{https://github.com/isayev/ReLeaSE#installation-with-anaconda}{Git Repository ReLeaSE} 
 
 \bibitem{nvidia-cuda-docker-image}
 \href{https://hub.docker.com/r/nvidia/cuda}{Nvidia CUDA docker image}
