@@ -1,8 +1,8 @@
-# The Reinforcement Learning for Structural Evolution method on a Docker Environment
+# The Reinforcement Learning for Structural Evolution method execution on a Docker Environment
 
 ## Citation
 
-This work runs the developer [ReLeaSE](https://github.com/isayev/ReLeaSE/) method on a Docker Environment. Further details about the method can be found in this paper: Mariya Popova, Olexandr Isayev, Alexander Tropsha. _Deep Reinforcement Learning for de-novo Drug Design_. Science Advances, 2018, Vol. 4, no. 7, eaap7885. DOI: [10.1126/sciadv.aap7885](http://dx.doi.org/10.1126/sciadv.aap7885)
+This work runs the developed [ReLeaSE](https://github.com/isayev/ReLeaSE/) method on a Docker Environment. Further details about the method can be found in this paper: Mariya Popova, Olexandr Isayev, Alexander Tropsha. _Deep Reinforcement Learning for de-novo Drug Design_. Science Advances, 2018, Vol. 4, no. 7, eaap7885. DOI: [10.1126/sciadv.aap7885](http://dx.doi.org/10.1126/sciadv.aap7885)
 
 ## Tutorial Structure
 
