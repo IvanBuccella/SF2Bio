@@ -1,4 +1,4 @@
-# The Reinforcement Learning for Structural Evolution method execution on a Docker Environment
+# Deep reinforcement learning for de novo drug design: a ReLeaSe method execution on a Docker Environment
 
 ## Citation
 
